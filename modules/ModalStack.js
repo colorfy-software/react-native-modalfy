@@ -15,15 +15,21 @@ import ModalContext from './ModalContext'
 import StackItem from './StackItem'
 
 const styles = StyleSheet.create({
-  container: {
+  container: (opacity, translateY) => ({
     ...StyleSheet.absoluteFill,
+    opacity,
+    transform: [{ translateY }],
     zIndex: 0,
-  },
-  backdrop: {
+  }),
+  backdrop: (opacity, backdropOpacity) => ({
     width: vw(100),
     height: vh(100),
     backgroundColor: 'black',
-  },
+    opacity: opacity.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, backdropOpacity],
+    }),
+  }),
 })
 
 type Props = {
@@ -95,15 +101,7 @@ class ModalStack extends Component<Props> {
     } = this.props
     return (
       <Animated.View
-        style={[
-          styles.backdrop,
-          {
-            opacity: this.animatedValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, backdropOpacity],
-            }),
-          },
-        ]}
+        style={styles.backdrop(this.animatedValue, backdropOpacity)}
       />
     )
   }
@@ -111,17 +109,7 @@ class ModalStack extends Component<Props> {
   render() {
     return (
       <Animated.View
-        style={[
-          styles.container,
-          {
-            opacity: this.animatedValue,
-            transform: [
-              {
-                translateY: this.translateYValue,
-              },
-            ],
-          },
-        ]}
+        style={styles.container(this.animatedValue, this.translateYValue)}
       >
         {this.renderStack()}
         {this.renderBackdrop()}

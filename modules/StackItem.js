@@ -127,10 +127,10 @@ class StackItem extends Component<Props> {
   }
 
   _getPosition = (stackItem: StackItemType): Object => {
-    if (!stackItem.options || !stackItem.options.position) {
-      return { justifyContent: 'center' }
-    }
-    switch (stackItem.options.position) {
+    const { stack } = this.props
+    const position =
+      stackItem.options?.position || stack.defaultOptions.position
+    switch (position) {
       case 'top':
         return { justifyContent: 'flex-start' }
       case 'bottom':
