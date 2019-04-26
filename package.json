@@ -23,9 +23,7 @@
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.3.0",
-    "react": "16.8.3",
-    "react-is": "^16.8.6",
-    "react-native": "0.59.4"
+    "react-is": "^16.8.6"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
