@@ -103,7 +103,7 @@ class StackItem extends PureComponent<Props> {
     const onAnimatedClose = () =>
       this._updateAnimatedValue(position - 1, closeModal)
 
-    const Component = () =>
+    const Component = React.memo(() =>
       // $FlowFixMe
       React.createElement(stackItem.component, {
         modal: {
@@ -117,7 +117,7 @@ class StackItem extends PureComponent<Props> {
             params: stack.params[currentModal],
           }),
         },
-      })
+      }))
 
     return React.memo(() => (
       <Animated.View style={{ ...transitionOptions }}>
