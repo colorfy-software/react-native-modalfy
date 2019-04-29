@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import hoistStatics from 'hoist-non-react-statics'
 
 import ModalContext from './modules/ModalContext'
 import { invariant } from './utils'
 
-export default function(Component) {
+function withModal(Component) {
   const displayName = `withModal(${Component.displayName || Component.name})`
   const C = props => {
     return (
@@ -33,3 +33,5 @@ export default function(Component) {
 
   return hoistStatics(C, Component)
 }
+
+export default memo(withModal)

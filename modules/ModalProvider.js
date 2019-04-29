@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Fragment, Component } from 'react'
+import React, { Fragment, PureComponent } from 'react'
 import { BackHandler, View } from 'react-native'
 
 import type { ModalName, Stack } from '../types'
@@ -21,7 +21,7 @@ type State = {
   stack: Stack,
 }
 
-class ModalProvider extends Component<Props, State> {
+class ModalProvider extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
 
@@ -102,7 +102,8 @@ class ModalProvider extends Component<Props, State> {
   }
 
   static displayName = 'ModalProvider'
-
+  viewStyles = { flex: 1 }
+  
   componentDidMount() {
     const { stack } = this.props
     // @TODO: Add an example
@@ -119,7 +120,7 @@ class ModalProvider extends Component<Props, State> {
     return (
       <ModalContext.Provider value={this.state}>
         <Fragment>
-          <View style={{ flex: 1 }}>{children}</View>
+          <View style={this.viewStyles}>{children}</View>
           <ModalStack {...this.state} />
         </Fragment>
       </ModalContext.Provider>

@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Animated, Easing, StyleSheet } from 'react-native'
 
 import type {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   }),
 })
 
-class StackItem extends Component<Props> {
+class StackItem extends PureComponent<Props> {
   animatedValue = new Animated.Value(-1)
 
   componentDidMount() {

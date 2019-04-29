@@ -1,6 +1,6 @@
 /* @flow */
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Animated, Dimensions, Easing, StyleSheet, View } from 'react-native'
 
 import type {
@@ -40,7 +40,7 @@ type Props = {
   stack: Stack,
 }
 
-class ModalStack extends Component<Props> {
+class ModalStack extends PureComponent<Props> {
   animatedValue = new Animated.Value(0)
   translateYValue = new Animated.Value(vh(100))
 
