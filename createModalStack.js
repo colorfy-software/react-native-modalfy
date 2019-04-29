@@ -12,7 +12,7 @@ export default function(config: Config, customDefaultOptions: Options): Stack {
   invariant(config, 'You need to provide a config to createModalStack()')
   validateDefaultOptions(customDefaultOptions)
 
-  let stack: Stack = {
+  const initialStack: Stack = {
     names: [],
     content: [],
     defaultOptions: {
@@ -23,18 +23,16 @@ export default function(config: Config, customDefaultOptions: Options): Stack {
     total: 0,
   }
 
-  Object.entries(config).map((entry, index) => {
+  return Object.entries(config).reduce((accum, entry, index) => {
     const { name, component, options } = getStackItemData(entry[0], entry[1])
-    stack = {
-      ...stack,
-      names: [...stack.names, name],
+    return {
+      ...accum,
+      names: [...accum.names, name],
       content: [
-        ...stack.content,
+        ...accum.content,
         { index, name, component, ...(options && { options }) },
       ],
-      total: stack.total + 1,
+      total: accum.total + 1,
     }
-  })
-
-  return stack
+  }, initialStack)
 }
