@@ -26,5 +26,6 @@ export const defaultOptions = {
 }
 
 export { default as getStackItemData } from './getStackItemData'
+export { default as getStackItemOptions } from './getStackItemOptions'
 export { default as invariant } from './invariant'
 export { default as validateDefaultOptions } from './validateDefaultOptions'

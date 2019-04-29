@@ -10,6 +10,8 @@ import type {
   TransitionOptions,
 } from '../types'
 
+import { getStackItemOptions } from '../utils'
+
 type Props = {
   getParams: (modalName: ModalName, fallback?: any) => any,
   closeModal: (modal?: ModalName) => void,
@@ -35,9 +37,7 @@ class StackItem extends Component<Props> {
 
   componentDidMount() {
     const { stack, stackItem } = this.props
-    const transitionOptions =
-      stackItem?.options?.transitionOptions ||
-      stack.defaultOptions.transitionOptions
+    const { transitionOptions } = getStackItemOptions(stackItem, stack)
 
     if (transitionOptions && typeof transitionOptions !== 'function') {
       throw new Error(`'${
@@ -68,15 +68,11 @@ class StackItem extends Component<Props> {
 
   _updateAnimatedValue = (toValue: number, closeModal?: Function) => {
     const { stack, stackItem } = this.props
-    const animateInConfig =
-      stackItem?.options?.animateInConfig ||
-      stack.defaultOptions.animateInConfig
-    const animateOutConfig =
-      stackItem?.options?.animateOutConfig ||
-      stack.defaultOptions.animateOutConfig
-    const shouldAnimateOut =
-      stackItem?.options?.shouldAnimateOut ??
-      stack.defaultOptions.shouldAnimateOut
+    const {
+      animateInConfig,
+      animateOutConfig,
+      shouldAnimateOut,
+    } = getStackItemOptions(stackItem, stack)
 
     if (!shouldAnimateOut) closeModal?.()
 
@@ -128,8 +124,8 @@ class StackItem extends Component<Props> {
 
   _getPosition = (stackItem: StackItemType): Object => {
     const { stack } = this.props
-    const position =
-      stackItem.options?.position || stack.defaultOptions.position
+    const { position } = getStackItemOptions(stackItem, stack)
+
     switch (position) {
       case 'top':
         return { justifyContent: 'flex-start' }
@@ -142,9 +138,7 @@ class StackItem extends Component<Props> {
 
   render() {
     const { position, stack, stackItem, zIndex } = this.props
-    const transitionOptions =
-      stackItem?.options?.transitionOptions ||
-      stack.defaultOptions.transitionOptions
+    const { transitionOptions } = getStackItemOptions(stackItem, stack)
 
     const AnimatedComponent = this._getAnimatedComponent(
       transitionOptions && transitionOptions(this.animatedValue)

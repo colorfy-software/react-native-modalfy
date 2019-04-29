@@ -5,7 +5,9 @@ import { Animated } from 'react-native'
 export type ModalName = string
 
 export type TransitionOptions = Animated.AnimatedValue => {
-  [key: string]: Animated.AnimatedInterpolation | Array<{ [key: string]: Animated.AnimatedInterpolation }>,
+  [key: string]:
+    | Animated.AnimatedInterpolation
+    | Array<{ [key: string]: Animated.AnimatedInterpolation }>,
 }
 
 export type Config = {
@@ -32,7 +34,7 @@ type Params = { [key: ModalName]: Object }
 
 export type StackItem = {
   name: ModalName,
-  component: React$Element<*>,
+  component: React$Element<*> & { modalOptions?: Options },
   options?: Options,
 }
 
