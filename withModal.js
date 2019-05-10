@@ -4,6 +4,7 @@ import hoistStatics from 'hoist-non-react-statics'
 import ModalContext from './modules/ModalContext'
 import { invariant } from './utils'
 
+// TODO: add `onRef` support
 export default function(Component) {
   const displayName = `withModal(${Component.displayName || Component.name})`
   const C = props => {
@@ -21,6 +22,7 @@ export default function(Component) {
                 currentModal: context.currentModal,
                 openModal: context.openModal,
                 closeModal: context.closeModal,
+                getParams: context.getParams,
               }}
             />
           )

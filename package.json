@@ -1,7 +1,7 @@
 {
   "name": "react-native-modalfy",
-  "version": "0.0.1",
-  "description": "Modals for React Native. Done right.",
+  "version": "0.1.0",
+  "description": "Modal citizen of React Native.",
   "main": "index.js",
   "repository": {
     "type": "git",
