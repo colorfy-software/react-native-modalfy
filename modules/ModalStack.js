@@ -40,7 +40,15 @@ type Props = {
   stack: Stack,
 }
 
-class ModalStack extends Component<Props> {
+type State = { stackItems: Array<?StackItemType> }
+
+class ModalStack extends Component<Props, State> {
+  state = { stackItems: [] }
+
+  static getDerivedStateFromProps = (props: Props): State => ({
+    stackItems: props.stack.openedItems,
+  })
+
   animatedValue = new Animated.Value(0)
   translateYValue = new Animated.Value(vh(100))
 
@@ -86,11 +94,9 @@ class ModalStack extends Component<Props> {
   )
 
   renderStack = (): ?Array<React$Element<*>> => {
-    const {
-      stack: { openedItems },
-    } = this.props
-    if (!openedItems.length) return null
-    return openedItems.map(this.renderStackItem)
+    const { stackItems } = this.state
+    if (!stackItems.length) return null
+    return stackItems.map(this.renderStackItem)
   }
 
   renderBackdrop = (): React$Element<*> => {

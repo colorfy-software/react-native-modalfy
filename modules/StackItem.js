@@ -66,6 +66,11 @@ class StackItem extends Component<Props> {
     this._updateAnimatedValue(this.props.position)
   }
 
+  shouldComponentUpdate(nextProps: Props) {
+    if (this.props.position !== nextProps.position) return true
+    return false
+  }
+
   _updateAnimatedValue = (toValue: number, closeModal?: Function) => {
     const { stack, stackItem } = this.props
     const {

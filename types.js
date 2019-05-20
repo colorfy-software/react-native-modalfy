@@ -35,6 +35,7 @@ type Params = { [key: ModalName]: Object }
 export type StackItem = {
   name: ModalName,
   component: React$Element<*> & { modalOptions?: Options },
+  index: number,
   options?: Options,
 }
 

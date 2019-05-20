@@ -25,76 +25,9 @@ class ModalProvider extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
-    const { stack } = props
-
-    this._handleBackPress = () => {
-      const {
-        defaultOptions: { backButtonBehavior },
-      } = stack
-      if (backButtonBehavior === 'none') return true
-      else if (backButtonBehavior === 'pop' || backButtonBehavior === 'clear')
-        this._closeModal()
-      return true
-    }
-
-    this._openModal = (modalName: ModalName, params: ?Object) => {
-      const { content, names } = props.stack
-      invariant(modalName?.length > 0, "You didn't pass any modal name")
-      invariant(
-        names.some(name => name === modalName),
-        // $FlowFixMe
-        `'${modalName}' is not valid modal name. Did you mean any of these: ${names.map(
-          validName => `\n• ${validName}`
-        )}`
-      )
-
-      const stackItem = content.find(item => item.name === modalName)
-
-      stack.openedItems = [...this.state.stack.openedItems, stackItem]
-      stack.params = {
-        ...(stack.params && stack.params),
-        ...(params && { [modalName]: params }),
-      }
-
-      if (!this.state.currentModal) {
-        BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
-      }
-      this.setState(() => ({ currentModal: modalName, stack }))
-    }
-
-    // TODO: Close specific modal
-    // TODO: Remove specific params
-    this._closeModal = () => {
-      const {
-        defaultOptions: { backButtonBehavior },
-      } = props.stack
-      const newStack = {
-        ...this.state.stack,
-        openedItems:
-          this.state.stack.openedItems.length === 1 ||
-          backButtonBehavior === 'clear'
-            ? []
-            : this.state.stack.openedItems.slice(
-                0,
-                this.state.stack.openedItems.length - 1
-              ),
-      }
-      this.setState(
-        state => ({ currentModal: null, stack: newStack }),
-        () =>
-          BackHandler.removeEventListener(
-            'hardwareBackPress',
-            this._handleBackPress
-          )
-      )
-    }
-
-    this._getParams = (modalName: ModalName, fallback?: any): any =>
-      stack.params?.[modalName] || fallback
-
     this.state = {
       currentModal: null,
-      stack,
+      stack: props.stack,
       openModal: this._openModal,
       closeModal: this._closeModal,
       getParams: this._getParams,
@@ -109,10 +42,76 @@ class ModalProvider extends Component<Props, State> {
     invariant(stack, 'You need to provide a stack prop to <ModalProvider>')
   }
 
-  _openModal: (modalName: ModalName, params?: Object) => void
-  _closeModal: (modal?: ModalName) => void
-  _getParams: (modalName: ModalName, fallback?: any) => any
-  _handleBackPress: Function
+  _openModal = (modalName: ModalName, params: ?Object) => {
+    const { content, names } = this.props.stack
+
+    invariant(modalName?.length > 0, "You didn't pass any modal name")
+    invariant(
+      names.some(name => name === modalName),
+      // $FlowFixMe
+      `'${modalName}' is not valid modal name. Did you mean any of these: ${names.map(
+        validName => `\n• ${validName}`
+      )}`
+    )
+
+    const stackItem = content.find(item => item.name === modalName)
+
+    if (!this.state.currentModal) {
+      BackHandler.addEventListener('hardwareBackPress', this._handleBackPress)
+    }
+
+    this.setState(state => ({
+      currentModal: modalName,
+      stack: {
+        ...state.stack,
+        openedItems: [...state.stack.openedItems, stackItem],
+        params: {
+          ...(state.stack.params && state.stack.params),
+          ...(params && { [modalName]: params }),
+        },
+      },
+    }))
+  }
+
+  // TODO: Close specific modal
+  // TODO: Remove specific params
+  _closeModal = () => {
+    const {
+      defaultOptions: { backButtonBehavior },
+    } = this.props.stack
+    const stack = {
+      ...this.state.stack,
+      openedItems:
+        this.state.stack.openedItems.length === 1 ||
+        backButtonBehavior === 'clear'
+          ? []
+          : this.state.stack.openedItems.slice(
+              0,
+              this.state.stack.openedItems.length - 1
+            ),
+    }
+    this.setState(
+      state => ({ currentModal: null, stack }),
+      () =>
+        BackHandler.removeEventListener(
+          'hardwareBackPress',
+          this._handleBackPress
+        )
+    )
+  }
+
+  _getParams = (modalName: ModalName, fallback?: any): any =>
+    this.state.stack.params?.[modalName] || fallback
+
+  _handleBackPress = () => {
+    const {
+      defaultOptions: { backButtonBehavior },
+    } = this.state.stack
+    if (backButtonBehavior === 'none') return true
+    else if (backButtonBehavior === 'pop' || backButtonBehavior === 'clear')
+      this._closeModal()
+    return true
+  }
 
   render() {
     const { children } = this.props
