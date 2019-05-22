@@ -1,5 +1,12 @@
 import React, { PureComponent } from 'react'
-import { View, Text, StatusBar, StyleSheet, Easing, Dimensions } from 'react-native'
+import {
+  Easing,
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import { ModalProvider, createModalStack } from 'react-native-modalfy'
 
 import CardModal from './app/modals/CardModal'
@@ -8,41 +15,43 @@ import Button from './app/components/Button/Button'
 const { width } = Dimensions.get('screen')
 
 const config = { CardModal }
+
 const defaultOptions = {
+  animateInConfig: {
+    easing: Easing.bezier(0.42, -0.03, 0.27, 0.95),
+    duration: 450,
+  },
+  animateOutConfig: {
+    easing: Easing.bezier(0.42, -0.03, 0.27, 0.95),
+    duration: 450,
+  },
   transitionOptions: animatedValue => ({
     opacity: animatedValue.interpolate({
       inputRange: [0, 1, 2],
-      outputRange: [0, 1, .9],
+      outputRange: [0, 1, 0.9],
     }),
     transform: [
+      { perspective: 2000 },
       {
         translateX: animatedValue.interpolate({
           inputRange: [0, 1, 2],
-          outputRange: [-width / 2, 0, 25],
+          outputRange: [-width / 2, 0, width / 2],
         }),
       },
       {
-        rotate: animatedValue.interpolate({
+        rotateY: animatedValue.interpolate({
           inputRange: [0, 1, 2],
-          outputRange: ['-19deg', '0deg', '19deg'],
+          outputRange: ['90deg', '0deg', '-90deg'],
         }),
       },
       {
         scale: animatedValue.interpolate({
           inputRange: [0, 1, 2],
-          outputRange: [.8, 1, .8],
+          outputRange: [1.2, 1, 0.9],
         }),
       },
     ],
   }),
-  animateInConfig: {
-    easing: Easing.bezier(.42,-0.03,.27,.95),
-    duration: 450,
-  },
-  animateOutConfig: {
-    easing: Easing.bezier(.42,-0.03,.27,.95),
-    duration: 450,
-  },
 }
 
 const stack = createModalStack(config, defaultOptions)
@@ -53,7 +62,6 @@ class App extends PureComponent {
       <ModalProvider stack={stack}>
         <View style={styles.container}>
           <StatusBar animated hidden translucent />
-
           <Button label="Open modal" modalToOpen="CardModal" />
         </View>
       </ModalProvider>

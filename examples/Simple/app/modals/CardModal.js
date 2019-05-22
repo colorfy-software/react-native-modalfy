@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, Dimensions, Text, StyleSheet } from 'react-native'
 
-import Button from '../components/Button/Button'
+import Button from '../components/Button'
 
 const { width: ww, height: wh } = Dimensions.get('screen')
 
