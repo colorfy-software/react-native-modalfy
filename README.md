@@ -18,7 +18,7 @@ And that's it, no further action needed!
 
 ## Documentation
 
-The doc is accessible at https://colorfy-software.gitbook.io/react-native-modalfy.
+The doc is accessible at https://react-native-modalfy.now.sh/docs.
 
 * The best way to learn is to follow the [guides](https://colorfy-software.gitbook.io/react-native-modalfy/guides). They will help you to get up and running in no time.
 * The [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api) lists all public APIs.
