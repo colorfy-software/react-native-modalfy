@@ -17,52 +17,52 @@ type InterpolationConfigType = {
   extrapolateRight?: ExtrapolateType,
 }
 type AnimatedInterpolation = {
-  interpolate(config: InterpolationConfigType): AnimatedInterpolation,
+  interpolate: (config: InterpolationConfigType) => AnimatedInterpolation,
 }
 
 // From react-native/Libraries/Animated/src/animations/Animation.js
 type EndResult = { finished: boolean }
 type EndCallback = (result: EndResult) => void
 type Animation = {
-  start(
+  start: (
     fromValue: number,
     onUpdate: (value: number) => void,
     onEnd: ?EndCallback,
     previousAnimation: ?Animation,
     animatedValue: AnimatedValue
-  ): void,
-  stop(): void,
+  ) => void,
+  stop: () => void,
 }
 
 // From react-native/Libraries/Animated/src/nodes/AnimatedTracking.js
 type AnimatedTracking = {
-  constructor(
+  constructor: (
     value: AnimatedValue,
     parent: any,
     animationClass: any,
     animationConfig: Object,
     callback?: ?EndCallback
-  ): void,
-  update(): void,
+  ) => void,
+  update: () => void,
 }
 
 // From react-native/Libraries/Animated/src/nodes/AnimatedValue.js
 type ValueListenerCallback = (state: { value: number }) => void
 type AnimatedValue = {
-  constructor(value: number): void,
-  setValue(value: number): void,
-  setOffset(offset: number): void,
-  flattenOffset(): void,
-  extractOffset(): void,
-  addListener(callback: ValueListenerCallback): string,
-  removeListener(id: string): void,
-  removeAllListeners(): void,
-  stopAnimation(callback?: ?(value: number) => void): void,
-  resetAnimation(callback?: ?(value: number) => void): void,
-  interpolate(config: InterpolationConfigType): AnimatedInterpolation,
-  animate(animation: Animation, callback: ?EndCallback): void,
-  stopTracking(): void,
-  track(tracking: AnimatedTracking): void,
+  constructor: (value: number) => void,
+  setValue: (value: number) => void,
+  setOffset: (offset: number) => void,
+  flattenOffset: () => void,
+  extractOffset: () => void,
+  addListener: (callback: ValueListenerCallback) => string,
+  removeListener: (id: string) => void,
+  removeAllListeners: () => void,
+  stopAnimation: (callback?: ?(value: number) => void) => void,
+  resetAnimation: (callback?: ?(value: number) => void) => void,
+  interpolate: (config: InterpolationConfigType) => AnimatedInterpolation,
+  animate: (animation: Animation, callback: ?EndCallback) => void,
+  stopTracking: () => void,
+  track: (tracking: AnimatedTracking) => void,
 }
 
 // From react-native/Libraries/Animated/src/animations/Animation.js
@@ -72,10 +72,6 @@ type AnimationConfig = {
   onComplete?: ?EndCallback,
   iterations?: number,
 }
-
-// From react-native/Libraries/Animated/src/nodes/AnimatedValueXY.js
-
-type AnimatedValueXY = {}
 
 // From react-native/Libraries/Animated/src/animations/TimingAnimation.js
 type TimingAnimationConfig = AnimationConfig & {
@@ -122,6 +118,7 @@ type Params = { [key: ModalName]: Object }
 export type StackItem = {
   name: ModalName,
   component: React$ComponentType<*>,
+  hash: string,
   index: number,
   options?: Options,
   params?: any,
@@ -136,7 +133,17 @@ export type Stack = {
   total: number,
 }
 
+type EventCallback = AnimatedValue => void
+
+type ModalEventSubscription = {
+  remove: () => void,
+}
+
 export type Modal = {
+  addListener: (
+    eventName: string,
+    callback: EventCallback
+  ) => ModalEventSubscription,
   currentModal: ?ModalName,
   openModal: (modalName: ModalName, params?: Object) => void,
   closeModal: (modal?: ModalName) => void,
