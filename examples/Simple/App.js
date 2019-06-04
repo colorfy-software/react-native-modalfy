@@ -10,7 +10,7 @@ import {
 import { ModalProvider, createModalStack } from 'react-native-modalfy'
 
 import CardModal from './app/modals/CardModal'
-import Button from './app/components/Button/Button'
+import Button from './app/components/Button'
 
 const { width } = Dimensions.get('screen')
 

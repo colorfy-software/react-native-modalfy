@@ -2,11 +2,17 @@ import React, { PureComponent } from 'react'
 import { TouchableOpacity, StyleSheet, Text } from 'react-native'
 import { withModal } from 'react-native-modalfy'
 
+let REFERENCE_COUNTER = 0
+
 class Button extends PureComponent {
+  componentDidMount = () => {
+    REFERENCE_COUNTER = REFERENCE_COUNTER + 1
+  }
+
   openModal = () => {
     const { modalToOpen, modal } = this.props
 
-    modal.openModal(modalToOpen)
+    modal.openModal(modalToOpen, { counter: REFERENCE_COUNTER })
   }
 
   render() {

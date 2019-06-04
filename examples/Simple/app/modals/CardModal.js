@@ -5,17 +5,12 @@ import Button from '../components/Button'
 
 const { width: ww, height: wh } = Dimensions.get('screen')
 
-let REFERENCE_COUNTER = 1
-
 class CardModal extends PureComponent {
-  componentDidMount = () => {
-    REFERENCE_COUNTER = REFERENCE_COUNTER + 1
-  }
-
   render() {
+    const { counter } = this.props.modal.params
     return (
       <View style={styles.card}>
-        <Text style={styles.title}>{REFERENCE_COUNTER}</Text>
+        <Text style={styles.title}>{counter}</Text>
         <Button label="Open Modal" modalToOpen="CardModal" />
       </View>
     )
