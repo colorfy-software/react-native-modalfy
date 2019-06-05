@@ -75,7 +75,7 @@ type AnimationConfig = {
 
 // From react-native/Libraries/Animated/src/animations/TimingAnimation.js
 type TimingAnimationConfig = AnimationConfig & {
-  toValue: number | AnimatedValue | { x: number, y: number },
+  toValue?: number & AnimatedValue & { x: number, y: number },
   easing?: (value: number) => number,
   duration?: number,
   delay?: number,
@@ -113,11 +113,9 @@ export type Options = {
   transitionOptions?: TransitionOptions,
 }
 
-type Params = { [key: ModalName]: Object }
-
 export type StackItem = {
   name: ModalName,
-  component: React$ComponentType<*>,
+  component: React$ComponentType<*> & { modalOptions?: Options },
   hash: string,
   index: number,
   options?: Options,
@@ -129,24 +127,31 @@ export type Stack = {
   content: Array<StackItem>,
   defaultOptions: Options,
   openedItems: Array<?StackItem>,
-  params?: Params,
   total: number,
 }
 
-type EventCallback = AnimatedValue => void
+export type EventName = 'onAnimate'
+export type EventNames = Array<EventName>
 
-type ModalEventSubscription = {
-  remove: () => void,
-}
+export type EventCallback = (animatedValue?: AnimatedValue) => void
+
+export type EventSubscription = { remove: () => boolean }
+
+export type ModalListener = (
+  eventName: EventName,
+  callback: EventCallback
+) => EventSubscription
+
+export type EventListeners = { event: string, handler: EventCallback }
+
+export type ModalEventListeners = Set<EventListeners>
 
 export type Modal = {
-  addListener: (
-    eventName: string,
-    callback: EventCallback
-  ) => ModalEventSubscription,
+  addListener: ModalListener,
   currentModal: ?ModalName,
   openModal: (modalName: ModalName, params?: Object) => void,
   closeModal: (modal?: ModalName) => void,
   getParams: (modalName: ModalName, fallback?: any) => any,
+  removeAllListeners: () => void,
   params?: any,
 }

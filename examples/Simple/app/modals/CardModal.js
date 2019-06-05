@@ -6,6 +6,20 @@ import Button from '../components/Button'
 const { width: ww, height: wh } = Dimensions.get('screen')
 
 class CardModal extends PureComponent {
+  componentDidMount() {
+    const { modal } = this.props
+    this.modalListenerID = modal.addListener('onAnimate', this._handleAnimation)
+  }
+
+  componentWillUnmount() {
+    this.modalListenerID?.remove()
+  }
+
+  _handleAnimation = animatedValue => {
+    const { counter } = this.props.modal.params
+    console.log(`✨ Card ${counter}:`, animatedValue)
+  }
+
   render() {
     const { counter } = this.props.modal.params
     return (
