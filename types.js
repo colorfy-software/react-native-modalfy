@@ -122,11 +122,11 @@ export type StackItem = {
   params?: any,
 }
 
-export type Stack = {
+export type Stack<T> = {
   names: Array<ModalName>,
   content: Array<StackItem>,
   defaultOptions: Options,
-  openedItems: Array<?StackItem>,
+  openedItems: T,
   total: number,
 }
 

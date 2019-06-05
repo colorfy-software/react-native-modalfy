@@ -2,7 +2,7 @@
 
 import type { Stack, StackItem } from '../types'
 
-export default function(stackItem: StackItem, stack: Stack) {
+export default function(stackItem: StackItem, stack: Stack<Set<StackItem>>) {
   return {
     animateInConfig:
       stackItem?.component.modalOptions?.animateInConfig ||

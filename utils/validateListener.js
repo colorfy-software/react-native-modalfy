@@ -1,16 +1,16 @@
 /* @flow */
 
-import type { EventCallback, EventName, EventNames } from '../types'
+import type { EventName } from '../types'
 import invariant from './invariant'
 
 type Action = 'add'
 
 type Payload = {
   eventName: EventName,
-  handler: EventCallback,
+  handler: () => void,
 }
 
-const validEventNames: EventNames = ['onAnimate']
+const validEventNames = ['onAnimate']
 
 export default function(action: Action, payload: Payload) {
   const { eventName, handler } = payload
