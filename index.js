@@ -1,4 +1,5 @@
-export { default as createModalStack } from './createModalStack'
-export { default as withModal } from './withModal'
-export { default as ModalProvider } from './modules/ModalProvider'
+export { default as ModalProvider } from './lib/ModalProvider'
+export { default as createModalStack } from './lib/createModalStack'
+export { default as withModal } from './lib/withModal'
+export { default as useModal } from './lib/useModal'
 export { Modal, Config, Options, Stack } from './types'
