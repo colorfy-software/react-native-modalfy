@@ -150,8 +150,27 @@ export type Modal = {
   addListener: ModalListener,
   currentModal: ?ModalName,
   openModal: (modalName: ModalName, params?: Object) => void,
+  closeAllModals: () => void,
   closeModal: (modal?: ModalName) => void,
+  closeModals: (modal: ModalName) => void,
   getParams: (modalName: ModalName, fallback?: any) => any,
   removeAllListeners: () => void,
   params?: any,
+}
+
+export type SharedProps = {
+  clearListeners: (hash: string) => void,
+  closeAllModals: () => void,
+  closeModal: (stackItem: StackItem) => void,
+  closeModals: (modal: ModalName) => void,
+  currentModal: ?ModalName,
+  eventListeners: ModalEventListeners,
+  getParams: (hash: ?string, fallback: any) => any,
+  openModal: ModalName => void,
+  registerListener: (
+    hash: string,
+    eventName: EventName,
+    handler: () => void
+  ) => EventSubscription,
+  stack: Stack<Set<StackItem>>,
 }
