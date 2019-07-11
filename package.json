@@ -40,7 +40,9 @@
     "react-native": ">=0.55"
   },
   "jest": {
-    "preset": "react-native"
+    "testMatch": [
+      "**/__tests__/*.spec.js"
+    ]
   },
   "keywords": [
     "react",
