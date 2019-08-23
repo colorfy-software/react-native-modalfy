@@ -18,30 +18,57 @@
   "homepage": "https://github.com/colorfy-software/react-native-modalfy#readme",
   "scripts": {
     "flow": "flow --show-all-errors",
-    "jest": "jest --verbose --coverage",
-    "prettier": "prettier --config .prettierrc --parser flow --write \"**/*.js\""
+    "jest": "jest --verbose",
+    "prettier": "prettier --config .prettierrc --parser flow --write \"**/*.js\"",
+    "test": "jest --verbose --coverage",
+    "test-ci": "yarn run lint-staged && yarn run lint && yarn run flow && yarn run jest"
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.3.0",
     "react-is": "^16.8.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.3",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
-    "babel-jest": "^24.7.1",
-    "flow-bin": "0.97.0",
-    "jest": "^24.7.1",
-    "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "16.8.3"
+    "babel-jest": "^24.9.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "flow-bin": "0.106.0",
+    "jest": "^24.9.0",
+    "jest-environment-enzyme": "^7.1.0",
+    "jest-enzyme": "^7.1.0",
+    "metro-react-native-babel-preset": "^0.55.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-native": "^0.60.5",
+    "react-test-renderer": "16.8.6"
   },
   "peerDependencies": {
     "react": ">=16.3.1",
     "react-native": ">=0.55"
   },
   "jest": {
+    "coverageDirectory": "./modules/__tests__/__coverage__",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ],
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "jest-enzyme"
+    ],
+    "testEnvironment": "enzyme",
+    "testEnvironmentOptions": {
+      "enzymeAdapter": "react16"
+    },
     "testMatch": [
-      "**/__tests__/*.spec.js"
+      "**/__tests__/**/*.spec.js"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!react-native)"
     ]
   },
   "keywords": [

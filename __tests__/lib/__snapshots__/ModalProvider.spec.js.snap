@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`💧 ModalProvider should render children correctly 1`] = `
+Array [
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View />
+  </View>,
+  <View
+    style={
+      Object {
+        "bottom": 0,
+        "left": 0,
+        "opacity": 0,
+        "position": "absolute",
+        "right": 0,
+        "top": 0,
+        "transform": Array [
+          Object {
+            "translateY": 1334,
+          },
+        ],
+        "zIndex": 0,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "black",
+          "height": 1334,
+          "opacity": 0,
+          "width": 750,
+        }
+      }
+    />
+  </View>,
+]
+`;

@@ -4,6 +4,8 @@ npm-debug.log
 
 # Dependency directory
 node_modules
+examples
+flow-typed
 
 # Runtime data
 tmp

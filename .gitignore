@@ -3,3 +3,5 @@ node_modules/
 examples/Simple/node_modules/
 npm-debug.log
 yarn-error.log
+modules/__tests__/__coverage__
+coverage
