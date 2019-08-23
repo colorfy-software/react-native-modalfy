@@ -6,6 +6,10 @@ npm-debug.log
 node_modules
 examples
 flow-typed
+__tests__
+coverage
+modules
 
 # Runtime data
 tmp
+.DS_Store
