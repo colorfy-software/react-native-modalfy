@@ -12,6 +12,13 @@ export default function(customDefaultOptions: Options = {}) {
   } = customDefaultOptions
 
   invariant(
+    !backButtonBehavior ||
+      ((backButtonBehavior && backButtonBehavior === 'clear') ||
+        (backButtonBehavior && backButtonBehavior === 'none') ||
+        (backButtonBehavior && backButtonBehavior === 'pop')),
+    "backButtonBehavior should either be 'pop', 'clear' or 'none' in createModalStack()"
+  )
+  invariant(
     !backdropOpacity ||
       (backdropOpacity &&
         typeof backdropOpacity === 'number' &&
@@ -43,12 +50,5 @@ export default function(customDefaultOptions: Options = {}) {
         }),
       }
       }`
-  )
-  invariant(
-    !backButtonBehavior ||
-      ((backButtonBehavior && backButtonBehavior === 'clear') ||
-        (backButtonBehavior && backButtonBehavior === 'none') ||
-        (backButtonBehavior && backButtonBehavior === 'pop')),
-    "backButtonBehavior should either be 'pop', 'clear' or 'none' in createModalStack()"
   )
 }

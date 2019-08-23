@@ -10,14 +10,14 @@ export const vw = (percentage: number): number =>
 export const vh = (percentage: number): number =>
   (Dimensions.get('window').height * percentage) / 100
 
-export const defaultOptions = {
+export const defaultOptions: Options = {
   animateInConfig: {
-    easing: Easing.inOut(Easing.exp),
     duration: 450,
+    easing: Easing.inOut(Easing.exp),
   },
   animateOutConfig: {
-    easing: Easing.inOut(Easing.exp),
     duration: 450,
+    easing: Easing.inOut(Easing.exp),
   },
   backdropOpacity: 0.6,
   position: 'center',
