@@ -1,6 +1,6 @@
 {
   "name": "react-native-modalfy",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "description": "Modal citizen of React Native.",
   "main": "index.js",
   "repository": {
