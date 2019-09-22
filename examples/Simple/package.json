@@ -11,7 +11,7 @@
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-gesture-handler": "^1.4.1",
-    "react-native-modalfy": "^1.0.0-beta.0",
+    "react-native-modalfy": "^1.0.1",
     "react-native-svg": "^9.6.4",
     "react-navigation": "^3.12.0"
   },

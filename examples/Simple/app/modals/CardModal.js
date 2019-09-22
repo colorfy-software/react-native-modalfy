@@ -22,42 +22,44 @@ class CardModal extends PureComponent {
   }
 
   _handleAnimation = animatedValue => {
-    const { counter } = this.props.modal.params
-    console.log(`✨ Card ${counter}:`, animatedValue)
+    const { currentModal } = this.props.modal
+    console.info(`✨ ${currentModal}:`, animatedValue)
   }
 
   render() {
     const {
-      closeAllModals,
+      currentModal,
       closeModal,
-      params: { counter },
+      closeModals,
+      closeAllModals,
+      params: { color },
     } = this.props.modal
+
     return (
       <View style={styles.card}>
-        <Text style={styles.title}>{counter}</Text>
-        <Button label="Open Modal" modalToOpen="CardModal" />
-        <ButtonModule title="Close" onPress={closeModal} color="#333ddd" />
-        <ButtonModule
-          title="Close all"
-          onPress={() => closeAllModals('CardModal')}
-          color="#ff3300"
-        />
+        <Text style={styles.title(color)}>{currentModal}</Text>
+        <Button label="Open ModalA" modalToOpen="ModalA" color="tomato" />
+        <Button label="Open ModalB" modalToOpen="ModalB" color="darkcyan" />
+        <Button label="Open ModalC" modalToOpen="ModalC" color="deeppink" />
+        
+        <ButtonModule title="Close" onPress={closeModal} color="dodgerblue" />
+        <ButtonModule title={`Close all ${currentModal}`} onPress={() => closeModals(currentModal)} color="dodgerblue" />
+        <ButtonModule title="Close all modals" onPress={closeAllModals} color="red" />
       </View>
     )
   }
 }
 
-export default CardModal
-
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 72,
-    color: '#333ddd',
-    marginBottom: 30,
-  },
+  title: color => ({
+    color,
+    fontSize: 48,
+    fontWeight: 'bold',
+    marginBottom: 50,
+  }),
   card: {
-    width: ww * 0.75,
-    height: wh * 0.6,
+    width: ww * 0.85,
+    height: wh * 0.7,
     backgroundColor: 'white',
     elevation: 5,
     alignItems: 'center',
@@ -65,3 +67,5 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
 })
+
+export default CardModal

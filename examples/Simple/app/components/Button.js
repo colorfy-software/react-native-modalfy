@@ -2,40 +2,32 @@ import React, { PureComponent } from 'react'
 import { TouchableOpacity, StyleSheet, Text } from 'react-native'
 import { withModal } from 'react-native-modalfy'
 
-let REFERENCE_COUNTER = 0
-
 class Button extends PureComponent {
-  componentDidMount = () => {
-    REFERENCE_COUNTER = REFERENCE_COUNTER + 1
-  }
-
   openModal = () => {
-    const { modalToOpen, modal } = this.props
+    const { color, modalToOpen, modal } = this.props
 
-    modal.openModal(modalToOpen, { counter: REFERENCE_COUNTER })
+    modal.openModal(modalToOpen, { color })
   }
 
   render() {
-    const { label } = this.props
+    const { color, label } = this.props
 
     return (
-      <TouchableOpacity onPress={this.openModal} style={styles.button}>
+      <TouchableOpacity onPress={this.openModal} style={styles.button(color)}>
         <Text style={styles.label}>{label}</Text>
       </TouchableOpacity>
     )
   }
 }
 
-export default withModal(Button)
-
 const styles = StyleSheet.create({
-  button: {
+  button: backgroundColor => ({
+    backgroundColor,
     paddingHorizontal: 60,
     paddingVertical: 21,
-    backgroundColor: '#333ddd',
     borderRadius: 21,
-    marginBottom: 10,
-  },
+    marginBottom: 30,
+  }),
   label: {
     fontSize: 16,
     fontWeight: '800',
@@ -43,3 +35,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 })
+
+export default withModal(Button)

@@ -5229,10 +5229,10 @@ react-native-gesture-handler@^1.4.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-modalfy@^1.0.0-beta.0:
-  version "1.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-1.0.0-beta.0.tgz#9566083b5f273c3d4bab32b0284e75b0eabd0d82"
-  integrity sha512-43ZwEnDft2rAoZKjhbQwVXPHeu/mllaOv+IIFqVQb2iUcyqlwGnXs5SBa4cS1IcMYfKShPvHRwWdDH1PMqvvQw==
+react-native-modalfy@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-1.0.0.tgz#9d306405232a1a24bf94a794da6f99881f9a1c64"
+  integrity sha512-ae9rcwi+jb8Fb2nYVd84lxMjnMn7uQkywBM1ckgYJwnG3IJG+sgh9a87UssGTQEXZcHCQmBCjbZ/Pk6CrPhiwQ==
   dependencies:
     hoist-non-react-statics "^3.3.0"
     react-is "^16.8.6"

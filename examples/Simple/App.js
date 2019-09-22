@@ -14,7 +14,7 @@ import Button from './app/components/Button'
 
 const { width } = Dimensions.get('screen')
 
-const config = { CardModal }
+const config = { ModalA: CardModal, ModalB: CardModal, ModalC: CardModal }
 
 const defaultOptions = {
   animateInConfig: {
@@ -35,19 +35,22 @@ const defaultOptions = {
       {
         translateX: animatedValue.interpolate({
           inputRange: [0, 1, 2],
-          outputRange: [-width / 2, 0, width / 2],
+          outputRange: [-width / 1.5, 0, width / 1.5],
+          extrapolate: 'clamp',
         }),
       },
       {
         rotateY: animatedValue.interpolate({
           inputRange: [0, 1, 2],
           outputRange: ['90deg', '0deg', '-90deg'],
+          extrapolate: 'clamp',
         }),
       },
       {
         scale: animatedValue.interpolate({
           inputRange: [0, 1, 2],
           outputRange: [1.2, 1, 0.9],
+          extrapolate: 'clamp',
         }),
       },
     ],
@@ -62,20 +65,30 @@ class App extends PureComponent {
       <ModalProvider stack={stack}>
         <View style={styles.container}>
           <StatusBar animated hidden translucent />
-          <Button label="Open modal" modalToOpen="CardModal" />
+          <Text style={styles.title}>RNM</Text>
+          <Button label="Open ModalA" modalToOpen="ModalA" color="tomato" />
+          <Button label="Open ModalB" modalToOpen="ModalB" color="darkcyan" />
+          <Button label="Open ModalC" modalToOpen="ModalC" color="deeppink" />
         </View>
       </ModalProvider>
     )
   }
 }
 
-export default App
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'pink',
+    backgroundColor: 'indigo',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
+  },
+  title: {
+    color: 'white',
+    fontSize: 54,
+    fontWeight: 'bold',
+    marginBottom: 50,
   },
 })
+
+export default App
+
