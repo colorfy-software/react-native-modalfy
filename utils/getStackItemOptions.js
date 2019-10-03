@@ -20,6 +20,9 @@ export default function(stackItem: StackItem, stack: Stack<Set<StackItem>>) {
       stackItem?.component.modalOptions?.shouldAnimateOut ??
       stackItem?.options?.shouldAnimateOut ??
       stack.defaultOptions.shouldAnimateOut,
+    stackItemContainerStyle: stackItem?.component.stackItemContainerStyle ||
+      stackItem.options?.stackItemContainerStyle ||
+      stack.defaultOptions.stackItemContainerStyle,
     transitionOptions:
       stackItem?.component.modalOptions?.transitionOptions ||
       stackItem?.options?.transitionOptions ||
