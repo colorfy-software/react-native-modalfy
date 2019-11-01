@@ -1,6 +1,6 @@
 {
   "name": "react-native-modalfy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Modal citizen of React Native.",
   "main": "index.js",
   "repository": {
@@ -30,14 +30,14 @@
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
     "babel-jest": "^24.9.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
-    "flow-bin": "0.106.0",
+    "flow-bin": "0.111.0",
     "jest": "^24.9.0",
-    "jest-environment-enzyme": "^7.1.0",
-    "jest-enzyme": "^7.1.0",
+    "jest-environment-enzyme": "^7.1.2",
+    "jest-enzyme": "^7.1.2",
     "metro-react-native-babel-preset": "^0.55.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
