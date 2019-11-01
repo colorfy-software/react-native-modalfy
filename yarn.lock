@@ -407,10 +407,18 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-syntax-optional-catch-binding" "^7.2.0"
 
-"@babel/plugin-proposal-optional-chaining@^7.0.0", "@babel/plugin-proposal-optional-chaining@^7.2.0":
+"@babel/plugin-proposal-optional-chaining@^7.0.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-chaining/-/plugin-proposal-optional-chaining-7.2.0.tgz#ae454f4c21c6c2ce8cb2397dc332ae8b420c5441"
   integrity sha512-ea3Q6edZC/55wEBVZAEz42v528VulyO0eir+7uky/sT4XRcdkWJcFi1aPtitTlwUzGnECWJNExWww1SStt+yWw==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-optional-chaining" "^7.2.0"
+
+"@babel/plugin-proposal-optional-chaining@^7.6.0":
+  version "7.6.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-chaining/-/plugin-proposal-optional-chaining-7.6.0.tgz#e9bf1f9b9ba10c77c033082da75f068389041af8"
+  integrity sha512-kj4gkZ6qUggkprRq3Uh5KP8XnE1MdIO0J7MhdDX8+rAbB6dJ2UrensGIS+0NPZAaaJ1Vr0PN6oLUgXMU1uMcSg==
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-syntax-optional-chaining" "^7.2.0"
@@ -2429,10 +2437,10 @@ enzyme-adapter-utils@^1.12.0:
     prop-types "^15.7.2"
     semver "^5.6.0"
 
-enzyme-matchers@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/enzyme-matchers/-/enzyme-matchers-7.1.0.tgz#7224298028679af41d224fdff02b9a9a61f2ad86"
-  integrity sha512-PCfIvyNnZh4ougBaMXKeqNrN6yilzkbtphpi2X74uFeqbPabDUcvNq30Bcw29sSIv7QI1ZCTlQ2ktGep/4jIBw==
+enzyme-matchers@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/enzyme-matchers/-/enzyme-matchers-7.1.2.tgz#d80530a61f22d28bb993dd7588abba38bd4de282"
+  integrity sha512-03WqAg2XDl7id9rARIO97HQ1JIw9F2heJ3R4meGu/13hx0ULTDEgl0E67MGl2Uq1jq1DyRnJfto1/VSzskdV5A==
   dependencies:
     circular-json-es6 "^2.0.1"
     deep-equal-ident "^1.1.1"
@@ -2818,10 +2826,10 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
-flow-bin@0.106.0:
-  version "0.106.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.106.0.tgz#55aab8c154df2bd78abfe6acfe120cf5638a0352"
-  integrity sha512-sV8lNBLTTfieUBNvQZFc1K1wXjC8I+O7ltv6G/nd3hdGyq2Jymyy01zAPhJ7MRw8yZ0X2dBSHFZx5DPreBqhAg==
+flow-bin@0.111.0:
+  version "0.111.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.111.0.tgz#dda5d07911df2268ef0f9061fb3c8d71bbb3bc3d"
+  integrity sha512-RQQMJ23r9zdGJjmYDoAoKqFy3TAudqbf/QGpsgsZvzMPg/qgIPK6e0hDLJe4aARR6B1+Gs0xBbVRBcFEFK8jyg==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -3578,10 +3586,10 @@ jest-each@^24.9.0:
     jest-util "^24.9.0"
     pretty-format "^24.9.0"
 
-jest-environment-enzyme@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/jest-environment-enzyme/-/jest-environment-enzyme-7.1.0.tgz#1181d174034a2a4d8ba8fd6ba2123f243ccaf7ec"
-  integrity sha512-31nPBYx1MZfihsKUgZg16zLS4+f4gBvo4YpYMU4TIvQ2IjbREU9bLFwAszTgcs5mkE7SNOykm/68OjPmgDd4/Q==
+jest-environment-enzyme@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/jest-environment-enzyme/-/jest-environment-enzyme-7.1.2.tgz#4561f26a719e8e87ce8c9a6d3f540a92663ba8d5"
+  integrity sha512-3tfaYAzO7qZSRrv+srQnfK16Vu5XwH/pHi8FpoqSHjKKngbHzXf7aBCBuWh8y3w0OtknHRfDMFrC60Khj+g1hA==
   dependencies:
     jest-environment-jsdom "^24.0.0"
 
@@ -3620,14 +3628,14 @@ jest-environment-node@^24.9.0:
     jest-mock "^24.9.0"
     jest-util "^24.9.0"
 
-jest-enzyme@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/jest-enzyme/-/jest-enzyme-7.1.0.tgz#4345e989382a6cd70c15c7225dad9c9a9bb79cbc"
-  integrity sha512-ukL9jFwvQ3xbzhoKniDVTkAgZzGCFJNeJVU058RyY0R46fVhjJlPEV/hYlmJl518qfCmKNW6zXgtmyPcaDgxhA==
+jest-enzyme@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/jest-enzyme/-/jest-enzyme-7.1.2.tgz#91a10b2d3be1b56c0d65b34286e5bdc41ab4ba3d"
+  integrity sha512-j+jkph3t5hGBS12eOldpfsnERYRCHi4c/0KWPMnqRPoJJXvCpLIc5th1MHl0xDznQDXVU0AHUXg3rqMrf8vGpA==
   dependencies:
-    enzyme-matchers "^7.1.0"
+    enzyme-matchers "^7.1.2"
     enzyme-to-json "^3.3.0"
-    jest-environment-enzyme "^7.1.0"
+    jest-environment-enzyme "^7.1.2"
 
 jest-get-type@^24.8.0:
   version "24.8.0"
