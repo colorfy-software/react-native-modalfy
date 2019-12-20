@@ -12,6 +12,11 @@ export default function(stackItem: StackItem, stack: Stack<Set<StackItem>>) {
       stackItem?.component.modalOptions?.animateOutConfig ||
       stackItem?.options?.animateOutConfig ||
       stack.defaultOptions.animateOutConfig,
+    containerStyle:
+      stackItem?.component.modalOptions?.containerStyle ||
+      stackItem.options?.containerStyle ||
+      stack.defaultOptions.containerStyle ||
+      {},
     position:
       stackItem?.component.modalOptions?.position ||
       stackItem.options?.position ||
@@ -20,9 +25,6 @@ export default function(stackItem: StackItem, stack: Stack<Set<StackItem>>) {
       stackItem?.component.modalOptions?.shouldAnimateOut ??
       stackItem?.options?.shouldAnimateOut ??
       stack.defaultOptions.shouldAnimateOut,
-    stackItemContainerStyle: stackItem?.component.stackItemContainerStyle ||
-      stackItem.options?.stackItemContainerStyle ||
-      stack.defaultOptions.stackItemContainerStyle || {},
     transitionOptions:
       stackItem?.component.modalOptions?.transitionOptions ||
       stackItem?.options?.transitionOptions ||
