@@ -99,6 +99,7 @@ export interface Config {
   [key: ModalName]: React.ComponentType<any>
   animateInConfig?: TimingAnimationConfig
   animateOutConfig?: TimingAnimationConfig
+  containerStyle?: ViewStyle
   modal?: React.ComponentType<any>
   position?: 'center' | 'top' | 'bottom'
   shouldAnimateOut?: boolean

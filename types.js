@@ -97,6 +97,7 @@ export type Config = {
   [key: ModalName]: React$ComponentType<*>,
   animateInConfig?: TimingAnimationConfig,
   animateOutConfig?: TimingAnimationConfig,
+  containerStyle?: Object,
   modal?: React$ComponentType<*>,
   position?: 'center' | 'top' | 'bottom',
   shouldAnimateOut?: boolean,
