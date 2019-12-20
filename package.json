@@ -23,6 +23,7 @@
     "test": "jest --verbose --coverage",
     "test-ci": "yarn run lint-staged && yarn run lint && yarn run flow && yarn run jest"
   },
+  "types": "./index.d.ts",
   "dependencies": {
     "hoist-non-react-statics": "^3.3.0",
     "react-is": "^16.8.6"
