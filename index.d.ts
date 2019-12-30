@@ -1,3 +1,4 @@
+import React from 'react'
 import { Animated, ViewStyle } from 'react-native'
 
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
@@ -199,7 +200,7 @@ export interface SharedProps {
 
 export function createModalStack(
   config: Config,
-  customDefaultOptions: Options
+  customDefaultOptions?: Options
 ): Stack<Set<StackItem>>
 
 export function withModal<P extends object>(
@@ -208,4 +209,4 @@ export function withModal<P extends object>(
 
 export function useModal(): WithModal
 
-export type ModalProvider = React.ComponentType<{ stack: Stack }>
+export class ModalProvider extends React.Component<{ stack: Stack<Set<StackItem>> }> {}
