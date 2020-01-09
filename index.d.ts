@@ -12,7 +12,7 @@ type ExtrapolateType = 'extend' | 'identity' | 'clamp'
 
 interface InterpolationConfigType {
   inputRange: Array<number>
-  outputRange: Array<number> | Array<string>-
+  outputRange: Array<number> | Array<string>
   easing?: (input: number) => number
   extrapolate?: ExtrapolateType
   extrapolateLeft?: ExtrapolateType
