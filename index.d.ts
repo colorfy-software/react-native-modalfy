@@ -119,7 +119,7 @@ type ModalEventListeners = Set<EventListeners>
 interface SharedProps {
   clearListeners: (hash: string) => void
   closeAllModals: () => void
-  closeModal: (stackItem: ModalStackItem) => void
+  closeModal: (stackItem?: ModalStackItem) => void
   closeModals: (modalName: ModalName) => void
   currentModal: ModalName | null
   eventListeners: ModalEventListeners

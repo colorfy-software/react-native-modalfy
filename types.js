@@ -163,7 +163,7 @@ export type Modal = {
 export type SharedProps = {
   clearListeners: (hash: string) => void,
   closeAllModals: () => void,
-  closeModal: (stackItem: StackItem) => void,
+  closeModal: (stackItem?: StackItem) => void,
   closeModals: (modalName: ModalName) => void,
   currentModal: ?ModalName,
   eventListeners: ModalEventListeners,
