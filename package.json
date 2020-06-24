@@ -13,7 +13,7 @@
     "url": "https://github.com/colorfy-software/react-native-modalfy/issues"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://registry.npmjs.org"
   },
   "homepage": "https://react-native-modalfy.now.sh/docs",
   "scripts": {

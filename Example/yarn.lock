@@ -1175,13 +1175,6 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@welldone-software/why-did-you-render@^4.2.2":
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/@welldone-software/why-did-you-render/-/why-did-you-render-4.2.2.tgz#720128a4f626997ece1ac455a7b13f9ef10dae0a"
-  integrity sha512-v08t2WXFQdnxkPodXzbPeho3FwgrlwzjwxasN+8A1LSZnkcxJpYvOF8/z+OySqehC44JT6oPB1KEnBVMrebHdw==
-  dependencies:
-    lodash "^4"
-
 abab@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
@@ -3036,7 +3029,7 @@ hoist-non-react-statics@^2.3.1:
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
 
-hoist-non-react-statics@^3.3.0:
+hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -4067,7 +4060,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
-lodash@^4, lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.3.0:
+lodash@^4.17.10, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.3.0:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
@@ -5098,13 +5091,14 @@ react-native-gesture-handler@^1.6.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-modalfy@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-1.1.3.tgz#56024a42f2b31c27a8828291a8f7cdd7e91859d8"
-  integrity sha512-bNZ6MD0G1cHXn+oWk4Sa6bAURp/lcn9/wVv4hFuqM4yIK07rIT0OOHoq+IgDmm77TMlqA3KqNQBy5OmocSJnzg==
+react-native-modalfy@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-2.0.0.tgz#dfceaf4dd539a467286d155cb85b7d8b4f50f6c6"
+  integrity sha512-lwVjxn380xDHyLCTW2IQEdWELc5+TZVbLYT0ockcnsTBojG7jFVTmV/rtZeDHS72D5jJN6rxUbxrIMC+RA7T6g==
   dependencies:
-    hoist-non-react-statics "^3.3.0"
+    hoist-non-react-statics "^3.3.2"
     react-is "^16.8.6"
+    use-memo-one "^1.1.1"
 
 react-native@0.62.2:
   version "0.62.2"

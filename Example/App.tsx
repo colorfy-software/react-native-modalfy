@@ -8,10 +8,10 @@ import {
   Text,
 } from 'react-native'
 import {
-  ModalStackOptions,
+  ModalOptions,
+  ModalProvider,
   ModalStackConfig,
   createModalStack,
-  ModalProvider,
 } from 'react-native-modalfy'
 
 import DemoModal from './components/DemoModal'
@@ -63,7 +63,7 @@ const config: ModalStackConfig = {
   ModalC: DemoModal,
 }
 
-const defaultOptions: ModalStackOptions = {
+const defaultOptions: ModalOptions = {
   backdropOpacity: 0.4,
   animateInConfig: {
     easing: Easing.bezier(0.42, -0.03, 0.27, 0.95),

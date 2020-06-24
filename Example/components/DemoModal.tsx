@@ -72,10 +72,10 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={onCloseModals}>
-          <Text>Close all {modalName}</Text>
+          <Text style={{ fontWeight: '600' }}>Close all {modalName}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={closeAllModals}>
-          <Text>Close everything</Text>
+          <Text style={{ fontWeight: '600' }}>Close everything</Text>
         </TouchableOpacity>
       </View>
     )
