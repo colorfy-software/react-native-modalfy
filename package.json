@@ -1,12 +1,9 @@
 {
   "name": "react-native-modalfy",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "description": "Modal citizen of React Native.",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/colorfy-software/react-native-modalfy.git"
-  },
+  "main": "index.ts",
+  "repository": "git://github.com/colorfy-software/react-native-modalfy.git",
   "license": "MIT",
   "authors": [
     "Charles Mangwa",
@@ -15,62 +12,40 @@
   "bugs": {
     "url": "https://github.com/colorfy-software/react-native-modalfy/issues"
   },
-  "homepage": "https://github.com/colorfy-software/react-native-modalfy#readme",
-  "scripts": {
-    "flow": "flow --show-all-errors",
-    "jest": "jest --verbose",
-    "prettier": "prettier --config .prettierrc --parser flow --write \"**/*.js\"",
-    "test": "jest --verbose --coverage",
-    "test-ci": "yarn run lint-staged && yarn run lint && yarn run flow && yarn run jest"
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
-  "types": "./index.d.ts",
+  "homepage": "https://react-native-modalfy.now.sh/docs",
+  "scripts": {
+    "lint": "eslint '*/**/*.{ts,tsx}' --quiet --fix",
+    "type": "yarn tsc"
+  },
   "dependencies": {
-    "hoist-non-react-statics": "^3.3.0",
-    "react-is": "^16.8.6"
+    "hoist-non-react-statics": "^3.3.2",
+    "react-is": "^16.8.6",
+    "use-memo-one": "^1.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.4.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.6.0",
-    "babel-jest": "^24.9.0",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
-    "flow-bin": "0.111.0",
-    "jest": "^24.9.0",
-    "jest-environment-enzyme": "^7.1.2",
-    "jest-enzyme": "^7.1.2",
-    "metro-react-native-babel-preset": "^0.55.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-native": "^0.60.5",
-    "react-test-renderer": "16.8.6"
+    "@react-native-community/eslint-config": "^1.1.0",
+    "@types/hoist-non-react-statics": "^3.3.1",
+    "@types/react": "^16.9.35",
+    "@types/react-is": "^16.7.1",
+    "@types/react-native": "^0.62.12",
+    "@typescript-eslint/eslint-plugin": "^3.0.2",
+    "@typescript-eslint/parser": "^3.0.2",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "prettier": "^2.0.5",
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-gesture-handler": "^1.6.1",
+    "typescript": "^3.9.3"
   },
   "peerDependencies": {
-    "react": ">=16.3.1",
-    "react-native": ">=0.55"
-  },
-  "jest": {
-    "coverageDirectory": "./modules/__tests__/__coverage__",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "coverageReporters": [
-      "lcov"
-    ],
-    "preset": "react-native",
-    "setupFilesAfterEnv": [
-      "jest-enzyme"
-    ],
-    "testEnvironment": "enzyme",
-    "testEnvironmentOptions": {
-      "enzymeAdapter": "react16"
-    },
-    "testMatch": [
-      "**/__tests__/**/*.spec.js"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!react-native)"
-    ]
+    "react": ">=16.8.3",
+    "react-native": ">=0.59.0",
+    "react-native-gesture-handler": "*"
   },
   "keywords": [
     "react",

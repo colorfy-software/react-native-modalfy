@@ -4,8 +4,6 @@ npm-debug.log
 
 # Dependency directory
 node_modules
-examples
-flow-typed
 __tests__
 coverage
 modules
@@ -13,3 +11,13 @@ modules
 # Runtime data
 tmp
 .DS_Store
+
+# Linting
+.eslintrc.js
+.prettierrc.js
+
+# Misc
+CODE_OF_CONDUCT.md
+.watchmanconfig
+.circleci
+Example
