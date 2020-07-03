@@ -130,7 +130,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
               backgroundColor,
               opacity: opacity.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, backdropOpacity || 0.6],
+                outputRange: [0, backdropOpacity ?? 0.6],
               }),
             },
           ]}
