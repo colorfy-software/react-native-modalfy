@@ -1,6 +1,6 @@
 import { isValidElementType } from 'react-is'
 
-import { ModalOptions } from 'types'
+import { ModalOptions } from '../types'
 
 export default function <P>(
   modalName: Exclude<keyof P, symbol | number>,
