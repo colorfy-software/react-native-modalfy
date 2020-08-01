@@ -10,11 +10,11 @@ export const vh = (percentage: number) =>
 
 export const defaultOptions: ModalOptions = {
   animateInConfig: {
-    duration: 0,
+    duration: 450,
     easing: Easing.inOut(Easing.exp),
   },
   animateOutConfig: {
-    duration: 0,
+    duration: 450,
     easing: Easing.inOut(Easing.exp),
   },
   disableFlingGesture: false,
