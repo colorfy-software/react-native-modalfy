@@ -62,6 +62,8 @@ const StackItem = <P extends ModalfyParams>({
     animateInConfig,
     containerStyle,
     backBehavior,
+    animationOut,
+    animationIn,
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
   React.useEffect(() => {
@@ -113,11 +115,17 @@ const StackItem = <P extends ModalfyParams>({
     ) => {
       if (!shouldAnimateOut) closeModalCallback?.(stackItem)
 
-      Animated.timing(animatedValue, {
-        toValue,
-        useNativeDriver: true,
-        ...(closeModalCallback ? animateOutConfig : animateInConfig),
-      }).start()
+      if (animationIn && !closeModalCallback) {
+        animationIn(animatedValue, toValue)
+      } else if (animationOut && closeModalCallback) {
+        animationOut(animatedValue, toValue)
+      } else {
+        Animated.timing(animatedValue, {
+          toValue,
+          useNativeDriver: true,
+          ...(closeModalCallback ? animateOutConfig : animateInConfig),
+        }).start()
+      }
 
       // Using `finished` provided by Animated.timing().start() callback
       // doesn't hide the backdrop fast enough to get a please animation,
@@ -128,7 +136,9 @@ const StackItem = <P extends ModalfyParams>({
       }, Math.max(1, Number(animateOutConfig?.duration) * 0.5))
     },
     [
+      animationIn,
       animateInConfig,
+      animationOut,
       animateOutConfig,
       animatedValue,
       shouldAnimateOut,

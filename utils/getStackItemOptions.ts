@@ -21,6 +21,8 @@ export default function <P>(
     containerStyle: extractOption('containerStyle'),
     backdropColor: extractOption('backdropColor'),
     backBehavior: extractOption('backBehavior'),
+    animationOut: extractOption('animationOut'),
+    animationIn: extractOption('animationIn'),
     position: extractOption('position'),
   }
 }
