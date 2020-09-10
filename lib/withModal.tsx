@@ -22,7 +22,7 @@ const withModal = <P extends ModalfyParams, Props extends object>(
   const displayName = Component.displayName || Component.name
 
   class WithModalComponent extends React.Component<
-    Omit<Props, keyof ModalProp<P, Props>>
+    Omit<Props, keyof ModalProp<P, {}>>
   > {
     static displayName = `withModal(${displayName})`
     static readonly WrappedComponent = Component
