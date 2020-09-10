@@ -17,7 +17,7 @@ import { invariant } from '../utils'
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/withmodal
  */
 const withModal = <P extends ModalfyParams, Props extends object>(
-  Component: React.ComponentClass<ModalProp<P, Props>>,
+  Component: React.ComponentClass<Props>,
 ) => {
   const displayName = Component.displayName || Component.name
 
@@ -36,7 +36,6 @@ const withModal = <P extends ModalfyParams, Props extends object>(
               `You should not use ${displayName} outside a <ModalProvider>`,
             )
             return (
-              // @ts-ignore
               <Component
                 {...(this.props as Props)}
                 modal={{
@@ -54,7 +53,6 @@ const withModal = <P extends ModalfyParams, Props extends object>(
     }
   }
 
-  // @ts-ignore
   return hoistStatics(WithModalComponent, Component)
 }
 
