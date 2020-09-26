@@ -1,5 +1,4 @@
-import React from 'react'
-
+import { useContext } from 'react'
 import { ModalfyParams, UsableModalProp } from '../types'
 
 import ModalContext from './ModalContext'
@@ -12,7 +11,7 @@ import ModalContext from './ModalContext'
  */
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
   // @ts-ignore
-  const context: UsableModalProp<P> = React.useContext(ModalContext)
+  const context: UsableModalProp<P> = useContext(ModalContext)
   return {
     /**
      * This function closes every open modal.

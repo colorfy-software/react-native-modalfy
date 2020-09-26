@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, memo } from 'react'
 import {
   TouchableWithoutFeedback,
   StyleSheet,
@@ -23,15 +23,13 @@ type State<P> = {
 const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const { stack } = props
 
-  const [hasChangedBackdropColor, setBackdropColorStatus] = React.useState<
-    boolean
-  >(false)
+  const [hasChangedBackdropColor, setBackdropColorStatus] = useState<boolean>(
+    false,
+  )
 
-  const [backdropClosedItems, setBackdropClosedItems] = React.useState<
-    string[]
-  >([])
+  const [backdropClosedItems, setBackdropClosedItems] = useState<string[]>([])
 
-  const [openedItemsArray, setOpenedItemsArray] = React.useState<
+  const [openedItemsArray, setOpenedItemsArray] = useState<
     State<P>['openedItemsArray']
   >([...stack.openedItems])
 
@@ -48,7 +46,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     [stack],
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       stack.openedItemsSize &&
       backdropColor &&
@@ -59,7 +57,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     }
   }, [backdropColor, hasChangedBackdropColor, stack.openedItemsSize])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const hasOpenedItemsNow = stack.openedItems.size
     const hadOpenedItemsBefore = openedItemsArray.length
 
@@ -82,7 +80,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     }
   }, [openedItemsArray.length, stack.openedItems.size, translateY, opacity])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (stack.openedItemsSize !== openedItemsArray.length) {
       setOpenedItemsArray([...stack.openedItems])
     }
@@ -164,7 +162,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export default React.memo(
+export default memo(
   ModalStack,
   (prevProps, nextProps) =>
     prevProps.stack.openedItemsSize === nextProps.stack.openedItemsSize,

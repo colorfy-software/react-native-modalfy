@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { useCallbackOne as useCallback } from 'use-memo-one'
 
@@ -18,7 +18,7 @@ import ModalState from './ModalState'
 import { invariant, validateListener } from '../utils'
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   stack: ModalStackType<any>
 }
 
@@ -31,12 +31,11 @@ interface Props {
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/stack#provider
  */
 const ModalProvider = ({ children, stack }: Props) => {
-  const modalStateSubscription = React.useRef<
+  const modalStateSubscription = useRef<
     ModalStateSubscription<any> | undefined
   >()
 
-  const modalEventListeners = React.useRef<ModalEventListeners>(new Set())
-    .current
+  const modalEventListeners = useRef<ModalEventListeners>(new Set()).current
 
   const openModal: SharedProps<any>['openModal'] = (modalName, params) => {
     const { currentModal } = ModalState.getState()
@@ -66,7 +65,7 @@ const ModalProvider = ({ children, stack }: Props) => {
   const closeAllModals: SharedProps<any>['closeAllModals'] = () =>
     ModalState.closeAllModals()
 
-  const [contextValue, setContextValue] = React.useState<
+  const [contextValue, setContextValue] = useState<
     ModalContextProvider<any, any>
   >({
     currentModal: null,
@@ -114,7 +113,7 @@ const ModalProvider = ({ children, stack }: Props) => {
     } else console.warn('Modalfy', error)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     invariant(stack, 'You need to provide a `stack` prop to <ModalProvider>')
 
     ModalState.init<any>({

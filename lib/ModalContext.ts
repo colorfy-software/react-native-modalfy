@@ -1,9 +1,9 @@
-import React from 'react'
+import { createContext } from 'react'
 
 import { ModalContextProvider, ModalfyParams } from '../types'
 
-const createContext = <ModalStackParamsList extends ModalfyParams>() => {
-  const ModalContext = React.createContext<
+const createModalContext = <ModalStackParamsList extends ModalfyParams>() => {
+  const ModalContext = createContext<
     Partial<ModalContextProvider<ModalStackParamsList>>
   >({})
   ModalContext.displayName = 'Modalfy'
@@ -11,4 +11,4 @@ const createContext = <ModalStackParamsList extends ModalfyParams>() => {
   return ModalContext
 }
 
-export default createContext()
+export default createModalContext()
