@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo } from 'react'
+import React, { ReactNode, useEffect, useRef, memo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import {
   useMemoOne as useMemo,
@@ -111,7 +111,7 @@ const StackItem = <P extends ModalfyParams>({
   const updateAnimatedValue = useCallback(
     (
       toValue: number,
-      closeModalCallback?: (stackItem: ModalStackItem<P>) => void,
+      closeModalCallback?: (closingElement: ModalStackItem<P>) => void,
     ) => {
       if (!shouldAnimateOut) closeModalCallback?.(stackItem)
 
@@ -186,7 +186,7 @@ const StackItem = <P extends ModalfyParams>({
     ],
   )
 
-  const renderAnimatedComponent = (): JSX.Element => {
+  const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
     const addListener = (eventName: ModalEventName, handler: () => void) =>
       registerListener(stackItem.hash, eventName, handler)
