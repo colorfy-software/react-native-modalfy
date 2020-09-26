@@ -26,21 +26,21 @@
     "use-memo-one": "^1.1.1"
   },
   "devDependencies": {
-    "@react-native-community/eslint-config": "^1.1.0",
+    "@react-native-community/eslint-config": "^2.0.0",
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/react": "^16.9.35",
     "@types/react-is": "^16.7.1",
     "@types/react-native": "^0.62.12",
-    "@typescript-eslint/eslint-plugin": "^3.0.2",
-    "@typescript-eslint/parser": "^3.0.2",
-    "eslint": "^7.1.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.3",
-    "prettier": "^2.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-gesture-handler": "^1.6.1",
-    "typescript": "^3.9.3"
+    "react-native-gesture-handler": "^1.8.0",
+    "typescript": "^4.0.3"
   },
   "peerDependencies": {
     "react": ">=16.8.3",

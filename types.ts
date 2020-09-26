@@ -1,3 +1,4 @@
+import { ComponentType } from 'react'
 import { Animated, ViewStyle } from 'react-native'
 
 /*  ========================                 ========================
@@ -51,7 +52,7 @@ export type ModalEventListeners = Set<{
 
 export interface ModalStackItem<P extends ModalfyParams> {
   name: Exclude<keyof P, symbol | number>
-  component: React.ComponentType<any> & { modalOptions?: ModalOptions }
+  component: ComponentType<any> & { modalOptions?: ModalOptions }
   hash: string
   index: number
   options?: ModalOptions
@@ -198,7 +199,7 @@ export interface UsableModalComponentProp<
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#config-and-options
  */
 export interface ModalStackConfig {
-  [key: string]: React.ComponentType<any> | ModalOptions
+  [key: string]: ComponentType<any> | ModalOptions
 }
 
 /**
@@ -333,7 +334,7 @@ export interface ModalOptions {
    * @default -
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#modal
    */
-  modal?: React.ComponentType<any>
+  modal?: ComponentType<any>
   /**
    * Vertical positioning of the modal.
    *
@@ -419,6 +420,6 @@ export type ModalComponentProp<
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentwithoptions
  */
-export type ModalComponentWithOptions<P = unknown> = React.ComponentType<P> & {
+export type ModalComponentWithOptions<P = unknown> = ComponentType<P> & {
   modalOptions?: ModalOptions
 }

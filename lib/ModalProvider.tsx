@@ -136,12 +136,9 @@ const ModalProvider = ({ children, stack }: Props) => {
   }, [])
 
   return (
-    // @ts-ignore
     <ModalContext.Provider value={contextValue}>
       <>
         <>{children}</>
-        {/*
-        // @ts-ignore */}
         <ModalStack
           {...contextValue}
           eventListeners={modalEventListeners}
