@@ -36,7 +36,7 @@ export interface ModalStackParamsList {
 
 export type ModalName = Exclude<keyof ModalStackParamsList, 'IntroModal'>
 
-const { width } = Dimensions.get('screen')
+const { height, width } = Dimensions.get('screen')
 
 const config: ModalStackConfig = {
   IntroModal: {
@@ -52,7 +52,7 @@ const config: ModalStackConfig = {
         {
           translateY: animatedValue.interpolate({
             inputRange: [0, 1, 2],
-            outputRange: [width * 3, 0, width * 3],
+            outputRange: [height, 0, height],
           }),
         },
       ],
