@@ -24,8 +24,9 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
     /**
      * This function closes the currently displayed modal by default.
      *
-     * You can also provide a `modalName` if you want to close
-     * a different modal than the latest opened.
+     * You can also provide a `modalName` if you want to close a different modal
+     * than the latest opened. This will only close the latest instance of that modal,
+     * see `closeModals()` if you want to close all instances.
      *
      * @example modal.closeModal()
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal

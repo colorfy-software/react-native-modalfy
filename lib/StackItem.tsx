@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, memo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
 import {
   useMemoOne as useMemo,
@@ -51,7 +51,7 @@ const StackItem = <P extends ModalfyParams>({
     [],
   )
 
-  const animatedListenerId = React.useRef<string | undefined>()
+  const animatedListenerId = useRef<string | undefined>()
 
   const {
     position: verticalPosition,
@@ -66,7 +66,7 @@ const StackItem = <P extends ModalfyParams>({
     animationIn,
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
-  React.useEffect(() => {
+  useEffect(() => {
     let handleAnimatedListener: ModalEventCallback = () => undefined
 
     if (transitionOptions && typeof transitionOptions !== 'function') {
@@ -146,9 +146,14 @@ const StackItem = <P extends ModalfyParams>({
     ],
   )
 
-  const closeStackItem = useCallback(() => {
-    updateAnimatedValue(position - 1, closeModal)
-  }, [closeModal, position, updateAnimatedValue])
+  const closeStackItem = useCallback(
+    (closingElement) => {
+      if (closingElement === currentModal) {
+        updateAnimatedValue(position - 1, () => closeModal(closingElement))
+      } else closeModal(closingElement)
+    },
+    [closeModal, currentModal, position, updateAnimatedValue],
+  )
 
   const closeAllStackItems = useCallback(() => {
     updateAnimatedValue(position - 1, closeAllModals)
@@ -240,11 +245,11 @@ const StackItem = <P extends ModalfyParams>({
     }
   }, [verticalPosition])
 
-  React.useEffect(() => {
+  useEffect(() => {
     updateAnimatedValue(position)
     if (wasClosedByBackdropPress) {
       if (backBehavior === 'clear') closeAllStackItems()
-      else closeStackItem()
+      else closeStackItem(undefined)
     }
   }, [
     backBehavior,
@@ -272,7 +277,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export default React.memo(
+export default memo(
   StackItem,
   (prevProps, nextProps) =>
     prevProps.position === nextProps.position &&

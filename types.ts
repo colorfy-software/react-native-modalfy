@@ -75,7 +75,7 @@ export interface ModalContextProvider<
 > {
   currentModal: M | null
   closeAllModals: () => void
-  closeModal: (stackItem?: ModalStackItem<P>) => void
+  closeModal: (stackItem?: M | ModalStackItem<P>) => void
   closeModals: (modalName: M) => boolean
   getParam: <N extends keyof P[M], D extends P[M][N]>(
     hash: ModalStackItem<P>['hash'],

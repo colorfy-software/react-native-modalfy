@@ -144,13 +144,39 @@ const createModalState = (): ModalStateType<any> => {
     return stackItem?.params?.[paramName] || defaultValue
   }
 
-  const closeModal = <P>(stackItem?: ModalStackItem<P>) => {
+  const closeModal = <P>(
+    closingElement?: Exclude<keyof P, symbol> | ModalStackItem<P>,
+  ) => {
     const {
-      stack: { openedItems },
+      stack: { openedItems, names },
     } = state
 
-    if (stackItem && openedItems.has(stackItem)) {
-      openedItems.delete(stackItem)
+    if (typeof closingElement === 'string') {
+      invariant(
+        names.some((name) => name === closingElement),
+        `'${closingElement}' is not a valid modal name. Did you mean any of these: ${names.map(
+          (validName) => `\n• ${String(validName)}`,
+        )}`,
+      )
+
+      let wasItemRemoved = false
+      let reversedOpenedItemsArray = Array.from(openedItems).reverse()
+
+      reversedOpenedItemsArray.forEach((openedItem) => {
+        if (openedItem.name === closingElement && !wasItemRemoved) {
+          openedItems.delete(openedItem)
+          wasItemRemoved = true
+        }
+      })
+
+      if (!wasItemRemoved) {
+        console.warn(`There was no opened ${closingElement} modal.`)
+      }
+    } else if (
+      closingElement &&
+      openedItems.has(closingElement as ModalStackItem<P>)
+    ) {
+      openedItems.delete(closingElement as ModalStackItem<P>)
     } else {
       const staleStackItem = Array.from(openedItems).pop()
       if (staleStackItem) openedItems.delete(staleStackItem)
@@ -267,13 +293,14 @@ export const modalfy = <
   /**
    * This function closes the currently displayed modal by default.
    *
-   * You can also provide a `modalName` if you want to close
-   * a different modal than the latest opened.
+   * You can also provide a `modalName` if you want to close a different modal
+   * than the latest opened. This will only close the latest instance of that modal,
+   * see `closeModals()` if you want to close all instances.
    *
    * @example modalfy().closeModal()
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
    */
-  closeModal: () => ModalState.closeModal(),
+  closeModal: (modalName: M) => ModalState.closeModal(modalName),
   /**
    * This function closes all the instances of a given modal.
    *
