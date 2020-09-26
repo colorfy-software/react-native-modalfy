@@ -14,7 +14,7 @@
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-modalfy": "2.0.0"
+    "react-native-modalfy": "2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

@@ -105,9 +105,7 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<
         [],
       ),
     )
-    // Should only be triggered on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [modalName])
 
   // Type checking at work 👇
   const onOpenSameModal = () =>
