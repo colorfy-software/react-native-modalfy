@@ -10,9 +10,10 @@ import {
 /**
  * `createModalStack()` is the function that's going to turn your configuration into a usable modal stack.
  *
- * @argument {ModalStackConfig} config - Modal stack configuration.
- * @argument {ModalOptions} [customDefaultOptions] - Configuration options to apply to all modals by default (optional).
- * @returns {ModalStack} Modal stack configuration object to provide to `<ModalProvider>`'s `stack` prop.
+ * @argument { ModalStackConfig } config - Modal stack configuration.
+ * @argument { ModalOptions } [customDefaultOptions] - Configuration options to apply to all modals by default (optional).
+ *
+ * @returns { ModalStack } Modal stack configuration object to provide to `<ModalProvider>`'s `stack` prop.
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/stack
  */

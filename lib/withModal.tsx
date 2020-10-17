@@ -10,10 +10,12 @@ import { invariant } from '../utils'
 /**
  * HOC that provides the `modal` prop to a wrapped Class component.
  *
- * Note: Prefer `useModal` hooks if you're using a functional component.
+ * Note: Prefer `useModal()` Hook if you're using a Hook component.
  *
  * @param { React.ComponentClass<any> } Component - Component class.
+ *
  * @returns Provided component class enhanced with the `modal` prop.
+ *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/withmodal
  */
 const withModal = <P extends ModalfyParams, Props extends object>(

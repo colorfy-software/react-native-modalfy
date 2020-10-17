@@ -128,7 +128,7 @@ const StackItem = <P extends ModalfyParams>({
       }
 
       // Using `finished` provided by Animated.timing().start() callback
-      // doesn't hide the backdrop fast enough to get a please animation,
+      // doesn't hide the backdrop fast enough to get a pleasing animation,
       // hence the use of this little hack.
       const timeout = setTimeout(() => {
         closeModalCallback?.(stackItem)

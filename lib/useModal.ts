@@ -4,9 +4,10 @@ import { ModalfyParams, UsableModalProp } from '../types'
 import ModalContext from './ModalContext'
 
 /**
- * Hooks that exposes Modalfy's API.
+ * Hook that exposes Modalfy's API.
  *
  * @returns Object containing all the functions and variables of the usual `modal` prop.
+ *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/usemodal
  */
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
@@ -17,6 +18,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * This function closes every open modal.
      *
      * @example modal.closeAllModals()
+     *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
      */
     closeAllModals: context.closeAllModals,
@@ -28,6 +30,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * see `closeModals()` if you want to close all instances.
      *
      * @example modal.closeModal()
+     *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
      */
     closeModal: context.closeModal,
@@ -38,8 +41,10 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * several times, to close all of them at once.
      *
      * @example modal.closeModals('ErrorModal')
-     * @returns {boolean} Whether or not Modalfy found any open modal
+     *
+     * @returns { boolean } Whether or not Modalfy found any open modal
      * corresponding to `modalName` (and then closed them).
+     *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
      */
     closeModals: context.closeModals,
@@ -47,6 +52,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * This value returns the current open modal (`null` if none).
      *
      * @example modal.currentModal
+     *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#currentmodal
      */
     currentModal: context.currentModal,
@@ -59,6 +65,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * accessible to that component.
      *
      * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' })
+     *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
      */
     openModal: context.openModal,

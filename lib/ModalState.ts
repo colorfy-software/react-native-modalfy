@@ -274,6 +274,7 @@ const ModalState = createModalState()
  * Please consider `useModal()` or `withModal()` instead.
  *
  * @returns Object containing all the functions and variables of the usual `modal` prop.
+ *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/modalfy
  */
 export const modalfy = <
@@ -287,6 +288,7 @@ export const modalfy = <
    * This function closes every open modal.
    *
    * @example modalfy().closeAllModals()
+   *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
    */
   closeAllModals: ModalState.closeAllModals,
@@ -298,6 +300,7 @@ export const modalfy = <
    * see `closeModals()` if you want to close all instances.
    *
    * @example modalfy().closeModal()
+   *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
    */
   closeModal: (modalName: M) => ModalState.closeModal(modalName),
@@ -308,8 +311,10 @@ export const modalfy = <
    * several times, to close all of them at once.
    *
    * @example modalfy().closeModals('ErrorModal')
+   *
    * @returns { boolean } Whether or not Modalfy found any open modal
    * corresponding to `modalName` (and then closed them).
+   *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
    */
   closeModals: (modalName: M) => ModalState.closeModals(modalName),
@@ -317,6 +322,7 @@ export const modalfy = <
    * This value returns the current open modal (`null` if none).
    *
    * @example modalfy().currentModal
+   *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#currentmodal
    */
   currentModal: ModalState.getState<P>()?.currentModal,
@@ -328,7 +334,8 @@ export const modalfy = <
    * Alternatively, you can also provide some `params` that will be
    * accessible to that component.
    *
-   * @example modalfy().openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' })
+   * @example modalfy().openModal('PokédexEntryModal', { id: 619, name: 'Lin-Fu' })
+   *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
    */
   openModal: (modalName: M, params?: P[M]) =>

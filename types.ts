@@ -193,8 +193,7 @@ export interface UsableModalComponentProp<
 
 /**
  * Interface of the modal stack configuration.
- * These settings will let Modalfy know what modals
- * you will be rendering and how.
+ * These settings will let Modalfy know what modals you will be rendering and how.
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#config-and-options
  */
@@ -211,7 +210,7 @@ export interface ModalStackConfig {
 export interface ModalOptions {
   /**
    * Animation configuration used to animate a modal in, at the top of the stack.
-   * It uses Animated.timing() so if you want to use another animation type, see `animationIn`.
+   * It uses Animated.timing() by default, if you want to use another animation type, see `animationIn`.
    *
    * Note: only `easing` and `duration` are needed.
    *
@@ -366,7 +365,7 @@ export interface ModalOptions {
  * @argument { unknown } ModalStackParamsList? - Interface of the whole modal stack params.
  * @argument { unknown } Props? - Component's props interface.
  *
- * Note: Modal components used in `createModalStack()`'s config should employ `ModalComponentProp` .
+ * Note: Modal components used in `createModalStack()`'s config should employ `ModalComponentProp` instead.
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprop
  */
@@ -374,7 +373,7 @@ export type ModalProp<P extends ModalfyParams, Props = unknown> = Props & {
   /**
    * Interface of the `modal` prop exposed by the library to regular components.
    *
-   * Note: Modal components used in `createModalStack()`'s config should employ `ModalComponentProp` .
+   * Note: Modal components used in `createModalStack()`'s config should employ `ModalComponentProp` instead.
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprop
    */
@@ -388,7 +387,7 @@ export type ModalProp<P extends ModalfyParams, Props = unknown> = Props & {
  * @argument { unknown } Props? - Component's props interface.
  * @argument { string } ModalName? - Name of the current modal
  *
- * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` .
+ * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` instead.
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop
  */
@@ -400,7 +399,7 @@ export type ModalComponentProp<
   /**
    * Interface of the `modal` prop exposed by the library specifically to modal components.
    *
-   * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` .
+   * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` instead.
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop
    */
@@ -409,14 +408,12 @@ export type ModalComponentProp<
 }
 
 /**
- * Interface for a React component containing its props and the `modalOption` static property.
+ * Interface for a React component containing its props and the `modalOptions` static property.
  *
- * Note: Only use with Hooks modal components (present in your `createModalStack()`'s config).
+ * Note: Only use with Hooks modal components (those present in your `createModalStack()`'s config).
  * If you're working with a Class modal component, you can directly use `static modalOptions: ModalOptions`.
  *
  * @argument { unknown } Props? - Component's props interface.
- *
- * Note: Modal components used in your `createModalStack()`'s config.
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentwithoptions
  */

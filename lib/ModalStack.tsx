@@ -89,7 +89,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => (
     <StackItem
       {...props}
-      // @ts-ignore see: https://github.com/microsoft/TypeScript/issues/29225#issuecomment-451678927
+      // @ts-ignore
       stackItem={stackItem}
       key={index}
       zIndex={index + 1}
