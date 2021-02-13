@@ -38,11 +38,9 @@ const HOOKS_MODALS_COLOR: ModalsColorType = [
   { name: 'ModalC', color: 'deeppink' },
 ]
 
-const DemoModal: ModalComponentWithOptions<ModalComponentProp<
-  ModalStackParamsList,
-  void,
-  ModalName
->> = ({
+const DemoModal: ModalComponentWithOptions<
+  ModalComponentProp<ModalStackParamsList, void, ModalName>
+> = ({
   modal: { closeModal, closeModals, closeAllModals, openModal, getParam },
 }) => {
   const [otherModals, setOtherModals] = React.useState<OtherModalsType>([])
@@ -95,9 +93,9 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<
 
   React.useEffect(() => {
     setOtherModals(
-      HOOKS_MODALS_COLOR.filter((entry) => entry.name !== modalName).reduce<
-        OtherModalsType
-      >(
+      HOOKS_MODALS_COLOR.filter(
+        (entry) => entry.name !== modalName,
+      ).reduce<OtherModalsType>(
         (output, item) => [
           ...output,
           { modalName: item.name, color: item.color },

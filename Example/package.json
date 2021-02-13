@@ -11,27 +11,27 @@
     "type": "tsc"
   },
   "dependencies": {
-    "react": "16.11.0",
-    "react-native": "0.62.2",
-    "react-native-gesture-handler": "^1.6.1",
-    "react-native-modalfy": "2.1.0"
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "react-native-gesture-handler": "^1.10.1",
+    "react-native-modalfy": "2.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
-    "@react-native-community/eslint-config": "^1.0.0",
-    "@types/jest": "^24.0.24",
-    "@types/react-native": "^0.62.0",
+    "@babel/core": "^7.12.16",
+    "@babel/runtime": "^7.12.13",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@types/jest": "^26.0.20",
+    "@types/react-native": "^0.63.48",
     "@types/react-test-renderer": "16.9.2",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^2.27.0",
-    "babel-jest": "^24.9.0",
-    "eslint": "^6.5.1",
-    "jest": "^24.9.0",
-    "metro-react-native-babel-preset": "^0.58.0",
-    "prettier": "^2.0.4",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.20.0",
+    "jest": "^26.6.3",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "prettier": "^2.2.1",
     "react-test-renderer": "16.11.0",
-    "typescript": "^3.8.3"
+    "typescript": "^4.1.5"
   },
   "jest": {
     "preset": "react-native",
