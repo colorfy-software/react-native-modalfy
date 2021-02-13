@@ -1,9 +1,6 @@
 import React, { ReactNode, useEffect, useRef, memo } from 'react'
 import { Animated, StyleSheet } from 'react-native'
-import {
-  useMemoOne as useMemo,
-  useCallbackOne as useCallback,
-} from 'use-memo-one'
+import { useMemo, useCallback } from 'use-memo-one'
 import {
   State,
   Directions,

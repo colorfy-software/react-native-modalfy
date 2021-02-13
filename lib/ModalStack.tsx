@@ -5,7 +5,7 @@ import {
   Animated,
   Easing,
 } from 'react-native'
-import { useMemoOne as useMemo } from 'use-memo-one'
+import { useMemo } from 'use-memo-one'
 
 import { ModalfyParams, ModalStackItem, SharedProps } from '../types'
 

@@ -23,7 +23,7 @@
   "dependencies": {
     "hoist-non-react-statics": "^3.3.2",
     "react-is": "^16.8.6",
-    "use-memo-one": "^1.1.1"
+    "use-memo-one": "^1.1.2"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^2.0.0",
@@ -31,22 +31,22 @@
     "@types/react": "^16.9.35",
     "@types/react-is": "^16.7.1",
     "@types/react-native": "^0.62.12",
-    "@typescript-eslint/eslint-plugin": "^4.2.0",
-    "@typescript-eslint/parser": "^4.2.0",
-    "eslint": "^7.9.0",
-    "eslint-config-prettier": "^6.12.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2",
-    "react": "16.11.0",
-    "react-native": "0.62.2",
-    "react-native-gesture-handler": "^1.8.0",
-    "typescript": "^4.0.3"
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1",
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "react-native-gesture-handler": "^1.10.1",
+    "typescript": "^4.1.5"
   },
   "peerDependencies": {
     "react": ">=16.8.3",
     "react-native": ">=0.59.0",
-    "use-memo-one": "*",
-    "react-native-gesture-handler": "*"
+    "react-native-gesture-handler": "*",
+    "use-memo-one": "*"
   },
   "keywords": [
     "react",
