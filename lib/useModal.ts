@@ -11,8 +11,7 @@ import ModalContext from './ModalContext'
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/usemodal
  */
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
-  // @ts-ignore
-  const context: UsableModalProp<P> = useContext(ModalContext)
+  const context = useContext(ModalContext) as UsableModalProp<P>
   return {
     /**
      * This function closes every open modal.

@@ -83,7 +83,7 @@ export interface ModalContextProvider<
     paramName: N,
     defaultValue?: D,
   ) => D extends P[M][N] ? P[M][N] : undefined
-  openModal: (modalName: M, params?: P[M]) => void
+  openModal: <N extends M>(modalName: N, params?: P[N]) => void
   stack: ModalStack<P>
 }
 
@@ -125,9 +125,9 @@ export type ModalState<P> = Omit<
   ModalContextProvider<P>,
   'currentModal' | 'stack' | 'openModal'
 > & {
-  openModal: <M extends Exclude<keyof P, symbol | number>>(
-    modalName: M,
-    params?: P[M],
+  openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(
+    modalName: N,
+    params?: P[N],
     isCalledOutsideOfContext?: boolean,
   ) => void
   handleBackPress(): boolean
@@ -394,7 +394,7 @@ export type ModalProp<P extends ModalfyParams, Props = unknown> = Props & {
 export type ModalComponentProp<
   P extends ModalfyParams,
   Props = unknown,
-  M = keyof P
+  M extends keyof P = keyof P
 > = Props & {
   /**
    * Interface of the `modal` prop exposed by the library specifically to modal components.
@@ -403,7 +403,6 @@ export type ModalComponentProp<
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop
    */
-  // @ts-ignore
   modal: UsableModalComponentProp<P, M>
 }
 

@@ -35,18 +35,16 @@ export default function <P>(
     openedItemsSize: 0,
   }
 
-  // @ts-ignore
   return Object.entries(config).reduce<ModalStack<P>>(
-    // @ts-ignore
-    (output, entry, index) => {
+    (output, entry, index): ModalStack<P> => {
       const { name, component, options } = getStackItemData(entry[0], entry[1])
       return {
         ...output,
-        names: [...output.names, name],
+        names: [...output.names, name] as ModalStack<P>['names'],
         content: [
           ...output.content,
           { index, name, component, hash: '', ...(options && { options }) },
-        ],
+        ] as ModalStack<P>['content'],
       }
     },
     initialStack,

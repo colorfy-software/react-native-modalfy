@@ -110,7 +110,6 @@ const createModalState = (): ModalStateType<any> => {
 
     setState<P>({
       currentModal: modalName,
-      // @ts-ignore
       stack: {
         ...state.stack,
         openedItems: state.stack.openedItems.add(
@@ -119,7 +118,7 @@ const createModalState = (): ModalStateType<any> => {
             ...(params && { params }),
           }),
         ),
-      },
+      } as ModalContextProvider<P>['stack'],
     })
   }
 
