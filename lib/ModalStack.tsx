@@ -4,8 +4,10 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  Platform
 } from 'react-native'
 import { useMemo } from 'use-memo-one'
+import ExtraDimensions from 'react-native-extra-dimensions-android'
 
 import { ModalfyParams, ModalStackItem, SharedProps } from '../types'
 
@@ -36,7 +38,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const { opacity, translateY } = useMemo(
     () => ({
       opacity: new Animated.Value(0),
-      translateY: new Animated.Value(vh(100)),
+      translateY: new Animated.Value(Platform.OS === 'android' ? ExtraDimensions.getRealWindowHeight() : vh(100)),
     }),
     [],
   )
@@ -76,7 +78,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         duration: 300,
         useNativeDriver: true,
       }).start()
-      translateY.setValue(vh(100))
+      translateY.setValue(Platform.OS === 'android' ? ExtraDimensions.getRealWindowHeight() : vh(100))
     }
   }, [openedItemsArray.length, stack.openedItems.size, translateY, opacity])
 

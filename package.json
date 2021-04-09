@@ -23,7 +23,8 @@
   "dependencies": {
     "hoist-non-react-statics": "^3.3.2",
     "react-is": "^16.8.6",
-    "use-memo-one": "^1.1.2"
+    "use-memo-one": "^1.1.2",
+    "react-native-extra-dimensions-android": "1.2.5"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^2.0.0",
@@ -46,7 +47,8 @@
     "react": ">=16.8.3",
     "react-native": ">=0.59.0",
     "react-native-gesture-handler": "*",
-    "use-memo-one": "*"
+    "use-memo-one": "*",
+    "react-native-extra-dimensions-android": "*"
   },
   "keywords": [
     "react",

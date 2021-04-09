@@ -6,3 +6,4 @@ yarn-error.log
 modules/__tests__/__coverage__
 coverage
 .DS_Store
+.idea
