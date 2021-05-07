@@ -6052,14 +6052,14 @@ react-native-gesture-handler@^1.10.1:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-modalfy@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-2.1.0.tgz#2b0e8a0b3963e07ed59f72f9e57e6d1eb5ec1014"
-  integrity sha512-GxOHBMTHkHPw9kWYbOUJ0ROXL1pkNxwir6IMmrJDIlxfGg39tNDf2FXLjuX1tOS4XqsMAFq9iAsF7ShXoncCZQ==
+react-native-modalfy@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-2.1.1.tgz#8507464df3dce373e1a0c36508a2bc5feff43f3a"
+  integrity sha512-p9RHNLgZCmD8ZRawsRy0k21gO17XBoNvCYmdoIqOInqBJZmpJZH2zaxs5COIrp8Axml/mYvc3nH0RfDGwY7tdQ==
   dependencies:
     hoist-non-react-statics "^3.3.2"
     react-is "^16.8.6"
-    use-memo-one "^1.1.1"
+    use-memo-one "^1.1.2"
 
 react-native@0.63.4:
   version "0.63.4"
@@ -7231,9 +7231,9 @@ typescript@^4.1.5:
   integrity sha512-6OSu9PTIzmn9TCDiovULTnET6BgXtDYL4Gg4szY+cGsc3JP1dQL8qvE8kShTRx1NIw4Q9IBHlwODjkjWEtMUyA==
 
 ua-parser-js@^0.7.18:
-  version "0.7.21"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.21.tgz#853cf9ce93f642f67174273cc34565ae6f308777"
-  integrity sha512-+O8/qh/Qj8CgC6eYBVBykMrNtp5Gebn4dlGD/kKXVkJNDwyrAwSIqwz8CDf+tsAIWVycKcku6gIXJ0qwx/ZXaQ==
+  version "0.7.28"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
+  integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
 
 uglify-es@^3.1.9:
   version "3.3.9"
@@ -7311,10 +7311,10 @@ urix@^0.1.0:
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
 
-use-memo-one@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.1.tgz#39e6f08fe27e422a7d7b234b5f9056af313bd22c"
-  integrity sha512-oFfsyun+bP7RX8X2AskHNTxu+R3QdE/RC5IefMbqptmACAA/gfol1KDD5KRzPsGMa62sWxGZw+Ui43u6x4ddoQ==
+use-memo-one@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.2.tgz#0c8203a329f76e040047a35a1197defe342fab20"
+  integrity sha512-u2qFKtxLsia/r8qG0ZKkbytbztzRb317XCkT7yP8wxL0tZ/CzK2G+WWie5vWvpyeP7+YoPIwbJoIHJ4Ba4k0oQ==
 
 use-subscription@^1.0.0:
   version "1.4.1"
