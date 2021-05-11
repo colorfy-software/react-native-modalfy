@@ -1,6 +1,6 @@
 {
   "name": "react-native-modalfy",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Modal citizen of React Native",
   "main": "index.ts",
   "repository": "git://github.com/colorfy-software/react-native-modalfy.git",
