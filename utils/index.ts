@@ -8,6 +8,9 @@ export const vw = (percentage: number) =>
 export const vh = (percentage: number) =>
   (Dimensions.get('window').height * percentage) / 100
 
+export const sh = (percentage: number) =>
+  (Dimensions.get('screen').height * percentage) / 100
+
 export const defaultOptions: ModalOptions = {
   animateInConfig: {
     duration: 450,

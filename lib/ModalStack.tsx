@@ -11,7 +11,7 @@ import { ModalfyParams, ModalStackItem, SharedProps } from '../types'
 
 import StackItem from './StackItem'
 
-import { getStackItemOptions, vh } from '../utils'
+import { getStackItemOptions, sh } from '../utils'
 
 type Props<P> = SharedProps<P>
 
@@ -34,7 +34,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const { opacity, translateY } = useMemo(
     () => ({
       opacity: new Animated.Value(0),
-      translateY: new Animated.Value(vh(100)),
+      translateY: new Animated.Value(sh(100)),
     }),
     [],
   )
@@ -74,7 +74,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         duration: 300,
         useNativeDriver: true,
       }).start()
-      translateY.setValue(vh(100))
+      translateY.setValue(sh(100))
     }
   }, [openedItemsArray.length, stack.openedItems.size, translateY, opacity])
 
