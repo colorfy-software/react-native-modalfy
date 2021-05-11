@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   TouchableOpacity,
   Dimensions,
@@ -8,11 +7,12 @@ import {
   View,
 } from 'react-native'
 import {
-  ModalComponentWithOptions,
   ModalComponentProp,
+  ModalComponentWithOptions,
 } from 'react-native-modalfy'
+import { useEffect, useState } from 'react'
 
-import { ModalStackParamsList, ModalName } from 'App'
+import { ModalStackParamsList, ModalName } from '../App'
 
 const { width } = Dimensions.get('screen')
 
@@ -43,7 +43,7 @@ const DemoModal: ModalComponentWithOptions<
 > = ({
   modal: { closeModal, closeModals, closeAllModals, openModal, getParam },
 }) => {
-  const [otherModals, setOtherModals] = React.useState<OtherModalsType>([])
+  const [otherModals, setOtherModals] = useState<OtherModalsType>([])
 
   const origin = getParam('origin', 'Hooks')
   const color = getParam('color', 'darkgreen')
@@ -91,7 +91,7 @@ const DemoModal: ModalComponentWithOptions<
     )
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     setOtherModals(
       HOOKS_MODALS_COLOR.filter(
         (entry) => entry.name !== modalName,
@@ -109,21 +109,21 @@ const DemoModal: ModalComponentWithOptions<
   const onOpenSameModal = () =>
     openModal(modalName, { name: modalName, color, origin })
 
-  const onPressLeftButton = React.useCallback(() => {
+  const onPressLeftButton = () => {
     openModal(otherModals[0]?.modalName, {
       name: otherModals[0]?.modalName,
       color: otherModals[0]?.color,
       origin,
     })
-  }, [openModal, origin, otherModals])
+  }
 
-  const onPressRightButton = React.useCallback(() => {
+  const onPressRightButton = () => {
     openModal(otherModals[1]?.modalName, {
       name: otherModals[1]?.modalName,
       color: otherModals[1]?.color,
       origin,
     })
-  }, [openModal, origin, otherModals])
+  }
 
   return (
     <View style={styles.wrapper}>

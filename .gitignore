@@ -1,6 +1,7 @@
 # Node
 node_modules/
 Example/node_modules/
+Example/android/.settings
 npm-debug.log
 yarn-error.log
 modules/__tests__/__coverage__

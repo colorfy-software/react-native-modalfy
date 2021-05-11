@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 import {
   TouchableOpacity,
   Dimensions,
@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { ModalProp, withModal } from 'react-native-modalfy'
 
-import { ModalStackParamsList, ModalName } from 'App'
+import { ModalStackParamsList, ModalName } from '../App'
 
 interface OwnProps {
   color: ModalStackParamsList[ModalName]['color']
@@ -20,7 +20,7 @@ type Props = ModalProp<ModalStackParamsList, OwnProps>
 
 const { width } = Dimensions.get('screen')
 
-class ClassButton extends React.Component<Props> {
+class ClassButton extends Component<Props> {
   onPress = () => {
     const {
       modal: { openModal },

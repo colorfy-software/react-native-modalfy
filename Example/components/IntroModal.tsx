@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   TouchableOpacity,
   Dimensions,
@@ -13,8 +12,9 @@ import {
   ModalComponentProp,
   ModalEventListener,
 } from 'react-native-modalfy'
+import { useCallback, useEffect, useRef } from 'react'
 
-import { ModalStackParamsList, ModalName } from 'App'
+import { ModalStackParamsList, ModalName } from '../App'
 
 import ClassButton from './ClassButton'
 import HooksButton from './HooksButton'
@@ -29,10 +29,7 @@ type Props = {
 }
 
 const Card = ({ title, modalName: name, color }: Props) => {
-  const onPress = React.useCallback(() => {
-    openFromJS(name, color)
-  }, [color, name])
-
+  const onPress = () => openFromJS(name, color)
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
@@ -52,17 +49,17 @@ const Card = ({ title, modalName: name, color }: Props) => {
 const IntroModal = ({
   modal: { addListener },
 }: ModalComponentProp<ModalStackParamsList, void, 'IntroModal'>) => {
-  const modalListener = React.useRef<ModalEventListener | undefined>()
-  const animatedValue = React.useRef(new Animated.Value(0)).current
+  const modalListener = useRef<ModalEventListener | undefined>()
+  const animatedValue = useRef(new Animated.Value(0)).current
 
-  const onModalAnimate: ModalEventCallback = React.useCallback(
+  const onModalAnimate: ModalEventCallback = useCallback(
     (value) => {
       if (value) animatedValue.setValue(value)
     },
     [animatedValue],
   )
 
-  React.useEffect(() => {
+  useEffect(() => {
     modalListener.current = addListener('onAnimate', onModalAnimate)
 
     return () => {

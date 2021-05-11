@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   TouchableOpacity,
   Dimensions,
@@ -10,7 +9,7 @@ import { useModal } from 'react-native-modalfy'
 
 const { width } = Dimensions.get('screen')
 
-import { ModalStackParamsList, ModalName } from 'App'
+import { ModalStackParamsList, ModalName } from '../App'
 
 interface Props {
   color: ModalStackParamsList[ModalName]['color']
@@ -20,10 +19,10 @@ interface Props {
 
 const HooksButton = ({ color, title, modalName: name }: Props) => {
   const { openModal } = useModal<ModalStackParamsList>()
-  const onPress = React.useCallback(() => {
+  const onPress = () => {
     // Type checking at work 👇
     openModal(name, { name, color, origin: 'Hooks' })
-  }, [color, name, openModal])
+  }
 
   return (
     <TouchableOpacity onPress={onPress}>

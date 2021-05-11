@@ -1,4 +1,3 @@
-import React from 'react'
 import { TouchableOpacity, StyleSheet, Text } from 'react-native'
 import { useModal } from 'react-native-modalfy'
 
@@ -6,9 +5,7 @@ import { ModalStackParamsList } from '../App'
 
 const IntroButton = () => {
   const { openModal } = useModal<ModalStackParamsList>()
-  const onPress = React.useCallback(() => {
-    openModal('IntroModal')
-  }, [openModal])
+  const onPress = () => openModal('IntroModal')
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
       <Text style={styles.buttonText}>Show me!</Text>

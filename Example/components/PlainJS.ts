@@ -1,6 +1,6 @@
 import { modalfy } from 'react-native-modalfy'
 
-import { ModalStackParamsList, ModalName } from 'App'
+import { ModalStackParamsList, ModalName } from '../App'
 
 const { openModal } = modalfy<ModalStackParamsList>()
 
