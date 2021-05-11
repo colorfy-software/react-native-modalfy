@@ -302,7 +302,7 @@ export const modalfy = <
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
    */
-  closeModal: (modalName: M) => ModalState.closeModal(modalName),
+  closeModal: (modalName?: M) => ModalState.closeModal(modalName),
   /**
    * This function closes all the instances of a given modal.
    *
