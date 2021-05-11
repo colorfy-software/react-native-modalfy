@@ -15,6 +15,9 @@
   <a href="https://www.npmjs.org/package/react-native-modalfy">
     <img src="https://badge.fury.io/js/react-native-modalfy.svg" alt="Current npm package version." />
   </a>
+  <a href="https://www.npmjs.org/package/react-native-modalfy">
+    <img src="https://img.shields.io/npm/dm/react-native-modalfy.svg?maxAge=2592000" alt="Monthly npm downloads." />
+  </a>
   <a href="https://colorfy-software.gitbook.io/react-native-modalfy/contributing">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
   </a>

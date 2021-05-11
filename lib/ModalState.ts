@@ -125,7 +125,7 @@ const createModalState = (): ModalStateType<any> => {
   const getParam = <
     P extends ModalfyParams,
     N extends keyof P[keyof P],
-    D extends P[keyof P][N]
+    D extends P[keyof P][N],
   >(
     hash: ModalStackItem<P>['hash'],
     paramName: N,
@@ -281,7 +281,7 @@ export const modalfy = <
   M extends Exclude<keyof P, symbol | number> = Exclude<
     keyof P,
     symbol | number
-  >
+  >,
 >() => ({
   /**
    * This function closes every open modal.

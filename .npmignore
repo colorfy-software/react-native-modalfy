@@ -21,3 +21,8 @@ CODE_OF_CONDUCT.md
 .watchmanconfig
 .circleci
 Example
+.github
+.idea
+.vscode
+babel.config.js
+tsconfig.json

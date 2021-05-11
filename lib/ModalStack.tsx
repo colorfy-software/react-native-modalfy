@@ -23,9 +23,7 @@ type State<P> = {
 const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const { stack } = props
 
-  const [hasChangedBackdropColor, setBackdropColorStatus] = useState<boolean>(
-    false,
-  )
+  const [hasChangedBackdropColor, setBackdropColorStatus] = useState(false)
 
   const [backdropClosedItems, setBackdropClosedItems] = useState<string[]>([])
 

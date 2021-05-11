@@ -1,14 +1,11 @@
 {
   "name": "react-native-modalfy",
   "version": "2.1.1",
-  "description": "Modal citizen of React Native.",
+  "description": "Modal citizen of React Native",
   "main": "index.ts",
   "repository": "git://github.com/colorfy-software/react-native-modalfy.git",
   "license": "MIT",
-  "authors": [
-    "Charles Mangwa",
-    "Kristjan Vool"
-  ],
+  "author": "Charles Mangwa <charlesmangwa@gmail.com> (https://github.com/CharlesMangwa)",
   "bugs": {
     "url": "https://github.com/colorfy-software/react-native-modalfy/issues"
   },
@@ -22,31 +19,30 @@
   },
   "dependencies": {
     "hoist-non-react-statics": "^3.3.2",
-    "react-is": "^16.8.6",
+    "react-is": "^17.0.2",
     "use-memo-one": "^1.1.2"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/hoist-non-react-statics": "^3.3.1",
-    "@types/react": "^16.9.35",
-    "@types/react-is": "^16.7.1",
-    "@types/react-native": "^0.63.48",
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "@typescript-eslint/parser": "^4.15.0",
-    "eslint": "^7.20.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "prettier": "^2.2.1",
-    "react": "16.13.1",
-    "react-native": "0.63.4",
-    "react-native-gesture-handler": "^1.10.1",
-    "typescript": "^4.1.5"
+    "@types/react": "^17.0.5",
+    "@types/react-is": "^17.0.0",
+    "@types/react-native": "^0.64.5",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.0",
+    "react": "17.0.2",
+    "react-native": "0.64.1",
+    "react-native-gesture-handler": "^1.10.3",
+    "typescript": "^4.2.4"
   },
   "peerDependencies": {
     "react": ">=16.8.3",
     "react-native": ">=0.59.0",
-    "react-native-gesture-handler": "*",
-    "use-memo-one": "*"
+    "react-native-gesture-handler": ">=1.9.0"
   },
   "keywords": [
     "react",

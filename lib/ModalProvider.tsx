@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { BackHandler } from 'react-native'
-import { useCallbackOne as useCallback } from 'use-memo-one'
+import { useCallback } from 'use-memo-one'
 
 import {
   ModalStack as ModalStackType,
@@ -31,9 +31,8 @@ interface Props {
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/stack#provider
  */
 const ModalProvider = ({ children, stack }: Props) => {
-  const modalStateSubscription = useRef<
-    ModalStateSubscription<any> | undefined
-  >()
+  const modalStateSubscription =
+    useRef<ModalStateSubscription<any> | undefined>()
 
   const modalEventListeners = useRef<ModalEventListeners>(new Set()).current
 
