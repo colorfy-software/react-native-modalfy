@@ -5151,9 +5151,9 @@ path-key@^3.0.0, path-key@^3.1.0:
   integrity sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 performance-now@^2.1.0:
   version "2.1.0"
@@ -5344,9 +5344,10 @@ react-native-gesture-handler@^1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-modalfy@/Users/charles/Desktop/Colorfy/react-native-modalfy/react-native-modalfy-v2.1.1.tgz:
-  version "2.1.1"
-  resolved "/Users/charles/Desktop/Colorfy/react-native-modalfy/react-native-modalfy-v2.1.1.tgz#17c961b6b1c6c3f29c97480c35363c6173aa3114"
+react-native-modalfy@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-modalfy/-/react-native-modalfy-2.1.2.tgz#a61a2152aa56fe2fcae650a037f70fc3b9a2a71e"
+  integrity sha512-wmNMCul4nD+S7gIktkAnQPm3luhNKDW0ytgf3fnDpF2mHHZJEJXBKdfnGWNi/4dBiXvoAE93GUdDdB0x8/RuEQ==
   dependencies:
     hoist-non-react-statics "^3.3.2"
     react-is "^17.0.2"
