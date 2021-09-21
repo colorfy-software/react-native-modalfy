@@ -4241,14 +4241,6 @@ react-native-gesture-handler@^1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-modalfy@/Users/charles/Desktop/Colorfy/react-native-modalfy/react-native-modalfy-v2.1.1.tgz:
-  version "2.1.1"
-  resolved "/Users/charles/Desktop/Colorfy/react-native-modalfy/react-native-modalfy-v2.1.1.tgz#17c961b6b1c6c3f29c97480c35363c6173aa3114"
-  dependencies:
-    hoist-non-react-statics "^3.3.2"
-    react-is "^17.0.2"
-    use-memo-one "^1.1.2"
-
 react-native@0.64.1:
   version "0.64.1"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.64.1.tgz#cd38f5b47b085549686f34eb0c9dcd466f307635"
@@ -4988,9 +4980,9 @@ through2@^2.0.1:
     xtend "~4.0.1"
 
 tmpl@1.0.x:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
-  integrity sha1-I2QN17QtAEM5ERQIIOXPRA5SHdE=
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.5.tgz#8683e0b902bb9c20c4f726e3c0b69f36518c07cc"
+  integrity sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
