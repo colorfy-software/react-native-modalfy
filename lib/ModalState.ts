@@ -53,7 +53,7 @@ const createModalState = (): ModalStateType<any> => {
         }
       } catch (error) {
         subscriber.error = true
-        subscriber.listener(null, error)
+        subscriber.listener(null, error as Error)
       }
     }
 
