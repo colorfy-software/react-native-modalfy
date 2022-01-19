@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		567971672798A47A00B0C0E3 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 567971662798A47A00B0C0E3 /* Bridge.swift */; };
 		788B43B2FB93C3EEA436177D /* libPods-Modalfy-ModalfyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD9634636CD474A50401A78A /* libPods-Modalfy-ModalfyTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		E8F0B7D47C4E24CA57CCCB17 /* libPods-Modalfy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 560490EDABA76E4B5FEDD092 /* libPods-Modalfy.a */; };
@@ -38,6 +39,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Modalfy/main.m; sourceTree = "<group>"; };
 		3DC1C7111DA1B51055410103 /* Pods-Modalfy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Modalfy.release.xcconfig"; path = "Target Support Files/Pods-Modalfy/Pods-Modalfy.release.xcconfig"; sourceTree = "<group>"; };
 		560490EDABA76E4B5FEDD092 /* libPods-Modalfy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Modalfy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		567971652798A47900B0C0E3 /* Modalfy-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Modalfy-Bridging-Header.h"; sourceTree = "<group>"; };
+		567971662798A47A00B0C0E3 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Bridge.swift; path = Modalfy/Bridge.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Modalfy/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B5E149E62CDAED27BD88591 /* Pods-Modalfy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Modalfy.debug.xcconfig"; path = "Target Support Files/Pods-Modalfy/Pods-Modalfy.debug.xcconfig"; sourceTree = "<group>"; };
 		A2336A8D63EFE67112328D0D /* Pods-Modalfy-ModalfyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Modalfy-ModalfyTests.debug.xcconfig"; path = "Target Support Files/Pods-Modalfy-ModalfyTests/Pods-Modalfy-ModalfyTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -88,10 +91,12 @@
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				567971662798A47A00B0C0E3 /* Bridge.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				567971652798A47900B0C0E3 /* Modalfy-Bridging-Header.h */,
 			);
 			name = Modalfy;
 			sourceTree = "<group>";
@@ -104,7 +109,6 @@
 				A2336A8D63EFE67112328D0D /* Pods-Modalfy-ModalfyTests.debug.xcconfig */,
 				B4B96A033AD85AA0EEB351C4 /* Pods-Modalfy-ModalfyTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -208,7 +212,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1320;
 					};
 				};
 			};
@@ -413,6 +417,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				567971672798A47A00B0C0E3 /* Bridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +436,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A2336A8D63EFE67112328D0D /* Pods-Modalfy-ModalfyTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -458,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B4B96A033AD85AA0EEB351C4 /* Pods-Modalfy-ModalfyTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = ModalfyTests/Info.plist;
@@ -498,6 +505,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Modalfy;
+				SWIFT_OBJC_BRIDGING_HEADER = "Modalfy-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -523,6 +531,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Modalfy;
+				SWIFT_OBJC_BRIDGING_HEADER = "Modalfy-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -577,7 +586,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -635,7 +644,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
