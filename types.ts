@@ -1,4 +1,4 @@
-import { ComponentType } from 'react'
+import { ComponentType, Dispatch } from 'react'
 import { Animated, ViewStyle } from 'react-native'
 
 /*  ========================                 ========================
@@ -100,15 +100,19 @@ export interface ModalContextProvider<
   >
 > {
   currentModal: M | null
-  closeAllModals: () => void
-  closeModal: (stackItem?: M | ModalStackItem<P>) => void
-  closeModals: (modalName: M) => boolean
+  closeAllModals: (callback?: () => void) => void
+  closeModal: (stackItem?: M | ModalStackItem<P>, callback?: () => void) => void
+  closeModals: (modalName: M, callback?: () => void) => boolean
   getParam: <N extends keyof P[M], D extends P[M][N]>(
     hash: ModalStackItem<P>['hash'],
     paramName: N,
     defaultValue?: D,
   ) => D extends P[M][N] ? P[M][N] : undefined
-  openModal: <N extends M>(modalName: N, params?: P[N]) => void
+  openModal: <N extends M>(
+    modalName: N,
+    params?: P[N],
+    callback?: () => void,
+  ) => void
   stack: ModalStack<P>
 }
 
@@ -154,6 +158,7 @@ export type ModalState<P> = Omit<
     modalName: N,
     params?: P[N],
     isCalledOutsideOfContext?: boolean,
+    callback?: () => void,
   ) => void
   handleBackPress(): boolean
   init: <P>(newState: {
@@ -193,7 +198,10 @@ export type UsableModalProp<P extends ModalfyParams> = Pick<
   ModalContextProvider<P>,
   'closeAllModals' | 'closeModals' | 'currentModal' | 'openModal'
 > & {
-  closeModal: (modalName?: Exclude<keyof P, symbol | number>) => void
+  closeModal: (
+    modalName?: Exclude<keyof P, symbol | number>,
+    callback?: () => void,
+  ) => void
 }
 
 export interface UsableModalComponentProp<
@@ -201,7 +209,7 @@ export interface UsableModalComponentProp<
   M extends keyof P
 > extends Omit<ModalContextProvider<P>, 'closeModal' | 'stack' | 'getParam'> {
   addListener: ModalListener
-  closeModal: (modalName?: M) => void
+  closeModal: (modalName?: M, callback?: () => void) => void
   getParam: <N extends keyof P[M], D extends P[M][N]>(
     paramName: N,
     defaultValue?: D,
@@ -273,6 +281,7 @@ export interface ModalOptions {
   animationIn?: (
     animatedValue: Animated.Value,
     toValue: number,
+    callback?: () => void,
   ) => Animated.CompositeAnimation | void
   /**
    * Animation configuration used to animate a modal out (underneath other modals or when closing the last one).
@@ -313,6 +322,7 @@ export interface ModalOptions {
   animationOut?: (
     animatedValue: Animated.Value,
     toValue: number,
+    callback?: () => void,
   ) => Animated.CompositeAnimation | void
   /**
    * How you want the modal stack to behave when users press the backdrop, but also when the physical back button is pressed on Android.

@@ -46,7 +46,7 @@ const ModalProvider = ({ children, stack }: Props) => {
       )
     }
 
-    ModalState.openModal(modalName, params)
+    ModalState.openModal(modalName, params, false, callback)
   }
 
   const getParam: SharedProps<any>['getParam'] = (

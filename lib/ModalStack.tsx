@@ -20,11 +20,6 @@ import { getStackItemOptions, sh } from '../utils'
 
 type Props<P> = SharedProps<P>
 
-type State<P> = {
-  backdropClosedItems: string[]
-  openedItemsArray: ModalStackItem<P>[]
-}
-
 const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const { stack } = props
 
@@ -32,9 +27,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   const [backdropClosedItems, setBackdropClosedItems] = useState<string[]>([])
 
-  const [openedItemsArray, setOpenedItemsArray] = useState<
-    State<P>['openedItemsArray']
-  >([...stack.openedItems])
+  const [openActionCallbacks, setOpenActionCallbacks] = useState<string[]>([])
 
   const { opacity, translateY } = useMemo(
     () => ({
@@ -99,6 +92,12 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         key={index}
         zIndex={index + 1}
         position={position}
+        openModal={(...args) => {
+          // @ts-ignore
+          props.openModal(...args)
+          setOpenActionCallbacks((state) => [...state, stackItem.hash])
+        }}
+        wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
         pendingClosingAction={
           hasPendingClosingAction ? pendingClosingAction : undefined

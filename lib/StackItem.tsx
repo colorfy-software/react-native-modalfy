@@ -18,6 +18,7 @@ import {
 import { getStackItemOptions, vh } from '../utils'
 
 type Props<P> = SharedProps<P> & {
+  wasOpenCallbackCalled: boolean
   wasClosedByBackdropPress: boolean
   pendingClosingAction?: ModalPendingClosingAction
   position: number
@@ -25,7 +26,9 @@ type Props<P> = SharedProps<P> & {
 }
 
 const StackItem = <P extends ModalfyParams>({
+  removeClosingAction,
   pendingClosingAction,
+  wasOpenCallbackCalled,
   wasClosedByBackdropPress,
   registerListener,
   clearListeners,
@@ -110,13 +113,15 @@ const StackItem = <P extends ModalfyParams>({
     (
       toValue: number,
       closeModalCallback?: (closingElement: ModalStackItem<P>) => void,
+      modalStackItemCallback?: () => void,
     ) => {
       if (!shouldAnimateOut) closeModalCallback?.(stackItem)
       if (!closeModalCallback && animationIn) {
-        animationIn(animatedValue, toValue)
+        animationIn(animatedValue, toValue, modalStackItemCallback)
       } else if (closeModalCallback && animationOut) {
         animationOut(animatedValue, toValue, () => {
           closeModalCallback(stackItem)
+          modalStackItemCallback?.()
         })
       } else {
         Animated.timing(animatedValue, {
@@ -126,53 +131,57 @@ const StackItem = <P extends ModalfyParams>({
         }).start(({ finished }) => {
           if (finished) {
             closeModalCallback?.(stackItem)
-        clearTimeout(timeout)
+            modalStackItemCallback?.()
           }
         })
       }
     },
     [
-      animationIn,
-      animateInConfig,
-      animationOut,
-      animateOutConfig,
-      animatedValue,
-      shouldAnimateOut,
       stackItem,
+      animationIn,
+      animationOut,
+      animatedValue,
+      animateInConfig,
+      animateOutConfig,
     ],
   )
 
   const closeStackItem = useCallback(
-    (modalName) => {
+    (modalName, callback?: () => void) => {
       if (!modalName || modalName === currentModal) {
         updateAnimatedValue(position - 1, () => {
           closeModal(modalName)
+          callback?.()
         })
       } else {
         closeModal(modalName)
+        callback?.()
       }
     },
     [closeModal, currentModal, position, updateAnimatedValue],
   )
 
   const closeStackItems = useCallback(
-    (closingElement) => {
+    (closingElement, callback?: () => void) => {
       if (closingElement === currentModal && position === 1) {
         return updateAnimatedValue(position - 1, () => {
           const output = closeModals(closingElement)
+          callback?.()
           return output
         })
       }
       const output = closeModals(closingElement)
+      callback?.()
       return output
     },
     [closeModals, currentModal, position, updateAnimatedValue],
   )
 
   const closeAllStackItems = useCallback(
-    () =>
+    (callback?: () => void) =>
       updateAnimatedValue(position - 1, () => {
         closeAllModals()
+        callback?.()
       }),
     [closeAllModals, position, updateAnimatedValue],
   )
@@ -264,7 +273,11 @@ const StackItem = <P extends ModalfyParams>({
   }, [verticalPosition])
 
   useEffect(() => {
-    updateAnimatedValue(position)
+    updateAnimatedValue(
+      position,
+      undefined,
+      wasOpenCallbackCalled ? undefined : stackItem.callback,
+    )
     if (wasClosedByBackdropPress) {
       if (backBehavior === 'clear') closeAllStackItems()
       else closeStackItem(undefined)
@@ -274,8 +287,10 @@ const StackItem = <P extends ModalfyParams>({
     closeAllStackItems,
     closeStackItem,
     position,
+    stackItem.callback,
     updateAnimatedValue,
     wasClosedByBackdropPress,
+    wasOpenCallbackCalled,
   ])
 
   useEffect(() => {
@@ -327,5 +342,6 @@ export default memo(
     prevProps.position === nextProps.position &&
     prevProps.stackItem.hash === nextProps.stackItem.hash &&
     prevProps.pendingClosingAction === nextProps.pendingClosingAction &&
+    prevProps.wasOpenCallbackCalled === nextProps.wasOpenCallbackCalled &&
     prevProps.wasClosedByBackdropPress === nextProps.wasClosedByBackdropPress,
 )

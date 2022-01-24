@@ -19,7 +19,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
     /**
      * This function closes every open modal.
      *
-     * @example modal.closeAllModals()
+     * @example modal.closeAllModals(() => console.log('All modals closed'))
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
      */
@@ -31,7 +31,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * than the latest opened. This will only close the latest instance of that modal,
      * see `closeModals()` if you want to close all instances.
      *
-     * @example modal.closeModal()
+     * @example modal.closeModal('Example', () => console.log('Current modal closed'))
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
      */
@@ -42,7 +42,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * You can use it whenever you have the same modal opened
      * several times, to close all of them at once.
      *
-     * @example modal.closeModals('ErrorModal')
+     * @example modal.closeModals('ExampleModal', () => console.log('All ExampleModal modals closed'))
      *
      * @returns { boolean } Whether or not Modalfy found any open modal
      * corresponding to `modalName` (and then closed them).
@@ -66,7 +66,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * Alternatively, you can also provide some `params` that will be
      * accessible to that component.
      *
-     * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' })
+     * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokedexEntryModal modal opened'))
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
      */

@@ -91,6 +91,7 @@ const createModalState = (): ModalStateType<any> => {
     modalName: Exclude<keyof P, symbol | number>,
     params?: P,
     isCalledOutsideOfContext?: boolean,
+    callback?: () => void,
   ) => {
     const {
       stack: { content, names },
@@ -284,6 +285,7 @@ const createModalState = (): ModalStateType<any> => {
         pendingClosingActions: currentState.stack.pendingClosingActions.add({
           hash,
           action,
+          callback,
           modalName,
           currentModalHash: [...currentState.stack.openedItems].slice(-1)[0]
             .hash,
@@ -357,12 +359,12 @@ export const modalfy = <
   /**
    * This function closes every open modal.
    *
-   * @example modalfy().closeAllModals()
+   * @example modalfy().closeAllModals(() => console.log('All modals closed'))
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
    */
-  closeAllModals: () => {
-    ModalState.queueClosingAction({ action: 'closeAllModals' })
+  closeAllModals: (callback?: () => void) => {
+    ModalState.queueClosingAction({ action: 'closeAllModals', callback })
   },
   /**
    * This function closes the currently displayed modal by default.
@@ -371,14 +373,15 @@ export const modalfy = <
    * than the latest opened. This will only close the latest instance of that modal,
    * see `closeModals()` if you want to close all instances.
    *
-   * @example modalfy().closeModal()
+   * @example modalfy().closeModal('ExampleModal', () => console.log('Current modal closed'))
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
    */
-  closeModal: (modalName?: M) => {
+  closeModal: (modalName?: M, callback?: () => void) => {
     ModalState.queueClosingAction({
       action: 'closeModal',
       modalName,
+      callback,
     })
   },
   /**
@@ -387,17 +390,18 @@ export const modalfy = <
    * You can use it whenever you have the same modal opened
    * several times, to close all of them at once.
    *
-   * @example modalfy().closeModals('ExampleModal')
+   * @example modalfy().closeModals('ExampleModal', () => console.log('All ExampleModal modals closed'))
    *
    * @returns { boolean } Whether or not Modalfy found any open modal
    * corresponding to `modalName` (and then closed them).
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
    */
-  closeModals: (modalName: M) => {
+  closeModals: (modalName: M, callback?: () => void) => {
     ModalState.queueClosingAction({
       action: 'closeModals',
       modalName,
+      callback,
     })
   },
   /**
@@ -416,12 +420,12 @@ export const modalfy = <
    * Alternatively, you can also provide some `params` that will be
    * accessible to that component.
    *
-   * @example modalfy().openModal('PokédexEntryModal', { id: 619, name: 'Lin-Fu' })
+   * @example modalfy().openModal('PokédexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokédexEntryModal modal opened'))
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
    */
-  openModal: (modalName: M, params?: P[M]) =>
-    ModalState.openModal(modalName, params, true),
+  openModal: (modalName: M, params?: P[M], callback?: () => void) =>
+    ModalState.openModal(modalName, params, true, callback),
 })
 
 export default ModalState
