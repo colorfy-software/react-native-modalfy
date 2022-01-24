@@ -73,8 +73,9 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         easing: Easing.inOut(Easing.ease),
         duration: 300,
         useNativeDriver: true,
-      }).start()
-      translateY.setValue(sh(100))
+      }).start(({ finished }) => {
+        if (finished) translateY.setValue(sh(100))
+      })
     }
   }, [openedItemsArray.length, stack.openedItems.size, translateY, opacity])
 
@@ -104,7 +105,19 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const onBackdropPress = () => {
     if (backBehavior === 'none') return
 
-    const currentItem = openedItemsArray.slice(-1)[0]
+    const currentItem = [...stack.openedItems].slice(-1)[0]
+
+    if (stack.openedItemsSize === 1) {
+      Animated.timing(opacity, {
+        toValue: 0,
+        easing: Easing.inOut(Easing.ease),
+        duration: 300,
+        useNativeDriver: true,
+      }).start(({ finished }) => {
+        if (finished) translateY.setValue(sh(100))
+      })
+    }
+
     setBackdropClosedItems([...backdropClosedItems, currentItem?.hash])
   }
 
