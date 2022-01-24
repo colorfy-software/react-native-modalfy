@@ -23,12 +23,16 @@ const createModalState = (): ModalStateType<any> => {
   let initialState: State<any>
   let state: State<any>
 
-  const setState = <P>(newState: State<P>): State<P> => {
+  const setState = <P>(
+    updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>,
+  ) => {
+    const newState = updater(state)
     state = {
       ...newState,
       stack: {
         ...newState.stack,
         openedItemsSize: newState.stack.openedItems.size,
+        pendingClosingActionsSize: newState.stack.pendingClosingActions.size,
       },
     }
     listeners.forEach((listener) => listener())
@@ -108,18 +112,19 @@ const createModalState = (): ModalStateType<any> => {
       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
     }
 
-    setState<P>({
+    setState<P>((currentState) => ({
       currentModal: modalName,
       stack: {
-        ...state.stack,
+        ...currentState.stack,
         openedItems: state.stack.openedItems.add(
           Object.assign({}, stackItem, {
             hash,
+            callback,
             ...(params && { params }),
           }),
         ),
       } as ModalContextProvider<P>['stack'],
-    })
+    }))
   }
 
   const getParam = <
@@ -183,10 +188,10 @@ const createModalState = (): ModalStateType<any> => {
 
     const openedItemsArray = Array.from(openedItems)
 
-    setState({
+    setState((currentState) => ({
       currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
-      stack: { ...state.stack, openedItems },
-    })
+      stack: { ...currentState.stack, openedItems },
+    }))
   }
 
   const closeModals = <P>(modalName: Exclude<keyof P, symbol>): boolean => {
@@ -210,10 +215,10 @@ const createModalState = (): ModalStateType<any> => {
 
     if (newOpenedItems.size !== oldOpenedItems.size) {
       const openedItemsArray = Array.from(newOpenedItems)
-      setState({
+      setState((currentState) => ({
         currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
-        stack: { ...state.stack, openedItems: newOpenedItems },
-      })
+        stack: { ...currentState.stack, openedItems: newOpenedItems },
+      }))
       return true
     }
 
@@ -225,10 +230,10 @@ const createModalState = (): ModalStateType<any> => {
 
     openedItems.clear()
 
-    setState({
+    setState((currentState) => ({
       currentModal: null,
-      stack: { ...state.stack, openedItems },
-    })
+      stack: { ...currentState.stack, openedItems },
+    }))
   }
 
   const handleBackPress = (): boolean => {
@@ -239,10 +244,10 @@ const createModalState = (): ModalStateType<any> => {
     if (currentModal) {
       if (backBehavior === 'none') return true
       else if (backBehavior === 'clear') {
-        setState(initialState)
+        queueClosingAction({ action: 'closeAllModals' })
         return true
       } else if (backBehavior === 'pop') {
-        closeModal(currentModalStackItem)
+        queueClosingAction({ action: 'closeModal', modalName: currentModal })
         return true
       }
     }
@@ -250,17 +255,83 @@ const createModalState = (): ModalStateType<any> => {
     return false
   }
 
+  const queueClosingAction = <P>({
+    action,
+    callback,
+    modalName,
+  }: ModalStateType<P>['queueClosingAction']['arguments']): ModalStateType<P>['queueClosingAction']['arguments'] => {
+    const {
+      stack: { names },
+    } = state
+
+    if (action !== 'closeAllModals' && modalName) {
+      invariant(
+        names.some((name) => name === modalName),
+        `'${modalName}' is not a valid modal name. Did you mean any of these: ${names.map(
+          (validName) => `\n• ${validName}`,
+        )}`,
+      )
+    }
+
+    const hash = `${
+      modalName ? `${modalName}_${action}` : action
+    }_${Math.random().toString(36).substring(2, 11)}`
+
+    const { pendingClosingActions } = setState((currentState) => ({
+      ...currentState,
+      stack: {
+        ...currentState.stack,
+        pendingClosingActions: currentState.stack.pendingClosingActions.add({
+          hash,
+          action,
+          modalName,
+          currentModalHash: [...currentState.stack.openedItems].slice(-1)[0]
+            .hash,
+        }),
+      },
+    })).stack
+
+    return [...pendingClosingActions].slice(-1)[0]
+  }
+
+  const removeClosingAction = (action: ModalPendingClosingAction): boolean => {
+    const {
+      stack: { pendingClosingActions: oldPendingClosingActions },
+    } = state
+
+    const newPendingClosingActions = new Set(oldPendingClosingActions)
+
+    if (newPendingClosingActions.has(action)) {
+      newPendingClosingActions.delete(action)
+    }
+
+    if (newPendingClosingActions.size !== oldPendingClosingActions.size) {
+      setState((currentState) => ({
+        ...currentState,
+        stack: {
+          ...currentState.stack,
+          pendingClosingActions: newPendingClosingActions,
+        },
+      }))
+      return true
+    }
+
+    return false
+  }
+
   return {
-    handleBackPress,
-    closeAllModals,
-    closeModals,
-    closeModal,
-    subscribe,
-    openModal,
-    getParam,
-    getState,
-    setState,
     init,
+    setState,
+    getState,
+    getParam,
+    openModal,
+    subscribe,
+    closeModal,
+    closeModals,
+    closeAllModals,
+    handleBackPress,
+    queueClosingAction,
+    removeClosingAction,
   }
 }
 
@@ -290,7 +361,9 @@ export const modalfy = <
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
    */
-  closeAllModals: ModalState.closeAllModals,
+  closeAllModals: () => {
+    ModalState.queueClosingAction({ action: 'closeAllModals' })
+  },
   /**
    * This function closes the currently displayed modal by default.
    *
@@ -302,21 +375,31 @@ export const modalfy = <
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
    */
-  closeModal: (modalName?: M) => ModalState.closeModal(modalName),
+  closeModal: (modalName?: M) => {
+    ModalState.queueClosingAction({
+      action: 'closeModal',
+      modalName,
+    })
+  },
   /**
    * This function closes all the instances of a given modal.
    *
    * You can use it whenever you have the same modal opened
    * several times, to close all of them at once.
    *
-   * @example modalfy().closeModals('ErrorModal')
+   * @example modalfy().closeModals('ExampleModal')
    *
    * @returns { boolean } Whether or not Modalfy found any open modal
    * corresponding to `modalName` (and then closed them).
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
    */
-  closeModals: (modalName: M) => ModalState.closeModals(modalName),
+  closeModals: (modalName: M) => {
+    ModalState.queueClosingAction({
+      action: 'closeModals',
+      modalName,
+    })
+  },
   /**
    * This value returns the current open modal (`null` if none).
    *

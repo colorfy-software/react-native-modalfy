@@ -1,7 +1,9 @@
 import { useContext } from 'react'
+
 import { ModalfyParams, UsableModalProp } from '../types'
 
 import ModalContext from './ModalContext'
+import { modalfy } from './ModalState'
 
 /**
  * Hook that exposes Modalfy's API.
@@ -12,6 +14,7 @@ import ModalContext from './ModalContext'
  */
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
   const context = useContext(ModalContext) as UsableModalProp<P>
+  const { closeModal, closeModals, closeAllModals } = modalfy<P>()
   return {
     /**
      * This function closes every open modal.
@@ -20,7 +23,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
      */
-    closeAllModals: context.closeAllModals,
+    closeAllModals: closeAllModals as UsableModalProp<P>['closeAllModals'],
     /**
      * This function closes the currently displayed modal by default.
      *
@@ -32,7 +35,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
      */
-    closeModal: context.closeModal,
+    closeModal: closeModal as UsableModalProp<P>['closeModal'],
     /**
      * This function closes all the instances of a given modal.
      *
@@ -46,7 +49,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
      */
-    closeModals: context.closeModals,
+    closeModals: closeModals as UsableModalProp<P>['closeModals'],
     /**
      * This value returns the current open modal (`null` if none).
      *

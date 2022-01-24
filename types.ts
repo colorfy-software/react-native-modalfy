@@ -50,6 +50,28 @@ export type ModalEventListeners = Set<{
   handler: ModalEventCallback
 }>
 
+export type ModalPendingClosingAction =
+  | {
+      hash: string
+      currentModalHash: string
+      modalName?: string
+      action: 'closeModal'
+      callback?: () => void
+    }
+  | {
+      hash: string
+      currentModalHash: string
+      modalName: string
+      action: 'closeModals'
+      callback?: () => void
+    }
+  | {
+      hash: string
+      currentModalHash: string
+      action: 'closeAllModals'
+      callback?: () => void
+    }
+
 export interface ModalStackItem<P extends ModalfyParams> {
   name: Exclude<keyof P, symbol | number>
   component: ComponentType<any> & { modalOptions?: ModalOptions }
@@ -57,6 +79,7 @@ export interface ModalStackItem<P extends ModalfyParams> {
   index: number
   options?: ModalOptions
   params?: any
+  callback?: () => void
 }
 
 export interface ModalStack<P extends ModalfyParams> {
@@ -65,6 +88,8 @@ export interface ModalStack<P extends ModalfyParams> {
   defaultOptions: ModalOptions
   openedItems: Set<ModalStackItem<P>>
   openedItemsSize: number
+  pendingClosingActions: Set<ModalPendingClosingAction>
+  pendingClosingActionsSize: number
 }
 
 export interface ModalContextProvider<
@@ -142,10 +167,10 @@ export type ModalState<P> = Omit<
     currentModal: ModalContextProvider<P>['currentModal']
     stack: ModalContextProvider<P>['stack']
   }
-  setState: <P>(newState: {
-    currentModal: ModalContextProvider<P>['currentModal']
-    stack: ModalContextProvider<P>['stack']
-  }) => void
+  queueClosingAction: (
+    action: Partial<ModalPendingClosingAction>,
+  ) => ModalPendingClosingAction
+  removeClosingAction: (action: ModalPendingClosingAction) => boolean
   subscribe: <P>(
     listener: ModalStateListener<P>,
     equalityFn?: ModalStateEqualityChecker<P>,
@@ -161,6 +186,7 @@ export interface SharedProps<P extends ModalfyParams>
     eventName: ModalEventName,
     handler: ModalEventCallback,
   ) => ModalEventListener
+  removeClosingAction: ModalState<P>['removeClosingAction']
 }
 
 export type UsableModalProp<P extends ModalfyParams> = Pick<

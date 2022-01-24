@@ -7,7 +7,12 @@ import {
 } from 'react-native'
 import { useMemo } from 'use-memo-one'
 
-import { ModalfyParams, ModalStackItem, SharedProps } from '../types'
+import {
+  SharedProps,
+  ModalfyParams,
+  ModalStackItem,
+  ModalPendingClosingAction,
+} from '../types'
 
 import StackItem from './StackItem'
 
@@ -79,27 +84,32 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     }
   }, [openedItemsArray.length, stack.openedItems.size, translateY, opacity])
 
-  useEffect(() => {
-    if (stack.openedItemsSize !== openedItemsArray.length) {
-      setOpenedItemsArray([...stack.openedItems])
-    }
-  }, [openedItemsArray.length, stack.openedItems, stack.openedItemsSize])
-
-  const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => (
-    <StackItem
-      {...props}
-      // @ts-ignore
-      stackItem={stackItem}
-      key={index}
-      zIndex={index + 1}
-      position={openedItemsArray.length - index}
-      wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
-    />
-  )
+  const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
+    const position = stack.openedItemsSize - index
+    const pendingClosingAction: ModalPendingClosingAction | undefined =
+      stack.pendingClosingActions.values().next().value
+    const hasPendingClosingAction =
+      position === 1 &&
+      pendingClosingAction?.currentModalHash === stackItem.hash
+    return (
+      <StackItem
+        {...props}
+        // @ts-ignore
+        stackItem={stackItem}
+        key={index}
+        zIndex={index + 1}
+        position={position}
+        wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
+        pendingClosingAction={
+          hasPendingClosingAction ? pendingClosingAction : undefined
+        }
+      />
+    )
+  }
 
   const renderStack = () => {
-    if (!openedItemsArray.length) return null
-    return openedItemsArray.map(renderStackItem)
+    if (!stack.openedItemsSize) return null
+    return [...stack.openedItems].map(renderStackItem)
   }
 
   const onBackdropPress = () => {
@@ -176,5 +186,7 @@ const styles = StyleSheet.create({
 export default memo(
   ModalStack,
   (prevProps, nextProps) =>
-    prevProps.stack.openedItemsSize === nextProps.stack.openedItemsSize,
+    prevProps.stack.openedItemsSize === nextProps.stack.openedItemsSize &&
+    prevProps.stack.pendingClosingActionsSize ===
+      nextProps.stack.pendingClosingActionsSize,
 )

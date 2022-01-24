@@ -115,10 +115,10 @@ const ModalProvider = ({ children, stack }: Props) => {
   useEffect(() => {
     invariant(stack, 'You need to provide a `stack` prop to <ModalProvider>')
 
-    ModalState.init<any>({
+    ModalState.init<any>(() => ({
       currentModal: null,
       stack,
-    })
+    }))
 
     modalStateSubscription.current = ModalState.subscribe(listener)
 
@@ -130,19 +130,20 @@ const ModalProvider = ({ children, stack }: Props) => {
       modalStateSubscription.current?.unsubscribe()
     }
 
-    // Should only be triggered on initial mount and return when unmounted
+    // NOTE: Should only be triggered on initial mount and return when unmounted
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <ModalContext.Provider value={contextValue}>
       <>
-        <>{children}</>
+        {children}
         <ModalStack
           {...contextValue}
-          eventListeners={modalEventListeners}
-          registerListener={registerListener}
           clearListeners={clearListeners}
+          registerListener={registerListener}
+          eventListeners={modalEventListeners}
+          removeClosingAction={ModalState.removeClosingAction}
         />
       </>
     </ModalContext.Provider>

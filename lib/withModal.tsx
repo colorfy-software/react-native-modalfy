@@ -6,6 +6,7 @@ import { ModalfyParams, ModalProp } from '../types'
 import ModalContext from './ModalContext'
 
 import { invariant } from '../utils'
+import { modalfy } from './ModalState'
 
 /**
  * HOC that provides the `modal` prop to a wrapped Class component.
@@ -22,12 +23,13 @@ const withModal = <P extends ModalfyParams, Props extends object>(
   Component: React.ComponentClass<Props>,
 ) => {
   const displayName = Component.displayName || Component.name
+  const { closeModal, closeModals, closeAllModals } = modalfy<P>()
 
   class WithModalComponent extends React.Component<
     Omit<Props, keyof ModalProp<P, {}>>
   > {
-    static displayName = `withModal(${displayName})`
     static readonly WrappedComponent = Component
+    static displayName = `withModal(${displayName})`
 
     render() {
       return (
@@ -41,11 +43,11 @@ const withModal = <P extends ModalfyParams, Props extends object>(
               <Component
                 {...(this.props as Props)}
                 modal={{
-                  closeAllModals: context.closeAllModals,
-                  currentModal: context.currentModal,
-                  closeModals: context.closeModals,
-                  closeModal: context.closeModal,
+                  closeModal,
+                  closeModals,
+                  closeAllModals,
                   openModal: context.openModal,
+                  currentModal: context.currentModal,
                 }}
               />
             )
