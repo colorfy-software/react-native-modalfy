@@ -2,13 +2,13 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 'latest',
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
   },
-  extends: '@react-native-community',
+  extends: ['@react-native-community', 'prettier'],
   plugins: ['@typescript-eslint'],
   rules: {
     curly: ['error', 'multi-line'],
