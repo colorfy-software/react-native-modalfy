@@ -115,7 +115,6 @@ const StackItem = <P extends ModalfyParams>({
       closeModalCallback?: (closingElement: ModalStackItem<P>) => void,
       modalStackItemCallback?: () => void,
     ) => {
-      if (!shouldAnimateOut) closeModalCallback?.(stackItem)
       if (!closeModalCallback && animationIn) {
         animationIn(animatedValue, toValue, modalStackItemCallback)
       } else if (closeModalCallback && animationOut) {

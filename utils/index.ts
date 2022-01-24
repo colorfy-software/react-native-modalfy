@@ -21,7 +21,6 @@ export const defaultOptions: ModalOptions = {
     easing: Easing.inOut(Easing.exp),
   },
   disableFlingGesture: false,
-  shouldAnimateOut: true,
   backdropOpacity: 0.6,
   backBehavior: 'pop',
   containerStyle: {},

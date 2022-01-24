@@ -378,13 +378,6 @@ export interface ModalOptions {
    */
   position?: 'center' | 'top' | 'bottom'
   /**
-   * Should closing a modal be animated.
-   *
-   * @deprecated since v2.0 | Use `animateConfigOut` instead.
-   * @default false
-   */
-  shouldAnimateOut?: boolean
-  /**
    * `transitionOptions(animatedValue)` returns a React Native style object containing values that can use the provided `animatedValue` to run animation interpolations on a modal.
    *
    * Note: the object returned by `transitionOptions()` must contain keys that work with `useNativeDriver: true`.
