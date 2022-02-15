@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://colorfy-software.gitbook.io" target="_blank" rel="noopener noreferrer">
+  <a href="https://colorfy-software.gitbook.io/react-native-modalfy/" target="_blank" rel="noopener noreferrer">
     🥞 React Native Modalfy
   </a>
 </h1>
@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/colorfy-software/react-native-modalfy/actions">
-    <img src="https://github.com/colorfy-software/react-native-modalfy/workflows/Lint%20&%20Type/badge.svg?branch=master" alt="Current GitHub Actions build status." />
+    <img src="https://github.com/colorfy-software/react-native-modalfy/workflows/Test%20Suite/badge.svg?branch=main" alt="Current GitHub Actions build status." />
   </a>
   <a href="https://www.npmjs.org/package/react-native-modalfy">
     <img src="https://badge.fury.io/js/react-native-modalfy.svg" alt="Current npm package version." />
@@ -23,7 +23,7 @@
   </a>
 </p>
 
-## Purpose
+## 🎯 Purpose
 
 Modalfy promise has always been to allow you to do 3 things:
 1. Write your modals once, call them from anywhere in your app.
@@ -32,14 +32,14 @@ Modalfy promise has always been to allow you to do 3 things:
 
 We only provide the logic and how to manage your modals: you pass the modal components and have complete control over how they look.
 
-## Documentation
+## 📚 Documentation
 
-The doc is accessible at https://react-native-modalfy.now.sh/docs.
+The doc is accessible at https://colorfy-software.gitbook.io/react-native-modalfy.
 
 - The best way to learn is to follow the [guides](https://colorfy-software.gitbook.io/react-native-modalfy/guides/stack). They will help you to get up and running in no time.
 - The [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types) lists all public APIs.
 
-## Show me!
+## 🎥  Show me!
 
 Maybe better than our long paragraphs, here's a quick
 sneak peek of what you could achieve with Modalfy in a few lines of code:
@@ -58,10 +58,10 @@ sneak peek of what you could achieve with Modalfy in a few lines of code:
 [![Watch the video](https://i.imgur.com/Z6HsH59.gif)](https://youtu.be/AJ1P9e7iD38)
 [Snippet #4](https://gist.github.com/iremlopsum/f3dcb215d8e318c0d1912359fffd232b)
 
-## Code of Conduct
+## 🤝 Code of Conduct
 
 This library has adopted a Code of Conduct that we expect project participants to adhere to. Please read the [full text](https://github.com/colorfy-software/react-native-modalfy/blob/master/CODE_OF_CONDUCT.md) so that you can understand what actions will and will not be tolerated.
 
-## License
+## 📰 License
 
 React Native Modalfy is licensed under the [MIT License](https://github.com/colorfy-software/react-native-modalfy/blob/master/LICENSE).

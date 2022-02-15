@@ -1,0 +1,22 @@
+{
+  "name": "react-native-modalfy-example",
+  "displayName": "Modalfy Example",
+  "expo": {
+    "name": "react-native-modalfy-example",
+    "slug": "react-native-modalfy-example",
+    "description": "Example app for react-native-modalfy",
+    "privacy": "public",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

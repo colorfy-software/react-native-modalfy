@@ -2,48 +2,26 @@
   "name": "react-native-modalfy",
   "version": "2.1.3",
   "description": "Modal citizen of React Native",
-  "main": "index.ts",
-  "repository": "git://github.com/colorfy-software/react-native-modalfy.git",
-  "license": "MIT",
-  "author": "Charles Mangwa <charlesmangwa@gmail.com> (https://github.com/CharlesMangwa)",
-  "bugs": {
-    "url": "https://github.com/colorfy-software/react-native-modalfy/issues"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "homepage": "https://react-native-modalfy.now.sh/docs",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "!**/__tests__"
+  ],
   "scripts": {
-    "lint": "eslint '*/**/*.{ts,tsx}' --quiet --fix",
-    "type": "yarn tsc"
-  },
-  "dependencies": {
-    "hoist-non-react-statics": "^3.3.2",
-    "react-is": "^17.0.2",
-    "use-memo-one": "^1.1.2"
-  },
-  "devDependencies": {
-    "@react-native-community/eslint-config": "^3.0.1",
-    "@types/hoist-non-react-statics": "^3.3.1",
-    "@types/react": "^17.0.38",
-    "@types/react-is": "^17.0.3",
-    "@types/react-native": "^0.66.12",
-    "@typescript-eslint/eslint-plugin": "^5.10.0",
-    "@typescript-eslint/parser": "^5.10.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react-hooks": "4.3.0",
-    "prettier": "^2.5.1",
-    "react": "17.0.2",
-    "react-native": "0.66.4",
-    "react-native-gesture-handler": "^1.10.3",
-    "typescript": "^4.5.4"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.3",
-    "react-native": ">=0.59.0",
-    "react-native-gesture-handler": ">=1.9.0"
+    "test": "jest --updateSnapshot --verbose",
+    "type": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "pre-commit": "yarn lint && yarn type && yarn test",
+    "prepare": "bob build && husky install",
+    "release": "release-it",
+    "example": "yarn --cwd example",
+    "pods": "cd example && pod-install --quiet",
+    "bootstrap": "yarn example && yarn && yarn pods"
   },
   "keywords": [
     "react",
@@ -54,5 +32,157 @@
     "mobile",
     "ios",
     "android"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colorfy-software/react-native-modalfy.git"
+  },
+  "author": "Charles Mangwa <charles.m@hey.com> (https://github.com/CharlesMangwa)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colorfy-software/react-native-modalfy/issues"
+  },
+  "homepage": "https://colorfy-software.gitbook.io/react-native-modalfy",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^3.3.2",
+    "react-is": "^17.0.2",
+    "use-memo-one": "^1.1.2"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^11.0.0",
+    "@react-native-community/eslint-config": "^3.0.1",
+    "@release-it/conventional-changelog": "^2.0.0",
+    "@types/hoist-non-react-statics": "^3.3.1",
+    "@types/jest": "^27.4.0",
+    "@types/react": "^17.0.3",
+    "@types/react-is": "^17.0.3",
+    "@types/react-native": "0.66.15",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "commitlint": "^11.0.0",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-flowtype": "^8.0.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "4.3.0",
+    "husky": "^7.0.0",
+    "jest": "^27.4.7",
+    "pod-install": "^0.1.0",
+    "prettier": "^2.5.1",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
+    "react-native-builder-bob": "^0.18.2",
+    "react-native-gesture-handler": "^1.10.3",
+    "release-it": "^14.2.2",
+    "typescript": "^4.5.4"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.3",
+    "react-native": ">=0.59.0",
+    "react-native-gesture-handler": ">=1.9.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "testPathIgnorePatterns": [
+      "<rootDir>/src/__tests__/helpers.ts"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn pre-commit"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "@react-native-community",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "bracketSameLine": true,
+          "printWidth": 120,
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "semi": false,
+          "tabWidth": 2,
+          "trailingComma": "all",
+          "useTabs": false
+        }
+      ],
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off"
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.ts",
+          "*.tsx"
+        ],
+        "rules": {
+          "no-undef": "off"
+        }
+      }
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
+  "prettier": {
+    "bracketSameLine": true,
+    "printWidth": 120,
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "semi": false,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  }
 }

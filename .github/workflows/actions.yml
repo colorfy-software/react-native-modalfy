@@ -1,4 +1,4 @@
-name: Lint & Type
+name: Test Suite
 
 on: push
 
@@ -23,19 +23,20 @@ jobs:
           path: ${{ steps.yarn-cache-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install
+        run: |
+          yarn install --cwd example --frozen-lockfile
+          yarn install --frozen-lockfile
 
       - name: Run linter
-        run: yarn run lint
+        run: |
+          yarn lint
         id: lint
 
   type:
-    name: Run Type checker
+    name: Run Type Checker
     runs-on: ubuntu-latest
 
     steps:
@@ -54,13 +55,46 @@ jobs:
           path: ${{ steps.yarn-cache-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        run: yarn install
+        run: |
+          yarn install --cwd example --frozen-lockfile
+          yarn install --frozen-lockfile
 
       - name: Run type checker
-        run: yarn run type
+        run: |
+          yarn type
         id: type
+
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get Yarn cache directory path
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        id: yarn-cache
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: |
+          yarn install --cwd example --frozen-lockfile
+          yarn install --frozen-lockfile
+
+      - name: Run unit tests
+        run: |
+          yarn test
+        id: test
