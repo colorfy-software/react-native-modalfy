@@ -262,7 +262,7 @@ export interface ModalOptions {
    *
    * @default -
    * @example
-   * animationOut: (modalAnimatedValue, modalToValue) => {
+   * animationOut: (modalAnimatedValue, modalToValue, callback) => {
    *   Animated.parallel([
    *     Animated.timing(modalAnimatedValue, {
    *       toValue: modalToValue,

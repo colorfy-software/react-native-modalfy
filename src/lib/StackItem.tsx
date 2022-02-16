@@ -180,12 +180,9 @@ const StackItem = <P extends ModalfyParams>({
           toValue,
           useNativeDriver: true,
           ...animateOutConfig,
-        }).start()
-
-        const timeout = setTimeout(() => {
-          closeModal(stackItem)
-          clearTimeout(timeout)
-        }, Math.max(1, Number(animateOutConfig?.duration) * 0.5))
+        }).start(({ finished }) => {
+          if (finished) closeModal(stackItem)
+        })
       }
     },
     [animateOutConfig, closeModal, disableFlingGesture, stackItem, translateY, verticalPosition],
