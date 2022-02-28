@@ -2,7 +2,7 @@ import type { ModalEventAction, ModalEventName, ModalEventPayload } from '../typ
 
 import invariant from './invariant'
 
-const validEventNames: ModalEventName[] = ['onAnimate']
+const validEventNames: ModalEventName[] = ['onAnimate', 'onClose']
 
 export default function (_: ModalEventAction, payload: ModalEventPayload) {
   const { eventName, handler } = payload

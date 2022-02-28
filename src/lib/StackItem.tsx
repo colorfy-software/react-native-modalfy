@@ -1,7 +1,7 @@
-import { State, Directions, FlingGestureHandler } from 'react-native-gesture-handler'
 import { Animated, StyleSheet } from 'react-native'
 import { useMemo, useCallback } from 'use-memo-one'
 import React, { ReactNode, useEffect, useRef, memo } from 'react'
+import { State, Directions, FlingGestureHandler } from 'react-native-gesture-handler'
 
 import type {
   SharedProps,
@@ -65,7 +65,8 @@ const StackItem = <P extends ModalfyParams>({
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
   useEffect(() => {
-    let handleAnimatedListener: ModalEventCallback = () => undefined
+    let onAnimateListener: ModalEventCallback = () => undefined
+    let onCloseListener: ModalEventCallback = () => undefined
 
     if (transitionOptions && typeof transitionOptions !== 'function') {
       throw new Error(`'${stackItem.name}' transitionOptions should be a function. For instance:
@@ -87,19 +88,19 @@ const StackItem = <P extends ModalfyParams>({
 
     eventListeners.forEach((item) => {
       if (item.event === `${stackItem.hash}_onAnimate`) {
-        handleAnimatedListener = item.handler
+        onAnimateListener = item.handler
+      } else if (item.event === `${stackItem.hash}_onClose`) {
+        onCloseListener = item.handler
       }
     })
 
-    animatedListenerId.current = animatedValue.addListener(({ value }) => handleAnimatedListener(value))
+    animatedListenerId.current = animatedValue.addListener(({ value }) => onAnimateListener(value))
 
     return () => {
       animatedValue.removeAllListeners()
+      onCloseListener()
       clearListeners(stackItem.hash)
     }
-
-    // Should only be triggered on initial mount and return when unmounted
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const updateAnimatedValue = useCallback(
@@ -190,7 +191,7 @@ const StackItem = <P extends ModalfyParams>({
 
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
-    const addListener = (eventName: ModalEventName, handler: () => void) =>
+    const addListener = (eventName: ModalEventName, handler: ModalEventCallback) =>
       registerListener(stackItem.hash, eventName, handler)
     const removeAllListeners = () => clearListeners(stackItem.hash)
 

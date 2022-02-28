@@ -114,9 +114,6 @@ const ModalProvider = ({ children, stack }: Props) => {
       BackHandler.removeEventListener('hardwareBackPress', ModalState.handleBackPress)
       modalStateSubscription.current?.unsubscribe()
     }
-
-    // NOTE: Should only be triggered on initial mount and return when unmounted
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

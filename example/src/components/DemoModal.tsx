@@ -9,8 +9,13 @@ import {
   useWindowDimensions,
   Platform,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { ModalComponentProp, ModalComponentWithOptions } from 'react-native-modalfy'
+import {
+  ModalComponentProp,
+  ModalComponentWithOptions,
+  ModalEventCallback,
+  ModalEventListener,
+} from 'react-native-modalfy'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ModalStackParamsList, ModalName } from '../App'
 
@@ -37,9 +42,15 @@ const HOOKS_MODALS_COLOR: ModalsColorType = [
 ]
 
 const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsList, void, ModalName>> = ({
-  modal: { closeModal, closeModals, closeAllModals, getParam, openModal },
+  modal: { addListener, currentModal, closeModal, closeModals, closeAllModals, getParam, openModal },
 }) => {
   const [otherModals, setOtherModals] = useState<OtherModalsType>([])
+
+  const modalListener = useRef<ModalEventListener | undefined>()
+
+  const handleClose: ModalEventCallback = useCallback(() => {
+    console.log(`👋 ${currentModal} closed`)
+  }, [currentModal])
 
   const { width } = useWindowDimensions()
 
@@ -85,15 +96,6 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
     )
   }
 
-  useEffect(() => {
-    setOtherModals(
-      HOOKS_MODALS_COLOR.filter((entry) => entry.name !== modalName).reduce<OtherModalsType>(
-        (output, item) => [...output, { modalName: item.name, color: item.color }],
-        [],
-      ),
-    )
-  }, [modalName])
-
   // Type checking at work 👇
   const onOpenSameModal = () =>
     openModal(modalName, { name: modalName, color, origin }, () => {
@@ -117,6 +119,23 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
   }
 
   const size = Platform.OS === 'web' ? Math.max(width * 0.3, 320) : width * 0.85
+
+  useEffect(() => {
+    setOtherModals(
+      HOOKS_MODALS_COLOR.filter((entry) => entry.name !== modalName).reduce<OtherModalsType>(
+        (output, item) => [...output, { modalName: item.name, color: item.color }],
+        [],
+      ),
+    )
+  }, [modalName])
+
+  useEffect(() => {
+    modalListener.current = addListener('onClose', handleClose)
+
+    return () => {
+      modalListener.current?.remove()
+    }
+  }, [addListener, handleClose])
 
   return (
     <View style={[styles.wrapper, { width: size, height: size }]}>

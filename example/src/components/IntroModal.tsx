@@ -36,7 +36,7 @@ const IntroModal = ({ modal: { addListener } }: ModalComponentProp<ModalStackPar
   const animatedValue = useRef(new Animated.Value(0)).current
   const { width } = useWindowDimensions()
 
-  const onModalAnimate: ModalEventCallback = useCallback(
+  const handleAnimation: ModalEventCallback = useCallback(
     (value) => {
       if (value) animatedValue.setValue(value)
     },
@@ -44,15 +44,12 @@ const IntroModal = ({ modal: { addListener } }: ModalComponentProp<ModalStackPar
   )
 
   useEffect(() => {
-    modalListener.current = addListener('onAnimate', onModalAnimate)
+    modalListener.current = addListener('onAnimate', handleAnimation)
 
     return () => {
       modalListener.current?.remove()
     }
-
-    // Should only be triggered on mount and unmount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [addListener, handleAnimation])
 
   const Header = () => (
     <Animated.View style={[styles.header, { opacity: animatedValue }]}>

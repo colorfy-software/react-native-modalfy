@@ -20,7 +20,7 @@ export type ModalTransitionOptions = (animatedValue: Animated.Value) => {
     | ModalTransitionValue
 }
 
-export type ModalEventName = 'onAnimate'
+export type ModalEventName = 'onAnimate' | 'onClose'
 
 export type ModalEventAction = 'add'
 
