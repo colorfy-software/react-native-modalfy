@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 6 },
   },
   cardIcon: {
-    marginRight: 30,
+    marginRight: 20,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
