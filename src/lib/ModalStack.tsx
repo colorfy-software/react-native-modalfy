@@ -140,8 +140,8 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         { opacity, transform: [{ translateY }] },
         Platform.OS === 'web' && stack.openedItemsSize ? styles.containerWeb : null,
       ]}>
-      {renderStack()}
       {renderBackdrop()}
+      {renderStack()}
     </Animated.View>
   )
 }
