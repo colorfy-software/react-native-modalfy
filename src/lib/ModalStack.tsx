@@ -11,6 +11,7 @@ import { getStackItemOptions, sh } from '../utils'
 type Props<P> = SharedProps<P>
 
 const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
+  // state
   const { stack } = props
 
   const [hasChangedBackdropColor, setBackdropColorStatus] = useState(false)
@@ -20,55 +21,27 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const [openActionCallbacks, setOpenActionCallbacks] = useState<string[]>([])
 
   const opacity = useSharedValue(0)
+
   const translateY = useSharedValue(sh(100))
+
   const fullHeight = useMemo(() => sh(100), [])
-  // const { opacity, translateY } = useMemo(
-  //   () => ({
-  //     opacity: new Animated.Value(0),
-  //     translateY: new Animated.Value(sh(100)),
-  //   }),
-  //   [],
-  // )
 
   const { backBehavior, backdropColor, backdropOpacity } = useMemo(
     () => getStackItemOptions(Array.from(stack.openedItems).pop(), stack),
     [stack],
   )
 
-  useEffect(() => {
-    if (stack.openedItemsSize && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
-      setBackdropColorStatus(true)
-    }
-  }, [backdropColor, hasChangedBackdropColor, stack.openedItemsSize])
+  // reanimated style
+  const backdropReStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(opacity.value, [0, 1], [0, backdropOpacity ?? 0.6]),
+  }))
 
-  useEffect(() => {
-    const scrollY = Platform.OS === 'web' ? window.scrollY ?? document.documentElement.scrollTop : 0
-    if (stack.openedItemsSize) {
-      translateY.value = scrollY
-      opacity.value = withTiming(1, { easing: Easing.in(Easing.ease), duration: 300 })
-      // Animated.timing(opacity, {
-      //   toValue: 1,
-      //   easing: Easing.in(Easing.ease),
-      //   duration: 300,
-      //   useNativeDriver: true,
-      // }).start()
-    } else {
-      opacity.value = withTiming(0, { easing: Easing.inOut(Easing.ease), duration: 300 }, (finished) => {
-        if (finished) {
-          translateY.value = fullHeight
-        }
-      })
-      // Animated.timing(opacity, {
-      //   toValue: 0,
-      //   easing: Easing.inOut(Easing.ease),
-      //   duration: 300,
-      //   useNativeDriver: true,
-      // }).start(({ finished }) => {
-      //   if (finished) translateY.setValue(sh(100))
-      // })
-    }
-  }, [opacity, stack.openedItemsSize, translateY])
+  const containerReStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateY: translateY.value }],
+  }))
 
+  // func
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItemsSize - index
     const pendingClosingAction: ModalPendingClosingAction | undefined = stack.pendingClosingActions
@@ -111,34 +84,18 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
           translateY.value = fullHeight
         }
       })
-      // Animated.timing(opacity, {
-      //   toValue: 0,
-      //   easing: Easing.inOut(Easing.ease),
-      //   duration: 300,
-      //   useNativeDriver: true,
-      // }).start(({ finished }) => {
-      //   if (finished) translateY.setValue(sh(100))
-      // })
     }
 
     setBackdropClosedItems([...backdropClosedItems, currentItem?.hash])
   }
 
-  const backdropReStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(opacity.value, [0, 1], [0, backdropOpacity ?? 0.6]),
-  }))
-  const containerReStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateY: translateY.value }],
-  }))
-
   const renderBackdrop = () => {
-    const onPress = () => onBackdropPress()
     const backgroundColor =
       stack.openedItemsSize && backdropColor ? backdropColor : hasChangedBackdropColor ? 'transparent' : 'black'
 
+    // render
     return (
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback onPress={onBackdropPress}>
         <Animated.View
           style={[
             styles.backdrop,
@@ -152,6 +109,28 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     )
   }
 
+  // effect
+  useEffect(() => {
+    if (stack.openedItemsSize && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
+      setBackdropColorStatus(true)
+    }
+  }, [backdropColor, hasChangedBackdropColor, stack.openedItemsSize])
+
+  useEffect(() => {
+    const scrollY = Platform.OS === 'web' ? window.scrollY ?? document.documentElement.scrollTop : 0
+    if (stack.openedItemsSize) {
+      translateY.value = scrollY
+      opacity.value = withTiming(1, { easing: Easing.in(Easing.ease), duration: 300 })
+    } else {
+      opacity.value = withTiming(0, { easing: Easing.inOut(Easing.ease), duration: 300 }, (finished) => {
+        if (finished) {
+          translateY.value = fullHeight
+        }
+      })
+    }
+  }, [opacity, stack.openedItemsSize, translateY])
+
+  // render
   return (
     <Animated.View
       style={[

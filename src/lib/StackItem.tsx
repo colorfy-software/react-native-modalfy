@@ -49,7 +49,9 @@ const StackItem = <P extends ModalfyParams>({
   wasOpenCallbackCalled,
   wasClosedByBackdropPress,
 }: Props<P>) => {
+  // state
   const animatedValue = useSharedValue(-1)
+
   const translateY = useSharedValue(0)
 
   const {
@@ -63,50 +65,23 @@ const StackItem = <P extends ModalfyParams>({
     disableFlingGesture,
     position: verticalPosition,
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
+
   const onAnimateListenerRef = useRef<(value: number) => void | null>(null) as MutableRefObject<
     (value: number) => void | null
   >
-  useAnimatedReaction(
-    () => animatedValue.value,
-    (value) => {
-      console.log('Change_value')
-      if (typeof onAnimateListenerRef.current === 'function') runOnJS(onAnimateListenerRef.current)(value)
-    },
-  )
-  useEffect(() => {
-    let onCloseListener: ModalEventCallback = () => undefined
 
-    if (transitionOptions && typeof transitionOptions !== 'function') {
-      throw new Error(`'${stackItem.name}' transitionOptions should be a worklet function. For instance:
-      import ${stackItem.name} from './src/modals/${stackItem.name}';
-      import {interpolate} from 'react-native-reanimated';
-      ...
-      ${stackItem.name}: {
-        modal: ${stackItem.name},
-        transitionOptions: animatedValue =>{
-          'worklet';
-          return {
-            opacity: interpolate(interpolate.value, [0, 1, 2, 3], [0, 1, 0.5, 0.25]),
-          }
-        }
-      },
-      }`)
+  const justifyContent = useMemo(() => {
+    switch (verticalPosition) {
+      case 'top':
+        return 'flex-start'
+      case 'bottom':
+        return 'flex-end'
+      default:
+        return 'center'
     }
+  }, [verticalPosition])
 
-    eventListeners.forEach((item) => {
-      if (item.event === `${stackItem.hash}_onAnimate`) {
-        onAnimateListenerRef.current = item.handler
-      } else if (item.event === `${stackItem.hash}_onClose`) {
-        onCloseListener = item.handler
-      }
-    })
-    return () => {
-      // animatedValue.removeAllListeners()
-      onCloseListener()
-      clearListeners(stackItem.hash)
-    }
-  }, [])
-
+  // func
   const updateAnimatedValue = useCallback(
     (
       toValue: number,
@@ -235,16 +210,48 @@ const StackItem = <P extends ModalfyParams>({
     )
   }
 
-  const justifyContent = useMemo(() => {
-    switch (verticalPosition) {
-      case 'top':
-        return 'flex-start'
-      case 'bottom':
-        return 'flex-end'
-      default:
-        return 'center'
+  // effect
+  useAnimatedReaction(
+    () => animatedValue.value,
+    (value) => {
+      console.log('Change_value')
+      if (typeof onAnimateListenerRef.current === 'function') runOnJS(onAnimateListenerRef.current)(value)
+    },
+  )
+
+  useEffect(() => {
+    let onCloseListener: ModalEventCallback = () => undefined
+
+    if (transitionOptions && typeof transitionOptions !== 'function') {
+      throw new Error(`'${stackItem.name}' transitionOptions should be a worklet function. For instance:
+      import ${stackItem.name} from './src/modals/${stackItem.name}';
+      import {interpolate} from 'react-native-reanimated';
+      ...
+      ${stackItem.name}: {
+        modal: ${stackItem.name},
+        transitionOptions: animatedValue =>{
+          'worklet';
+          return {
+            opacity: interpolate(interpolate.value, [0, 1, 2, 3], [0, 1, 0.5, 0.25]),
+          }
+        }
+      },
+      }`)
     }
-  }, [verticalPosition])
+
+    eventListeners.forEach((item) => {
+      if (item.event === `${stackItem.hash}_onAnimate`) {
+        onAnimateListenerRef.current = item.handler
+      } else if (item.event === `${stackItem.hash}_onClose`) {
+        onCloseListener = item.handler
+      }
+    })
+    return () => {
+      // animatedValue.removeAllListeners()
+      onCloseListener()
+      clearListeners(stackItem.hash)
+    }
+  }, [])
 
   useEffect(() => {
     updateAnimatedValue(position, undefined, wasOpenCallbackCalled ? undefined : stackItem.callback)
@@ -277,6 +284,7 @@ const StackItem = <P extends ModalfyParams>({
     }
   }, [closeAllStackItems, closeStackItem, closeStackItems, pendingClosingAction, removeClosingAction])
 
+  // render
   return (
     <Animated.View pointerEvents="box-none" style={[styles.container, containerStyle, { justifyContent, zIndex }]}>
       {renderAnimatedComponent()}
