@@ -1,6 +1,13 @@
-import { Animated, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import Animated, {
+  useSharedValue,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  runOnJS,
+  withTiming,
+} from 'react-native-reanimated'
 import { useMemo, useCallback } from 'use-memo-one'
-import React, { ReactNode, useEffect, useRef, memo } from 'react'
+import React, { ReactNode, useEffect, memo, useRef, MutableRefObject } from 'react'
 import { State, Directions, FlingGestureHandler } from 'react-native-gesture-handler'
 
 import type {
@@ -42,15 +49,10 @@ const StackItem = <P extends ModalfyParams>({
   wasOpenCallbackCalled,
   wasClosedByBackdropPress,
 }: Props<P>) => {
-  const { animatedValue, translateY } = useMemo(
-    () => ({
-      animatedValue: new Animated.Value(-1),
-      translateY: new Animated.Value(0),
-    }),
-    [],
-  )
+  // state
+  const animatedValue = useSharedValue(-1)
 
-  const animatedListenerId = useRef<string | undefined>()
+  const translateY = useSharedValue(0)
 
   const {
     animationIn,
@@ -64,45 +66,22 @@ const StackItem = <P extends ModalfyParams>({
     position: verticalPosition,
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
-  useEffect(() => {
-    let onAnimateListener: ModalEventCallback = () => undefined
-    let onCloseListener: ModalEventCallback = () => undefined
+  const onAnimateListenerRef = useRef<(value: number) => void | null>(null) as MutableRefObject<
+    (value: number) => void | null
+  >
 
-    if (transitionOptions && typeof transitionOptions !== 'function') {
-      throw new Error(`'${stackItem.name}' transitionOptions should be a function. For instance:
-      import ${stackItem.name} from './src/modals/${stackItem.name}';
-
-      ...
-      ${stackItem.name}: {
-        modal: ${stackItem.name},
-        transitionOptions: animatedValue => ({
-          opacity: animatedValue.interpolate({
-            inputRange: [0, 1, 2, 3],
-            outputRange: [0, 1, 0.5, 0.25],
-            extrapolate: 'clamp',
-          }),
-        }),
-      },
-      }`)
+  const justifyContent = useMemo(() => {
+    switch (verticalPosition) {
+      case 'top':
+        return 'flex-start'
+      case 'bottom':
+        return 'flex-end'
+      default:
+        return 'center'
     }
+  }, [verticalPosition])
 
-    eventListeners.forEach((item) => {
-      if (item.event === `${stackItem.hash}_onAnimate`) {
-        onAnimateListener = item.handler
-      } else if (item.event === `${stackItem.hash}_onClose`) {
-        onCloseListener = item.handler
-      }
-    })
-
-    animatedListenerId.current = animatedValue.addListener(({ value }) => onAnimateListener(value))
-
-    return () => {
-      animatedValue.removeAllListeners()
-      onCloseListener()
-      clearListeners(stackItem.hash)
-    }
-  }, [])
-
+  // func
   const updateAnimatedValue = useCallback(
     (
       toValue: number,
@@ -117,16 +96,20 @@ const StackItem = <P extends ModalfyParams>({
           modalStackItemCallback?.()
         })
       } else {
-        Animated.timing(animatedValue, {
+        animatedValue.value = withTiming(
           toValue,
-          useNativeDriver: true,
-          ...(closeModalCallback ? animateOutConfig : animateInConfig),
-        }).start(({ finished }) => {
-          if (finished) {
-            closeModalCallback?.(stackItem)
-            modalStackItemCallback?.()
-          }
-        })
+          { ...(closeModalCallback ? animateOutConfig : animateInConfig) },
+          (finished) => {
+            if (finished) {
+              if (typeof closeModalCallback === 'function') {
+                runOnJS(closeModalCallback)(stackItem)
+              }
+              if (typeof modalStackItemCallback === 'function') {
+                runOnJS(modalStackItemCallback)()
+              }
+            }
+          },
+        )
       }
     },
     [stackItem, animationIn, animationOut, animatedValue, animateInConfig, animateOutConfig],
@@ -176,18 +159,21 @@ const StackItem = <P extends ModalfyParams>({
     ({ nativeEvent }) => {
       if (!disableFlingGesture && nativeEvent.oldState === State.ACTIVE) {
         const toValue = verticalPosition === 'top' ? vh(-100) : vh(100)
-
-        Animated.timing(translateY, {
-          toValue,
-          useNativeDriver: true,
-          ...animateOutConfig,
-        }).start(({ finished }) => {
-          if (finished) closeModal(stackItem)
+        withTiming(toValue, { ...animateOutConfig }, (finished) => {
+          if (finished) {
+            runOnJS(closeStackItem)(stackItem.name)
+          }
         })
       }
     },
     [animateOutConfig, closeModal, disableFlingGesture, stackItem, translateY, verticalPosition],
   )
+
+  const reanimatedStyle = useAnimatedStyle(() => ({ transform: [{ translateY: translateY.value }] }))
+
+  const flingReStyle = useAnimatedStyle(() => ({
+    ...(transitionOptions && transitionOptions(animatedValue)),
+  }))
 
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
@@ -196,14 +182,11 @@ const StackItem = <P extends ModalfyParams>({
     const removeAllListeners = () => clearListeners(stackItem.hash)
 
     return (
-      <Animated.View pointerEvents="box-none" style={{ transform: [{ translateY }] }}>
+      <Animated.View pointerEvents="box-none" style={reanimatedStyle}>
         <FlingGestureHandler
           direction={verticalPosition === 'top' ? Directions.UP : verticalPosition === 'bottom' ? Directions.DOWN : -1}
           onHandlerStateChange={onFling}>
-          <Animated.View
-            style={{
-              ...(transitionOptions && transitionOptions(animatedValue)),
-            }}>
+          <Animated.View style={flingReStyle}>
             <Component
               modal={{
                 openModal,
@@ -227,16 +210,48 @@ const StackItem = <P extends ModalfyParams>({
     )
   }
 
-  const justifyContent = useMemo(() => {
-    switch (verticalPosition) {
-      case 'top':
-        return 'flex-start'
-      case 'bottom':
-        return 'flex-end'
-      default:
-        return 'center'
+  // effect
+  useAnimatedReaction(
+    () => animatedValue.value,
+    (value) => {
+      console.log('Change_value')
+      if (typeof onAnimateListenerRef.current === 'function') runOnJS(onAnimateListenerRef.current)(value)
+    },
+  )
+
+  useEffect(() => {
+    let onCloseListener: ModalEventCallback = () => undefined
+
+    if (transitionOptions && typeof transitionOptions !== 'function') {
+      throw new Error(`'${stackItem.name}' transitionOptions should be a worklet function. For instance:
+      import ${stackItem.name} from './src/modals/${stackItem.name}';
+      import {interpolate} from 'react-native-reanimated';
+      ...
+      ${stackItem.name}: {
+        modal: ${stackItem.name},
+        transitionOptions: animatedValue =>{
+          'worklet';
+          return {
+            opacity: interpolate(interpolate.value, [0, 1, 2, 3], [0, 1, 0.5, 0.25]),
+          }
+        }
+      },
+      }`)
     }
-  }, [verticalPosition])
+
+    eventListeners.forEach((item) => {
+      if (item.event === `${stackItem.hash}_onAnimate`) {
+        onAnimateListenerRef.current = item.handler
+      } else if (item.event === `${stackItem.hash}_onClose`) {
+        onCloseListener = item.handler
+      }
+    })
+    return () => {
+      // animatedValue.removeAllListeners()
+      onCloseListener()
+      clearListeners(stackItem.hash)
+    }
+  }, [])
 
   useEffect(() => {
     updateAnimatedValue(position, undefined, wasOpenCallbackCalled ? undefined : stackItem.callback)
@@ -269,6 +284,7 @@ const StackItem = <P extends ModalfyParams>({
     }
   }, [closeAllStackItems, closeStackItem, closeStackItems, pendingClosingAction, removeClosingAction])
 
+  // render
   return (
     <Animated.View pointerEvents="box-none" style={[styles.container, containerStyle, { justifyContent, zIndex }]}>
       {renderAnimatedComponent()}

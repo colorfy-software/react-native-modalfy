@@ -1,5 +1,7 @@
 import type { ComponentType } from 'react'
-import type { Animated, ViewStyle } from 'react-native'
+import type { ViewStyle } from 'react-native'
+import type Animated from 'react-native-reanimated'
+import type { WithTimingConfig } from 'react-native-reanimated'
 
 /*  ========================                 ========================
  *
@@ -10,15 +12,7 @@ import type { Animated, ViewStyle } from 'react-native'
 
 export type ModalfyParams = { [key: string]: any }
 
-export type ModalTransitionValue = Animated.AnimatedInterpolation | string | number | undefined | null
-
-export type ModalTransitionOptions = (animatedValue: Animated.Value) => {
-  [key: string]:
-    | {
-        [key: string]: ModalTransitionValue
-      }[]
-    | ModalTransitionValue
-}
+export type ModalTransitionOptions = (animatedValue: Animated.SharedValue<number>) => ViewStyle
 
 export type ModalEventName = 'onAnimate' | 'onClose'
 
@@ -205,7 +199,7 @@ export interface ModalOptions {
    * @default { easing: Easing.inOut(Easing.exp), duration: 450 }
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animateinconfig
    */
-  animateInConfig?: Pick<Animated.TimingAnimationConfig, 'duration' | 'easing'>
+  animateInConfig?: WithTimingConfig
   /**
    * Animation function that receives the `animatedValue` used by the library to animate the modal opening,
    * and a `toValue` argument representing the modal position in the stack.
@@ -238,10 +232,10 @@ export interface ModalOptions {
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationin
    */
   animationIn?: (
-    animatedValue: Animated.Value,
+    animatedValue: Animated.SharedValue<number>,
     toValue: number,
     callback?: () => void,
-  ) => Animated.CompositeAnimation | void
+  ) => Animated.AnimateStyle<unknown>
   /**
    * Animation configuration used to animate a modal out (underneath other modals or when closing the last one).
    * Uses Animated.timing(), if you want to use another animation type, use `animationOut`.
@@ -251,7 +245,7 @@ export interface ModalOptions {
    * @default { easing: Easing.inOut(Easing.exp), duration: 450 }
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout
    */
-  animateOutConfig?: Pick<Animated.TimingAnimationConfig, 'duration' | 'easing'>
+  animateOutConfig?: WithTimingConfig
   /**
    * Animation function that receives the `animatedValue` used by the library to animate the modal closing,
    * and a `toValue` argument representing the modal position in the stack.
@@ -283,10 +277,10 @@ export interface ModalOptions {
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout
    */
   animationOut?: (
-    animatedValue: Animated.Value,
+    animatedValue: Animated.SharedValue<number>,
     toValue: number,
     callback?: () => void,
-  ) => Animated.CompositeAnimation | void
+  ) => Animated.AnimateStyle<unknown>
   /**
    * How you want the modal stack to behave when users press the backdrop, but also when the physical back button is pressed on Android.
    *
