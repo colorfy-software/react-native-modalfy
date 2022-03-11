@@ -1,7 +1,7 @@
 import { useMemo } from 'use-memo-one'
 import React, { useEffect, useState, memo } from 'react'
-import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
-
+import { StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming, interpolate } from 'react-native-reanimated'
 import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAction } from '../types'
 
 import StackItem from './StackItem'
@@ -19,13 +19,16 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   const [openActionCallbacks, setOpenActionCallbacks] = useState<string[]>([])
 
-  const { opacity, translateY } = useMemo(
-    () => ({
-      opacity: new Animated.Value(0),
-      translateY: new Animated.Value(sh(100)),
-    }),
-    [],
-  )
+  const opacity = useSharedValue(0)
+  const translateY = useSharedValue(sh(100))
+  const fullHeight = useMemo(() => sh(100), [])
+  // const { opacity, translateY } = useMemo(
+  //   () => ({
+  //     opacity: new Animated.Value(0),
+  //     translateY: new Animated.Value(sh(100)),
+  //   }),
+  //   [],
+  // )
 
   const { backBehavior, backdropColor, backdropOpacity } = useMemo(
     () => getStackItemOptions(Array.from(stack.openedItems).pop(), stack),
@@ -41,22 +44,28 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   useEffect(() => {
     const scrollY = Platform.OS === 'web' ? window.scrollY ?? document.documentElement.scrollTop : 0
     if (stack.openedItemsSize) {
-      translateY.setValue(scrollY)
-      Animated.timing(opacity, {
-        toValue: 1,
-        easing: Easing.in(Easing.ease),
-        duration: 300,
-        useNativeDriver: true,
-      }).start()
+      translateY.value = scrollY
+      opacity.value = withTiming(1, { easing: Easing.in(Easing.ease), duration: 300 })
+      // Animated.timing(opacity, {
+      //   toValue: 1,
+      //   easing: Easing.in(Easing.ease),
+      //   duration: 300,
+      //   useNativeDriver: true,
+      // }).start()
     } else {
-      Animated.timing(opacity, {
-        toValue: 0,
-        easing: Easing.inOut(Easing.ease),
-        duration: 300,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) translateY.setValue(sh(100))
+      opacity.value = withTiming(0, { easing: Easing.inOut(Easing.ease), duration: 300 }, (finished) => {
+        if (finished) {
+          translateY.value = fullHeight
+        }
       })
+      // Animated.timing(opacity, {
+      //   toValue: 0,
+      //   easing: Easing.inOut(Easing.ease),
+      //   duration: 300,
+      //   useNativeDriver: true,
+      // }).start(({ finished }) => {
+      //   if (finished) translateY.setValue(sh(100))
+      // })
     }
   }, [opacity, stack.openedItemsSize, translateY])
 
@@ -97,18 +106,31 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     const currentItem = [...stack.openedItems].slice(-1)[0]
 
     if (stack.openedItemsSize === 1) {
-      Animated.timing(opacity, {
-        toValue: 0,
-        easing: Easing.inOut(Easing.ease),
-        duration: 300,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) translateY.setValue(sh(100))
+      opacity.value = withTiming(0, { easing: Easing.inOut(Easing.ease), duration: 300 }, (finished) => {
+        if (finished) {
+          translateY.value = fullHeight
+        }
       })
+      // Animated.timing(opacity, {
+      //   toValue: 0,
+      //   easing: Easing.inOut(Easing.ease),
+      //   duration: 300,
+      //   useNativeDriver: true,
+      // }).start(({ finished }) => {
+      //   if (finished) translateY.setValue(sh(100))
+      // })
     }
 
     setBackdropClosedItems([...backdropClosedItems, currentItem?.hash])
   }
+
+  const backdropReStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(opacity.value, [0, 1], [0, backdropOpacity ?? 0.6]),
+  }))
+  const containerReStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateY: translateY.value }],
+  }))
 
   const renderBackdrop = () => {
     const onPress = () => onBackdropPress()
@@ -122,11 +144,8 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
             styles.backdrop,
             {
               backgroundColor,
-              opacity: opacity.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, backdropOpacity ?? 0.6],
-              }),
             },
+            backdropReStyle,
           ]}
         />
       </TouchableWithoutFeedback>
@@ -137,7 +156,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     <Animated.View
       style={[
         styles.container,
-        { opacity, transform: [{ translateY }] },
+        containerReStyle,
         Platform.OS === 'web' && stack.openedItemsSize ? styles.containerWeb : null,
       ]}>
       {renderBackdrop()}

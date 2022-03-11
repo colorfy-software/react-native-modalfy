@@ -1,7 +1,7 @@
 import React from 'react'
 import { ModalOptions, ModalProvider, ModalStackConfig, createModalStack } from 'react-native-modalfy'
-import { ImageBackground, Dimensions, StyleSheet, StatusBar, Easing, Text, Animated, Platform } from 'react-native'
-
+import { ImageBackground, Dimensions, StyleSheet, StatusBar, Text, Platform } from 'react-native'
+import Animated, { interpolate, runOnJS, withSpring, Easing } from 'react-native-reanimated'
 import DemoModal from './components/DemoModal'
 import IntroModal from './components/IntroModal'
 import IntroButton from './components/IntroButton'
@@ -39,71 +39,76 @@ const config: ModalStackConfig = {
       easing: Easing.inOut(Easing.exp),
       duration: 500,
     },
-    transitionOptions: (animatedValue) => ({
-      transform: [
-        {
-          translateY: animatedValue.interpolate({
-            inputRange: [0, 1, 2],
-            outputRange: [height, 0, height],
-          }),
-        },
-      ],
-    }),
+    transitionOptions: (animatedValue) => {
+      'worklet'
+      return {
+        transform: [
+          {
+            translateY: interpolate(animatedValue.value, [0, 1, 2], [height, 0, height]),
+          },
+        ],
+      }
+    },
   },
+  // IntroModal: IntroModal,
   ModalA: DemoModal,
   ModalB: DemoModal,
   ModalC: DemoModal,
 }
 
-const animate = (animatedValue: Animated.Value, toValue: number, callback?: () => void) => {
-  Animated.spring(animatedValue, {
+const animate = (animatedValue: Animated.SharedValue<number>, toValue: number, callback?: () => void) => {
+  animatedValue.value = withSpring(
     toValue,
-    damping: 10,
-    mass: 0.35,
-    stiffness: 100,
-    overshootClamping: true,
-    restSpeedThreshold: 0.001,
-    restDisplacementThreshold: 0.001,
-    useNativeDriver: true,
-  }).start(({ finished }) => {
-    if (finished) callback?.()
-  })
+    {
+      damping: 10,
+      mass: 0.35,
+      stiffness: 100,
+      overshootClamping: true,
+      restSpeedThreshold: 0.001,
+      restDisplacementThreshold: 0.001,
+    },
+    (finished) => {
+      if (finished) {
+        if (typeof callback === 'function') {
+          runOnJS(callback)()
+        }
+      }
+    },
+  )
+  // Animated.spring(animatedValue, {
+  //   toValue,
+
+  //   useNativeDriver: true,
+  // }).start(({ finished }) => {
+  //   if (finished) callback?.()
+  // })
 }
 
 const defaultOptions: ModalOptions = {
   backdropOpacity: 0.4,
   animationIn: animate,
   animationOut: animate,
-  transitionOptions: (animatedValue) => ({
-    opacity: animatedValue.interpolate({
-      inputRange: [0, 1, 2],
-      outputRange: [0, 1, 0.9],
-    }),
-    transform: [
-      { perspective: 2000 },
-      {
-        translateX: animatedValue.interpolate({
-          inputRange: [0, 1, 2],
-          outputRange: [-width / 1.5, 0, width / 1.5],
-          extrapolate: 'clamp',
-        }),
-      },
-      {
-        rotateY: animatedValue.interpolate({
-          inputRange: [0, 1, 2],
-          outputRange: ['90deg', '0deg', '-90deg'],
-          extrapolate: 'clamp',
-        }),
-      },
-      {
-        scale: animatedValue.interpolate({
-          inputRange: [0, 1, 2],
-          outputRange: [1.2, 1, 0.9],
-          extrapolate: 'clamp',
-        }),
-      },
-    ],
-  }),
+  transitionOptions: (animatedValue) => {
+    'worklet'
+    return {
+      opacity: interpolate(animatedValue.value, [0, 1, 2], [0, 1, 0.9]),
+      transform: [
+        { perspective: 2000 },
+        {
+          translateX: interpolate(animatedValue.value, [0, 1, 2], [-width / 1.5, 0, 10]),
+        },
+        // {
+        //   rotateY: interpolate(animatedValue.value, [0, 1, 2], [90, 0, -90]) + 'deg',
+        // },
+        {
+          rotate: interpolate(animatedValue.value, [0, 1, 2], [45, 0, 45]) + 'deg',
+        },
+        // {
+        //   scale: interpolate(animatedValue.value, [0, 1, 2], [1.2, 1, 0.9]),
+        // },
+      ],
+    }
+  },
 }
 
 const stack = createModalStack<ModalStackParamsList>(config, defaultOptions)
