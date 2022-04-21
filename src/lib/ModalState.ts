@@ -126,7 +126,7 @@ const createModalState = (): ModalStateType<any> => {
       if (item.hash === hash) stackItem = item
     })
 
-    return stackItem?.params?.[paramName] || defaultValue
+    return stackItem?.params?.[paramName] ?? defaultValue
   }
 
   const closeModal = <P>(closingElement?: Exclude<keyof P, symbol> | ModalStackItem<P>) => {
