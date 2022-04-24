@@ -1,3 +1,3 @@
 import { modalfy } from '../index'
 
-it('write tests', () => console.log(modalfy()))
+it('📝 Write tests', () => expect(modalfy().currentModal).toBe(null))

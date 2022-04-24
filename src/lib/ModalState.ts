@@ -29,7 +29,7 @@ const createModalState = (): ModalStateType<any> => {
         pendingClosingActionsSize: newState.stack.pendingClosingActions.size,
       },
     }
-    listeners.forEach((listener) => listener())
+    listeners.forEach(listener => listener())
     return state
   }
 
@@ -84,20 +84,20 @@ const createModalState = (): ModalStateType<any> => {
 
     invariant(modalName, "You didn't pass any modal name")
     invariant(
-      names.some((name) => name === modalName),
+      names.some(name => name === modalName),
       `'${modalName}' is not a valid modal name. Did you mean any of these: ${names.map(
-        (validName) => `\n• ${validName}`,
+        validName => `\n• ${validName}`,
       )}`,
     )
 
-    const stackItem = content.find((item) => item.name === modalName)
+    const stackItem = content.find(item => item.name === modalName)
     const hash = `${modalName}_${Math.random().toString(36).substring(2, 11)}`
 
     if (!currentModal && isCalledOutsideOfContext) {
       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
     }
 
-    setState<P>((currentState) => ({
+    setState<P>(currentState => ({
       currentModal: modalName,
       stack: {
         ...currentState.stack,
@@ -122,7 +122,7 @@ const createModalState = (): ModalStateType<any> => {
     } = state
     let stackItem: ModalStackItem<P> | undefined
 
-    openedItems.forEach((item) => {
+    openedItems.forEach(item => {
       if (item.hash === hash) stackItem = item
     })
 
@@ -136,16 +136,16 @@ const createModalState = (): ModalStateType<any> => {
 
     if (typeof closingElement === 'string') {
       invariant(
-        names.some((name) => name === closingElement),
+        names.some(name => name === closingElement),
         `'${closingElement}' is not a valid modal name. Did you mean any of these: ${names.map(
-          (validName) => `\n• ${String(validName)}`,
+          validName => `\n• ${String(validName)}`,
         )}`,
       )
 
       let wasItemRemoved = false
       let reversedOpenedItemsArray = Array.from(openedItems).reverse()
 
-      reversedOpenedItemsArray.forEach((openedItem) => {
+      reversedOpenedItemsArray.forEach(openedItem => {
         if (openedItem.name === closingElement && !wasItemRemoved) {
           openedItems.delete(openedItem)
           wasItemRemoved = true
@@ -164,7 +164,7 @@ const createModalState = (): ModalStateType<any> => {
 
     const openedItemsArray = Array.from(openedItems)
 
-    setState((currentState) => ({
+    setState(currentState => ({
       currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
       stack: { ...currentState.stack, openedItems },
     }))
@@ -177,21 +177,21 @@ const createModalState = (): ModalStateType<any> => {
 
     invariant(modalName, "You didn't pass any modal name to closeModals()")
     invariant(
-      names.some((name) => name === modalName),
+      names.some(name => name === modalName),
       `'${modalName}' is not a valid modal name. Did you mean any of these: ${names.map(
-        (validName) => `\n• ${String(validName)}`,
+        validName => `\n• ${String(validName)}`,
       )}`,
     )
 
     const newOpenedItems = new Set(oldOpenedItems)
 
-    newOpenedItems.forEach((item) => {
+    newOpenedItems.forEach(item => {
       if (item.name === modalName) newOpenedItems.delete(item)
     })
 
     if (newOpenedItems.size !== oldOpenedItems.size) {
       const openedItemsArray = Array.from(newOpenedItems)
-      setState((currentState) => ({
+      setState(currentState => ({
         currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
         stack: { ...currentState.stack, openedItems: newOpenedItems },
       }))
@@ -206,7 +206,7 @@ const createModalState = (): ModalStateType<any> => {
 
     openedItems.clear()
 
-    setState((currentState) => ({
+    setState(currentState => ({
       currentModal: null,
       stack: { ...currentState.stack, openedItems },
     }))
@@ -242,16 +242,16 @@ const createModalState = (): ModalStateType<any> => {
 
     if (action !== 'closeAllModals' && modalName) {
       invariant(
-        names.some((name) => name === modalName),
+        names.some(name => name === modalName),
         `'${modalName}' is not a valid modal name. Did you mean any of these: ${names.map(
-          (validName) => `\n• ${validName}`,
+          validName => `\n• ${validName}`,
         )}`,
       )
     }
 
     const hash = `${modalName ? `${modalName}_${action}` : action}_${Math.random().toString(36).substring(2, 11)}`
 
-    const { pendingClosingActions } = setState((currentState) => ({
+    const { pendingClosingActions } = setState(currentState => ({
       ...currentState,
       stack: {
         ...currentState.stack,
@@ -280,7 +280,7 @@ const createModalState = (): ModalStateType<any> => {
     }
 
     if (newPendingClosingActions.size !== oldPendingClosingActions.size) {
-      setState((currentState) => ({
+      setState(currentState => ({
         ...currentState,
         stack: {
           ...currentState.stack,
@@ -380,7 +380,7 @@ export const modalfy = <
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#currentmodal
    */
-  currentModal: ModalState.getState<P>()?.currentModal,
+  currentModal: ModalState.getState<P>()?.currentModal ?? null,
   /**
    * This function opens a modal based on the provided `modalName`.
    *
