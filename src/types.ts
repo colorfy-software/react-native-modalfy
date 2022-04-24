@@ -43,21 +43,21 @@ export type ModalEventListeners = Set<{
 export type ModalPendingClosingAction =
   | {
       hash: string
-      currentModalHash: string
+      currentModalHash?: string
       modalName?: string
       action: 'closeModal'
       callback?: () => void
     }
   | {
       hash: string
-      currentModalHash: string
+      currentModalHash?: string
       modalName: string
       action: 'closeModals'
       callback?: () => void
     }
   | {
       hash: string
-      currentModalHash: string
+      currentModalHash?: string
       action: 'closeAllModals'
       callback?: () => void
     }

@@ -260,7 +260,7 @@ const createModalState = (): ModalStateType<any> => {
           action,
           callback,
           modalName,
-          currentModalHash: [...currentState.stack.openedItems].slice(-1)[0].hash,
+          currentModalHash: [...currentState.stack.openedItems].slice(-1)[0]?.hash,
         }),
       },
     })).stack
