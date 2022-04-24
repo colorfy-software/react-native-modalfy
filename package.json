@@ -52,8 +52,8 @@
     "use-memo-one": "^1.1.2"
   },
   "devDependencies": {
+    "@colorfy-software/eslint-config": "^0.3.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@react-native-community/eslint-config": "^3.0.1",
     "@release-it/conventional-changelog": "^2.0.0",
     "@testing-library/jest-native": "^4.0.4",
     "@types/hoist-non-react-statics": "^3.3.1",
@@ -61,13 +61,8 @@
     "@types/react": "^17.0.3",
     "@types/react-is": "^17.0.3",
     "@types/react-native": "0.66.15",
-    "@typescript-eslint/eslint-plugin": "^5.12.0",
     "commitlint": "^11.0.0",
-    "eslint": "^8.7.0",
-    "eslint-config-prettier": "^8.2.0",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react-hooks": "4.3.0",
+    "eslint": "^8.14.0",
     "husky": "^7.0.0",
     "jest": "^27.4.7",
     "pod-install": "^0.1.0",
@@ -113,40 +108,10 @@
     }
   },
   "eslintConfig": {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-      "@react-native-community",
-      "prettier"
-    ],
+    "extends": "@colorfy-software",
     "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "bracketSameLine": true,
-          "printWidth": 120,
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "semi": false,
-          "tabWidth": 2,
-          "trailingComma": "all",
-          "useTabs": false
-        }
-      ],
-      "react/jsx-uses-react": "off",
-      "react/react-in-jsx-scope": "off"
-    },
-    "overrides": [
-      {
-        "files": [
-          "*.ts",
-          "*.tsx"
-        ],
-        "rules": {
-          "no-undef": "off"
-        }
-      }
-    ]
+      "@typescript-eslint/no-explicit-any": "off"
+    }
   },
   "eslintIgnore": [
     "node_modules/",
@@ -159,6 +124,7 @@
     "singleQuote": true,
     "semi": false,
     "tabWidth": 2,
+    "arrowParens": "avoid",
     "trailingComma": "all",
     "useTabs": false
   },

@@ -37,7 +37,7 @@ const IntroModal = ({ modal: { addListener } }: ModalComponentProp<ModalStackPar
   const { width } = useWindowDimensions()
 
   const handleAnimation: ModalEventCallback = useCallback(
-    (value) => {
+    value => {
       if (value) animatedValue.setValue(value)
     },
     [animatedValue],

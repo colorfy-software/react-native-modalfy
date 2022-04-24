@@ -1,4 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/jsx-one-expression-per-line */
 import {
   TouchableOpacity,
   StyleSheet,
@@ -21,7 +21,7 @@ import { ModalStackParamsList, ModalName } from '../App'
 
 type ButtonProps = {
   letter: string
-  onPress: Function
+  onPress: () => void
   backgroundColor: ModalStackParamsList[ModalName]['color'] | undefined
 }
 
@@ -66,7 +66,7 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
         <View style={[styles.headerTag, { backgroundColor: 'white' }]}>
           <Text style={[styles.headerTagText, { color }]}>{origin?.toLocaleUpperCase()}</Text>
         </View>
-        <TouchableOpacity onPress={onPress} style={{ padding: 10 }}>
+        <TouchableOpacity style={{ padding: 10 }} onPress={onPress}>
           <Text style={{ fontSize: 14 }}>❌</Text>
         </TouchableOpacity>
       </View>
@@ -90,7 +90,7 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
   const Button = ({ letter, onPress, backgroundColor }: ButtonProps) => {
     const onPressButton = () => onPress()
     return (
-      <TouchableOpacity onPress={onPressButton} style={[styles.button, { backgroundColor }]}>
+      <TouchableOpacity style={[styles.button, { backgroundColor }]} onPress={onPressButton}>
         <Text style={styles.buttonText}>{letter}</Text>
       </TouchableOpacity>
     )
@@ -122,7 +122,7 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
 
   useEffect(() => {
     setOtherModals(
-      HOOKS_MODALS_COLOR.filter((entry) => entry.name !== modalName).reduce<OtherModalsType>(
+      HOOKS_MODALS_COLOR.filter(entry => entry.name !== modalName).reduce<OtherModalsType>(
         (output, item) => [...output, { modalName: item.name, color: item.color }],
         [],
       ),
@@ -146,7 +146,7 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
           backgroundColor={otherModals[0]?.color}
           onPress={onPressLeftButton}
         />
-        <TouchableOpacity onPress={onOpenSameModal} style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }} onPress={onOpenSameModal}>
           <>
             <Text style={{ fontSize: 40, fontWeight: 'bold', color }}>{modalName}</Text>
             <Text style={{ fontSize: 12, fontWeight: '600' }}>another one?</Text>

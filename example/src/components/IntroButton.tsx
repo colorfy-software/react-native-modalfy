@@ -8,7 +8,7 @@ const IntroButton = () => {
   const { openModal } = useModal<ModalStackParamsList>()
   const onPress = () => openModal('IntroModal')
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
       <Text style={styles.buttonText}>Show me!</Text>
     </TouchableOpacity>
   )

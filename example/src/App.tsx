@@ -39,7 +39,7 @@ const config: ModalStackConfig = {
       easing: Easing.inOut(Easing.exp),
       duration: 500,
     },
-    transitionOptions: (animatedValue) => ({
+    transitionOptions: animatedValue => ({
       transform: [
         {
           translateY: animatedValue.interpolate({
@@ -74,7 +74,7 @@ const defaultOptions: ModalOptions = {
   backdropOpacity: 0.4,
   animationIn: animate,
   animationOut: animate,
-  transitionOptions: (animatedValue) => ({
+  transitionOptions: animatedValue => ({
     opacity: animatedValue.interpolate({
       inputRange: [0, 1, 2],
       outputRange: [0, 1, 0.9],

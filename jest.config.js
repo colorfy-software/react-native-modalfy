@@ -118,7 +118,7 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: [/*'<rootDir>/__mocks__/jest.setup.js', */ './node_modules/react-native-gesture-handler/jestSetup.js'],
+  setupFiles: [/* '<rootDir>/__mocks__/jest.setup.js', */ './node_modules/react-native-gesture-handler/jestSetup.js'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],

@@ -9,9 +9,9 @@ export default function (_: ModalEventAction, payload: ModalEventPayload) {
 
   invariant(eventName?.length > 0, "You didn't pass any event listener name to addListener()")
   invariant(
-    validEventNames.some((name) => name === eventName),
+    validEventNames.some(name => name === eventName),
     `'${eventName}' is not a valid event listener name. Did you mean any of these: ${validEventNames.map(
-      (validName) => `\n• ${validName}`,
+      validName => `\n• ${validName}`,
     )}`,
   )
 
