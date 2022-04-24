@@ -42,15 +42,15 @@ const ModalProvider = ({ children, stack }: Props) => {
       BackHandler.addEventListener('hardwareBackPress', ModalState.handleBackPress)
     }
 
-    ModalState.openModal(modalName, params, false, callback)
+    ModalState.openModal({ modalName, params, callback, isCalledOutsideOfContext: true })
   }
 
   const getParam: SharedProps<any>['getParam'] = (hash, paramName, defaultValue) =>
     ModalState.getParam(hash, paramName, defaultValue)
 
-  const closeModal: SharedProps<any>['closeModal'] = (stackItem) => ModalState.closeModal(stackItem)
+  const closeModal: SharedProps<any>['closeModal'] = stackItem => ModalState.closeModal(stackItem)
 
-  const closeModals: SharedProps<any>['closeModals'] = (modalName) => ModalState.closeModals(modalName)
+  const closeModals: SharedProps<any>['closeModals'] = modalName => ModalState.closeModals(modalName)
 
   const closeAllModals: SharedProps<any>['closeAllModals'] = () => ModalState.closeAllModals()
 
@@ -82,8 +82,8 @@ const ModalProvider = ({ children, stack }: Props) => {
   )
 
   const clearListeners: SharedProps<any>['clearListeners'] = useCallback(
-    (hash) => {
-      modalEventListeners.forEach((item) => {
+    hash => {
+      modalEventListeners.forEach(item => {
         if (item.event.includes(hash)) modalEventListeners.delete(item)
       })
     },

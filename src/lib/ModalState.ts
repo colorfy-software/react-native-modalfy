@@ -71,12 +71,17 @@ const createModalState = (): ModalStateType<any> => {
     equalityFn: ModalStateEqualityChecker<P> = Object.is,
   ): ModalStateSubscription<P> => addSubscriber(createSubscriber(listener, equalityFn))
 
-  const openModal = <P>(
-    modalName: Exclude<keyof P, symbol | number>,
-    params?: P,
-    isCalledOutsideOfContext?: boolean,
-    callback?: () => void,
-  ) => {
+  const openModal = <P>({
+    modalName,
+    params,
+    isCalledOutsideOfContext,
+    callback,
+  }: {
+    modalName: Exclude<keyof P, symbol | number>
+    params?: P
+    isCalledOutsideOfContext?: boolean
+    callback?: () => void
+  }) => {
     const {
       stack: { content, names },
       currentModal,
@@ -394,7 +399,7 @@ export const modalfy = <
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
    */
   openModal: (modalName: M, params?: P[M], callback?: () => void) =>
-    ModalState.openModal(modalName, params, true, callback),
+    ModalState.openModal({ modalName, params, callback, isCalledOutsideOfContext: true }),
 })
 
 export default ModalState

@@ -30,7 +30,7 @@ const withModal = <P extends ModalfyParams, Props extends object>(Component: Rea
     render() {
       return (
         <ModalContext.Consumer>
-          {(context) => {
+          {context => {
             invariant(context, `You should not use ${displayName} outside a <ModalProvider>`)
             return (
               <Component

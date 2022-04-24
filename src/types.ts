@@ -124,12 +124,12 @@ export type ModalStateEqualityChecker<P> = (
 ) => boolean
 
 export type ModalState<P> = Omit<ModalContextProvider<P>, 'currentModal' | 'stack' | 'openModal'> & {
-  openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(
-    modalName: N,
-    params?: P[N],
-    isCalledOutsideOfContext?: boolean,
-    callback?: () => void,
-  ) => void
+  openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(args: {
+    modalName: N
+    params?: P[N]
+    isCalledOutsideOfContext?: boolean
+    callback?: () => void
+  }) => void
   handleBackPress: () => boolean
   init: <T>(updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>) => ModalInternalState<T>
   getState: <T>() => ModalInternalState<T>

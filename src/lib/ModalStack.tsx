@@ -77,7 +77,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         openModal={(...args) => {
           // @ts-ignore
           props.openModal(...args)
-          setOpenActionCallbacks((state) => [...state, stackItem.hash])
+          setOpenActionCallbacks(state => [...state, stackItem.hash])
         }}
         wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
