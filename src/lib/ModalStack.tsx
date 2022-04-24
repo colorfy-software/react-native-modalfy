@@ -1,4 +1,4 @@
-import { useMemo } from 'use-memo-one'
+import { useCallback, useMemo } from 'use-memo-one'
 import React, { useEffect, useState, memo } from 'react'
 import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
 
@@ -32,6 +32,17 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     [stack],
   )
 
+  const hideBackdrop = useCallback(() => {
+    Animated.timing(opacity, {
+      toValue: 0,
+      easing: Easing.inOut(Easing.ease),
+      duration: 300,
+      useNativeDriver: true,
+    }).start(({ finished }) => {
+      if (finished) translateY.setValue(sh(100))
+    })
+  }, [opacity])
+
   useEffect(() => {
     if (stack.openedItemsSize && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
       setBackdropColorStatus(true)
@@ -48,16 +59,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         duration: 300,
         useNativeDriver: true,
       }).start()
-    } else {
-      Animated.timing(opacity, {
-        toValue: 0,
-        easing: Easing.inOut(Easing.ease),
-        duration: 300,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) translateY.setValue(sh(100))
-      })
-    }
+    } else hideBackdrop()
   }, [opacity, stack.openedItemsSize, translateY])
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
@@ -79,6 +81,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
           props.openModal(...args)
           setOpenActionCallbacks(state => [...state, stackItem.hash])
         }}
+        hideBackdrop={hideBackdrop}
         wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
         pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
@@ -96,16 +99,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
     const currentItem = [...stack.openedItems].slice(-1)[0]
 
-    if (stack.openedItemsSize === 1) {
-      Animated.timing(opacity, {
-        toValue: 0,
-        easing: Easing.inOut(Easing.ease),
-        duration: 300,
-        useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) translateY.setValue(sh(100))
-      })
-    }
+    if (stack.openedItemsSize === 1) hideBackdrop()
 
     setBackdropClosedItems([...backdropClosedItems, currentItem?.hash])
   }
