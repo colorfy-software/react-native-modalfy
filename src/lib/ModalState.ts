@@ -17,7 +17,7 @@ import { invariant, getStackItemOptions } from '../utils'
 
 const createModalState = (): ModalStateType<any> => {
   let state: ModalInternalState<any>
-  let listeners: Set<() => void> = new Set()
+  let stateListeners: Set<() => void> = new Set()
 
   const setState = <P>(updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>) => {
     const newState = updater(state)
@@ -29,7 +29,7 @@ const createModalState = (): ModalStateType<any> => {
         pendingClosingActionsSize: newState.stack.pendingClosingActions.size,
       },
     }
-    listeners.forEach(listener => listener())
+    stateListeners.forEach(stateListener => stateListener())
     return state
   }
 
@@ -37,29 +37,29 @@ const createModalState = (): ModalStateType<any> => {
 
   const getState = <P>(): ModalInternalState<P> => state
 
-  const addSubscriber = <P>(subscriber: ModalStateSubscriber<P>): ModalStateSubscription<P> => {
-    function listener() {
+  const addStateSubscriber = <P>(stateSubscriber: ModalStateSubscriber<P>): ModalStateSubscription<P> => {
+    function stateListener() {
       try {
         const currentState = getState<P>()
-        if (!subscriber.equalityFn(subscriber.state, currentState)) {
-          subscriber.listener((subscriber.state = currentState))
+        if (!stateSubscriber.equalityFn(stateSubscriber.state, currentState)) {
+          stateSubscriber.stateListener((stateSubscriber.state = currentState))
         }
       } catch (error) {
-        subscriber.error = true
-        subscriber.listener(null, error as Error)
+        stateSubscriber.error = true
+        stateSubscriber.stateListener(null, error as Error)
       }
     }
 
-    listeners.add(listener)
+    stateListeners.add(stateListener)
 
-    return { unsubscribe: () => listeners.delete(listener) }
+    return { unsubscribe: () => stateListeners.delete(stateListener) }
   }
 
-  const createSubscriber = <P>(
-    listener: ModalStateListener<P>,
+  const createStateSubscriber = <P>(
+    stateListener: ModalStateListener<P>,
     equalityFn: ModalStateEqualityChecker<P>,
   ): ModalStateSubscriber<P> => ({
-    listener,
+    stateListener,
     equalityFn,
     error: false,
     state: getState(),
@@ -67,9 +67,9 @@ const createModalState = (): ModalStateType<any> => {
   })
 
   const subscribe = <P>(
-    listener: ModalStateListener<P>,
+    stateListener: ModalStateListener<P>,
     equalityFn: ModalStateEqualityChecker<P> = Object.is,
-  ): ModalStateSubscription<P> => addSubscriber(createSubscriber(listener, equalityFn))
+  ): ModalStateSubscription<P> => addStateSubscriber(createStateSubscriber(stateListener, equalityFn))
 
   const openModal = <P>({
     modalName,

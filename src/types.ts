@@ -108,7 +108,7 @@ export interface ModalStateSubscriber<P> {
   state: ModalInternalState<P>
   equalityFn: ModalStateEqualityChecker<P>
   error: boolean
-  listener: ModalStateListener<P>
+  stateListener: ModalStateListener<P>
   unsubscribe: () => boolean
 }
 
