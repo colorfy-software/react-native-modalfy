@@ -12,7 +12,7 @@ import {
 import {
   ModalComponentProp,
   ModalComponentWithOptions,
-  ModalEventCallback,
+  ModalOnCloseEventCallback,
   ModalEventListener,
 } from 'react-native-modalfy'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -48,9 +48,12 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
 
   const modalListener = useRef<ModalEventListener | undefined>()
 
-  const handleClose: ModalEventCallback = useCallback(() => {
-    console.log(`👋 ${currentModal} closed`)
-  }, [currentModal])
+  const handleClose: ModalOnCloseEventCallback = useCallback(
+    closingAction => {
+      console.log(`👋 ${currentModal} closed by: ${closingAction.type} • ${closingAction.origin}`)
+    },
+    [currentModal],
+  )
 
   const { width } = useWindowDimensions()
 

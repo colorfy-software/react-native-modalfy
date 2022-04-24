@@ -1,5 +1,10 @@
+import {
+  ModalComponentProp,
+  ModalEventListener,
+  ModalOnCloseEventCallback,
+  ModalOnAnimateEventCallback,
+} from 'react-native-modalfy'
 import React, { useCallback, useEffect, useRef } from 'react'
-import { ModalEventCallback, ModalComponentProp, ModalEventListener } from 'react-native-modalfy'
 import { TouchableOpacity, StyleSheet, Animated, Text, View, Platform, useWindowDimensions } from 'react-native'
 
 import { ModalStackParamsList, ModalName } from '../App'
@@ -32,24 +37,30 @@ const Card = ({ title, modalName: name, color }: Props) => {
 }
 
 const IntroModal = ({ modal: { addListener } }: ModalComponentProp<ModalStackParamsList, void, 'IntroModal'>) => {
-  const modalListener = useRef<ModalEventListener | undefined>()
+  const onAnimateListener = useRef<ModalEventListener | undefined>()
+  const onCloseListener = useRef<ModalEventListener | undefined>()
   const animatedValue = useRef(new Animated.Value(0)).current
   const { width } = useWindowDimensions()
 
-  const handleAnimation: ModalEventCallback = useCallback(
+  const handleAnimation: ModalOnAnimateEventCallback = useCallback(
     value => {
       if (value) animatedValue.setValue(value)
     },
     [animatedValue],
   )
 
+  const handleClose: ModalOnCloseEventCallback = useCallback(closingAction => {
+    console.log(`👋 IntroModal closed by: ${closingAction.type} • ${closingAction.origin}`)
+  }, [])
+
   useEffect(() => {
-    modalListener.current = addListener('onAnimate', handleAnimation)
+    onAnimateListener.current = addListener('onAnimate', handleAnimation)
+    onCloseListener.current = addListener('onClose', handleClose)
 
     return () => {
-      modalListener.current?.remove()
+      onAnimateListener.current?.remove()
     }
-  }, [addListener, handleAnimation])
+  }, [addListener, handleAnimation, handleClose])
 
   const Header = () => (
     <Animated.View style={[styles.header, { opacity: animatedValue }]}>

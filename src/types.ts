@@ -20,7 +20,24 @@ export type ModalTransitionOptions = (animatedValue: Animated.Value) => {
     | ModalTransitionValue
 }
 
+export type ModalListener = (eventName: ModalEventName, callback: ModalEventCallback) => ModalEventListener
+export type ModalEventListeners = Set<{
+  event: string
+  handler: ModalEventCallback
+}>
+
 export type ModalEventName = 'onAnimate' | 'onClose'
+
+export type ModalOnAnimateEventCallback = (value?: number) => void
+export type ModalOnCloseEventCallback = (closingAction: {
+  type: ModalClosingActionName
+  origin: ModalClosingActionOrigin
+}) => void
+export type ModalClosingActionName = 'closeModal' | 'closeModals' | 'closeAllModals'
+export type ModalClosingActionOrigin = 'default' | 'fling' | 'backdrop'
+export type ModalEventCallback = ModalOnAnimateEventCallback | ModalOnCloseEventCallback
+
+export type ModalEventListener = { remove: () => boolean }
 
 export type ModalEventAction = 'add'
 
@@ -28,17 +45,6 @@ export type ModalEventPayload = {
   eventName: ModalEventName
   handler: ModalEventCallback
 }
-
-export type ModalEventCallback = (value?: number) => void
-
-export type ModalEventListener = { remove: () => boolean }
-
-export type ModalListener = (eventName: ModalEventName, callback: ModalEventCallback) => ModalEventListener
-
-export type ModalEventListeners = Set<{
-  event: string
-  handler: ModalEventCallback
-}>
 
 export type ModalPendingClosingAction =
   | {

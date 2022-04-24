@@ -10,6 +10,8 @@ import type {
   ModalEventName,
   ModalEventCallback,
   ModalPendingClosingAction,
+  ModalOnCloseEventCallback,
+  ModalOnAnimateEventCallback,
 } from '../types'
 
 import { getStackItemOptions, vh } from '../utils'
@@ -51,6 +53,7 @@ const StackItem = <P extends ModalfyParams>({
   )
 
   const animatedListenerId = useRef<string | undefined>()
+  const onCloseListener = useRef<ModalOnCloseEventCallback>(() => undefined)
 
   const {
     animationIn,
@@ -65,8 +68,7 @@ const StackItem = <P extends ModalfyParams>({
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
   useEffect(() => {
-    let onAnimateListener: ModalEventCallback = () => undefined
-    let onCloseListener: ModalEventCallback = () => undefined
+    let onAnimateListener: ModalOnAnimateEventCallback = () => undefined
 
     if (transitionOptions && typeof transitionOptions !== 'function') {
       throw new Error(`'${stackItem.name}' transitionOptions should be a function. For instance:
@@ -86,11 +88,11 @@ const StackItem = <P extends ModalfyParams>({
       }`)
     }
 
-    eventListeners.forEach((item) => {
+    eventListeners.forEach(item => {
       if (item.event === `${stackItem.hash}_onAnimate`) {
-        onAnimateListener = item.handler
+        onAnimateListener = item.handler as ModalOnAnimateEventCallback
       } else if (item.event === `${stackItem.hash}_onClose`) {
-        onCloseListener = item.handler
+        onCloseListener.current = item.handler as ModalOnCloseEventCallback
       }
     })
 
@@ -98,7 +100,6 @@ const StackItem = <P extends ModalfyParams>({
 
     return () => {
       animatedValue.removeAllListeners()
-      onCloseListener()
       clearListeners(stackItem.hash)
     }
   }, [])
@@ -134,31 +135,31 @@ const StackItem = <P extends ModalfyParams>({
 
   const closeStackItem = useCallback(
     (modalName, callback?: () => void) => {
-      if (!modalName || modalName === currentModal) {
-        updateAnimatedValue(position - 1, () => {
-          closeModal(modalName)
-          callback?.()
-        })
-      } else {
+      const onCloseFns = () => {
+        onCloseListener.current({ type: 'closeModal', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeModal(modalName)
         callback?.()
       }
+
+      if (!modalName || modalName === currentModal) {
+        updateAnimatedValue(position - 1, onCloseFns)
+      } else onCloseFns()
     },
-    [closeModal, currentModal, position, updateAnimatedValue],
+    [currentModal, closeModal, onCloseListener, position, updateAnimatedValue, wasClosedByBackdropPress],
   )
 
   const closeStackItems = useCallback(
     (closingElement, callback?: () => void) => {
-      if (closingElement === currentModal && position === 1) {
-        return updateAnimatedValue(position - 1, () => {
-          const output = closeModals(closingElement)
-          callback?.()
-          return output
-        })
+      const onCloseFns = () => {
+        onCloseListener.current({ type: 'closeModals', origin: 'default' })
+        let output = closeModals(closingElement)
+        callback?.()
+        return output
       }
-      const output = closeModals(closingElement)
-      callback?.()
-      return output
+
+      if (closingElement === currentModal && position === 1) {
+        return updateAnimatedValue(position - 1, onCloseFns)
+      } else return onCloseFns()
     },
     [closeModals, currentModal, position, updateAnimatedValue],
   )
@@ -166,10 +167,11 @@ const StackItem = <P extends ModalfyParams>({
   const closeAllStackItems = useCallback(
     (callback?: () => void) =>
       updateAnimatedValue(position - 1, () => {
+        onCloseListener.current({ type: 'closeAllModals', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeAllModals()
         callback?.()
       }),
-    [closeAllModals, position, updateAnimatedValue],
+    [closeAllModals, position, updateAnimatedValue, wasClosedByBackdropPress],
   )
 
   const onFling = useCallback(
@@ -182,7 +184,10 @@ const StackItem = <P extends ModalfyParams>({
           useNativeDriver: true,
           ...animateOutConfig,
         }).start(({ finished }) => {
-          if (finished) closeModal(stackItem)
+          if (finished) {
+            onCloseListener.current({ type: 'closeModal', origin: 'fling' })
+            closeModal(stackItem)
+          }
         })
       }
     },
