@@ -43,20 +43,10 @@ The doc is accessible at https://colorfy-software.gitbook.io/react-native-modalf
 
 Maybe better than our long paragraphs, here's a quick
 sneak peek of what you could achieve with Modalfy in a few lines of code:
+| [![Watch the video](https://i.imgur.com/q8QFajL.gif)](https://youtu.be/usAU2pcURh8)<br/>[Snippet #1](https://gist.github.com/iremlopsum/77e8549735c6c6ba7a243ea453c10147)  | [![Watch the video](https://i.imgur.com/wF0hTBm.gif)](https://youtu.be/UPDSPjj4dyU)<br/>[Snippet #2](https://gist.github.com/iremlopsum/17b4804a142a39525160df22e67410ea) |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [![Watch the video](https://i.imgur.com/C79UD6B.gif)](https://youtu.be/LkHFK5zZMI8)<br/>[Snippet #3](https://gist.github.com/iremlopsum/b40640264335545bf3b9e39622f5c423 ) | [![Watch the video](https://i.imgur.com/Z6HsH59.gif)](https://youtu.be/AJ1P9e7iD38)<br/>[Snippet #4](https://gist.github.com/iremlopsum/f3dcb215d8e318c0d1912359fffd232b) |
 
-[![Watch the video](https://i.imgur.com/q8QFajL.gif)](https://youtu.be/usAU2pcURh8)
-[Snippet #1](https://gist.github.com/iremlopsum/77e8549735c6c6ba7a243ea453c10147)
-
-[![Watch the video](https://i.imgur.com/wF0hTBm.gif)](https://youtu.be/UPDSPjj4dyU)
-[Snippet #2](https://gist.github.com/iremlopsum/17b4804a142a39525160df22e67410ea
-)
-
-[![Watch the video](https://i.imgur.com/C79UD6B.gif)](https://youtu.be/LkHFK5zZMI8)
-[Snippet #3](https://gist.github.com/iremlopsum/b40640264335545bf3b9e39622f5c423
-)
-
-[![Watch the video](https://i.imgur.com/Z6HsH59.gif)](https://youtu.be/AJ1P9e7iD38)
-[Snippet #4](https://gist.github.com/iremlopsum/f3dcb215d8e318c0d1912359fffd232b)
 
 ## 🤝 Code of Conduct
 
