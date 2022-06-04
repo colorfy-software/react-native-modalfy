@@ -2,10 +2,10 @@ import type { ModalStack, ModalStackItem, ModalOptions } from '../types'
 
 export default function <P>(stackItem: ModalStackItem<P> | undefined, stack: ModalStack<P>): ModalOptions {
   const stackItemOption = <K extends keyof ModalOptions>(key: K): ModalOptions[K] =>
-    stackItem?.component.modalOptions?.[key] || stackItem?.options?.[key]
+    stackItem?.component.modalOptions?.[key] ?? stackItem?.options?.[key]
 
   const extractOption = <K extends keyof ModalOptions>(key: K): ModalOptions[K] =>
-    stackItem?.component.modalOptions?.[key] || stackItem?.options?.[key] || stack.defaultOptions[key]
+    stackItem?.component.modalOptions?.[key] ?? stackItem?.options?.[key] ?? stack.defaultOptions[key]
 
   return {
     position: extractOption('position'),
