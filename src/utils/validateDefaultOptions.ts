@@ -2,7 +2,13 @@ import type { ModalOptions } from '../types'
 
 import invariant from './invariant'
 
-export default function ({ transitionOptions, backdropOpacity, backBehavior, position }: ModalOptions = {}) {
+export default function ({
+  position,
+  backBehavior,
+  backdropOpacity,
+  transitionOptions,
+  backdropAnimationDuration,
+}: ModalOptions = {}) {
   invariant(
     !backBehavior ||
       (backBehavior && backBehavior === 'clear') ||
@@ -14,6 +20,10 @@ export default function ({ transitionOptions, backdropOpacity, backBehavior, pos
     !backdropOpacity ||
       (backdropOpacity && typeof backdropOpacity === 'number' && backdropOpacity >= 0 && backdropOpacity <= 1),
     'backdropOpacity should be a number between 0 and 1 in createModalStack()',
+  )
+  invariant(
+    !backdropAnimationDuration || (backdropAnimationDuration && typeof backdropAnimationDuration === 'number'),
+    'backdropAnimationDuration should be a number in createModalStack()',
   )
   invariant(
     !position ||

@@ -6,7 +6,7 @@ import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAct
 
 import StackItem from './StackItem'
 
-import { getStackItemOptions, sh } from '../utils'
+import { defaultOptions, getStackItemOptions, sh } from '../utils'
 
 type Props<P> = SharedProps<P>
 
@@ -27,7 +27,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     [],
   )
 
-  const { backBehavior, backdropColor, backdropOpacity } = useMemo(
+  const { backBehavior, backdropAnimationDuration, backdropColor, backdropOpacity } = useMemo(
     () => getStackItemOptions(Array.from(stack.openedItems).pop(), stack),
     [stack],
   )
@@ -36,12 +36,12 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     Animated.timing(opacity, {
       toValue: 0,
       easing: Easing.inOut(Easing.ease),
-      duration: 300,
+      duration: backdropAnimationDuration,
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (finished) translateY.setValue(sh(100))
     })
-  }, [opacity])
+  }, [backdropAnimationDuration, opacity, translateY])
 
   useEffect(() => {
     if (stack.openedItemsSize && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
@@ -56,11 +56,11 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       Animated.timing(opacity, {
         toValue: 1,
         easing: Easing.in(Easing.ease),
-        duration: 300,
+        duration: backdropAnimationDuration,
         useNativeDriver: true,
       }).start()
     } else hideBackdrop()
-  }, [opacity, stack.openedItemsSize, translateY])
+  }, [backdropAnimationDuration, opacity, stack.openedItemsSize, translateY])
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItemsSize - index
@@ -118,7 +118,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
               backgroundColor,
               opacity: opacity.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, backdropOpacity ?? 0.6],
+                outputRange: [0, backdropOpacity ?? defaultOptions.backdropOpacity!],
               }),
             },
           ]}

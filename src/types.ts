@@ -315,6 +315,13 @@ export interface ModalOptions {
    */
   backdropOpacity?: number
   /**
+   * Number that defines how long the backdrop should take to animate in and out.
+   *
+   * @default 300
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropanimationduration
+   */
+  backdropAnimationDuration?: number
+  /**
    * Styles applied to the `<View>` directly wrapping your modal component.
    *
    * @default '{}'

@@ -22,6 +22,7 @@ export const defaultOptions: ModalOptions = {
   backBehavior: 'pop',
   backdropOpacity: 0.6,
   disableFlingGesture: false,
+  backdropAnimationDuration: 300,
 }
 
 export { default as invariant } from './invariant'
