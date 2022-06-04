@@ -13,10 +13,21 @@ import type {
   ModalState as ModalStateType,
 } from '../types'
 
-import { invariant, getStackItemOptions } from '../utils'
+import { invariant, getStackItemOptions, defaultOptions } from '../utils'
 
 const createModalState = (): ModalStateType<any> => {
-  let state: ModalInternalState<any>
+  let state: ModalInternalState<any> = {
+    currentModal: null,
+    stack: {
+      names: [],
+      content: [],
+      defaultOptions,
+      openedItemsSize: 0,
+      openedItems: new Set(),
+      pendingClosingActionsSize: 0,
+      pendingClosingActions: new Set(),
+    },
+  }
   let stateListeners: Set<() => void> = new Set()
 
   const setState = <P>(updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>) => {
