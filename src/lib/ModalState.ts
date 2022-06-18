@@ -11,6 +11,7 @@ import type {
   ModalStateEqualityChecker,
   ModalPendingClosingAction,
   ModalState as ModalStateType,
+  ModalStatePendingClosingAction,
 } from '../types'
 
 import { invariant, getStackItemOptions, defaultOptions } from '../utils'
@@ -247,11 +248,11 @@ const createModalState = (): ModalStateType<any> => {
     return false
   }
 
-  const queueClosingAction = <P>({
+  const queueClosingAction = ({
     action,
     callback,
     modalName,
-  }: ModalStateType<P>['queueClosingAction']['arguments']): ModalStateType<P>['queueClosingAction']['arguments'] => {
+  }: ModalStatePendingClosingAction): ModalPendingClosingAction | null => {
     const {
       stack: { names },
     } = state
@@ -265,12 +266,17 @@ const createModalState = (): ModalStateType<any> => {
       )
     }
 
+    const noOpenedItems = !state?.stack?.openedItems?.size
+
+    if (noOpenedItems) return null
+
     const hash = `${modalName ? `${modalName}_${action}` : action}_${Math.random().toString(36).substring(2, 11)}`
 
     const { pendingClosingActions } = setState(currentState => ({
       ...currentState,
       stack: {
         ...currentState.stack,
+        // @ts-ignore
         pendingClosingActions: currentState.stack.pendingClosingActions.add({
           hash,
           action,

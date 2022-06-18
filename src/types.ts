@@ -46,6 +46,23 @@ export type ModalEventPayload = {
   handler: ModalEventCallback
 }
 
+export type ModalStatePendingClosingAction =
+  | {
+      modalName?: string
+      action: 'closeModal'
+      callback?: () => void
+    }
+  | {
+      modalName: string
+      action: 'closeModals'
+      callback?: () => void
+    }
+  | {
+      modalName?: never
+      action: 'closeAllModals'
+      callback?: () => void
+    }
+
 export type ModalPendingClosingAction =
   | {
       hash: string
@@ -63,6 +80,7 @@ export type ModalPendingClosingAction =
     }
   | {
       hash: string
+      modalName?: never
       currentModalHash?: string
       action: 'closeAllModals'
       callback?: () => void
@@ -144,7 +162,7 @@ export type ModalState<P> = Omit<ModalContextProvider<P>, 'currentModal' | 'stac
     listener: ModalStateListener<T>,
     equalityFn?: ModalStateEqualityChecker<T>,
   ) => ModalStateSubscription<T>
-  queueClosingAction: (action: Partial<ModalPendingClosingAction>) => ModalPendingClosingAction
+  queueClosingAction: (action: ModalStatePendingClosingAction) => ModalPendingClosingAction | null
   removeClosingAction: (action: ModalPendingClosingAction) => boolean
 }
 
