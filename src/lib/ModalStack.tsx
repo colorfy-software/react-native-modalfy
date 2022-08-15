@@ -127,7 +127,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     )
   }
 
-  return (
+  return !stack.openedItemsSize ? null : (
     <Animated.View
       style={[
         styles.container,
