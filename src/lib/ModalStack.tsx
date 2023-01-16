@@ -159,6 +159,9 @@ const styles = StyleSheet.create({
     height: '100vh',
     width: '100vw',
     zIndex: 0,
+    // mobile viewport units bug fix
+    maxHeight: '-webkit-fill-available',
+    maxWidth: '-webkit-fill-available',
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
