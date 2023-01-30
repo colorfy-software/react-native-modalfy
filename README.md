@@ -13,7 +13,7 @@
     <img src="https://github.com/colorfy-software/react-native-modalfy/workflows/Test%20Suite/badge.svg?branch=main" alt="Current GitHub Actions build status." />
   </a>
   <a href="https://www.npmjs.org/package/react-native-modalfy">
-    <img src="https://badge.fury.io/js/react-native-modalfy.svg" alt="Current npm package version." />
+    <img src="https://img.shields.io/npm/v/react-native-modalfy.svg?color=brightgreen" alt="Current npm package version." />
   </a>
   <a href="https://www.npmjs.org/package/react-native-modalfy">
     <img src="https://img.shields.io/npm/dm/react-native-modalfy.svg?maxAge=2592000" alt="Monthly npm downloads." />
