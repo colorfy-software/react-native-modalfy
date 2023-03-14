@@ -81,7 +81,6 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
           props.openModal(...args)
           setOpenActionCallbacks(state => [...state, stackItem.hash])
         }}
-        hideBackdrop={hideBackdrop}
         wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
         pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
@@ -98,8 +97,6 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     if (backBehavior === 'none') return
 
     const currentItem = [...stack.openedItems].slice(-1)[0]
-
-    if (stack.openedItemsSize === 1) hideBackdrop()
 
     setBackdropClosedItems([...backdropClosedItems, currentItem?.hash])
   }

@@ -19,7 +19,6 @@ import { getStackItemOptions, vh } from '../utils'
 type Props<P> = SharedProps<P> & {
   zIndex: number
   position: number
-  hideBackdrop: () => void
   stackItem: ModalStackItem<P>
   wasOpenCallbackCalled: boolean
   wasClosedByBackdropPress: boolean
@@ -35,7 +34,6 @@ const StackItem = <P extends ModalfyParams>({
   openModal,
   closeModal,
   closeModals,
-  hideBackdrop,
   currentModal,
   closeAllModals,
   eventListeners,
@@ -144,8 +142,6 @@ const StackItem = <P extends ModalfyParams>({
         callback?.()
       }
 
-      if (stack.openedItemsSize === 1) hideBackdrop()
-
       if (!modalName || modalName === currentModal) {
         updateAnimatedValue(position - 1, onCloseFns)
       } else onCloseFns()
@@ -153,7 +149,6 @@ const StackItem = <P extends ModalfyParams>({
     [
       currentModal,
       closeModal,
-      hideBackdrop,
       onCloseListener,
       position,
       stack.openedItemsSize,
@@ -171,34 +166,28 @@ const StackItem = <P extends ModalfyParams>({
         return output
       }
 
-      if (stack.openedItemsSize === 1) hideBackdrop()
-
       if (closingElement === currentModal && position === 1) {
         return updateAnimatedValue(position - 1, onCloseFns)
       } else return onCloseFns()
     },
-    [closeModals, currentModal, hideBackdrop, position, stack.openedItemsSize, updateAnimatedValue],
+    [closeModals, currentModal, position, stack.openedItemsSize, updateAnimatedValue],
   )
 
   const closeAllStackItems = useCallback(
     (callback?: () => void) => {
-      if (stack.openedItemsSize === 1) hideBackdrop()
-
       updateAnimatedValue(position - 1, () => {
         onCloseListener.current({ type: 'closeAllModals', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeAllModals()
         callback?.()
       })
     },
-    [closeAllModals, hideBackdrop, position, stack.openedItemsSize, updateAnimatedValue, wasClosedByBackdropPress],
+    [closeAllModals, position, stack.openedItemsSize, updateAnimatedValue, wasClosedByBackdropPress],
   )
 
   const onFling = useCallback(
     ({ nativeEvent }) => {
       if (!disableFlingGesture && nativeEvent.oldState === State.ACTIVE) {
         const toValue = verticalPosition === 'top' ? vh(-100) : vh(100)
-
-        if (stack.openedItemsSize === 1) hideBackdrop()
 
         Animated.timing(translateY, {
           toValue,
@@ -212,23 +201,14 @@ const StackItem = <P extends ModalfyParams>({
         })
       }
     },
-    [
-      animateOutConfig,
-      closeModal,
-      disableFlingGesture,
-      hideBackdrop,
-      stack.openedItemsSize,
-      stackItem,
-      translateY,
-      verticalPosition,
-    ],
+    [animateOutConfig, closeModal, disableFlingGesture, stack.openedItemsSize, stackItem, translateY, verticalPosition],
   )
 
   const pointerEvents = useMemo((): ViewProps['pointerEvents'] => {
     /**
      * NOTE: Using `box-only` instead of `none` here so that the modal would catch the event and not dispatch it to the backdrop.
      * If there's only 1 modal in the stack for instance, by using `none` and touching anywhere on the modal, the event
-     * would be propagated to the backdrop which would close the modal, which is a pretty counterintuitive UX. 
+     * would be propagated to the backdrop which would close the modal, which is a pretty counterintuitive UX.
      */
     switch (pointerEventsBehavior) {
       case 'none':
