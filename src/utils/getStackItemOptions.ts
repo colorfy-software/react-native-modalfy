@@ -17,6 +17,7 @@ export default function <P>(stackItem: ModalStackItem<P> | undefined, stack: Mod
     animateOutConfig: extractOption('animateOutConfig'),
     transitionOptions: extractOption('transitionOptions'),
     disableFlingGesture: extractOption('disableFlingGesture'),
+    pointerEventsBehavior: extractOption('pointerEventsBehavior'),
     backdropAnimationDuration: extractOption('backdropAnimationDuration'),
     /**
      * NOTE: In StackItem's updateAnimatedValue() we don't use the `animateIn/OutConfig` if

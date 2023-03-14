@@ -380,6 +380,13 @@ export interface ModalOptions {
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#transitionoptions
    */
   transitionOptions?: ModalTransitionOptions
+  /**
+   * How you want any modal to respond to a touch/click.
+   *
+   * @default 'auto'
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#pointereventsbehavior
+   */
+  pointerEventsBehavior?: 'auto' | 'none' | 'current-modal-only' | 'current-modal-none'
 }
 
 /**

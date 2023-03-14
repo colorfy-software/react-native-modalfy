@@ -1,6 +1,6 @@
-import { Animated, StyleSheet } from 'react-native'
 import { useMemo, useCallback } from 'use-memo-one'
 import React, { ReactNode, useEffect, useRef, memo } from 'react'
+import { Animated, StyleSheet, ViewProps, ViewStyle } from 'react-native'
 import { State, Directions, FlingGestureHandler } from 'react-native-gesture-handler'
 
 import type {
@@ -66,6 +66,7 @@ const StackItem = <P extends ModalfyParams>({
     animateOutConfig,
     transitionOptions,
     disableFlingGesture,
+    pointerEventsBehavior,
     position: verticalPosition,
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
@@ -223,6 +224,25 @@ const StackItem = <P extends ModalfyParams>({
     ],
   )
 
+  const pointerEvents = useMemo((): ViewProps['pointerEvents'] => {
+    /**
+     * NOTE: Using `box-only` instead of `none` here so that the modal would catch the event and not dispatch it to the backdrop.
+     * If there's only 1 modal in the stack for instance, by using `none` and touching anywhere on the modal, the event
+     * would be propagated to the backdrop which would close the modal, which is a pretty counterintuitive UX. 
+     */
+    switch (pointerEventsBehavior) {
+      case 'none':
+        return 'box-only'
+      case 'current-modal-none':
+        return position === 1 ? 'box-only' : 'box-none'
+      case 'current-modal-only':
+        return position === 1 ? 'box-none' : 'box-only'
+      case 'auto':
+      default:
+        return 'box-none'
+    }
+  }, [pointerEventsBehavior, position])
+
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
     const addListener = (eventName: ModalEventName, handler: ModalEventCallback) =>
@@ -230,7 +250,7 @@ const StackItem = <P extends ModalfyParams>({
     const removeAllListeners = () => clearListeners(stackItem.hash)
 
     return (
-      <Animated.View pointerEvents="box-none" style={{ transform: [{ translateY }] }}>
+      <Animated.View pointerEvents={pointerEvents} style={{ transform: [{ translateY }] }}>
         <FlingGestureHandler
           direction={verticalPosition === 'top' ? Directions.UP : verticalPosition === 'bottom' ? Directions.DOWN : -1}
           onHandlerStateChange={onFling}>
@@ -261,7 +281,7 @@ const StackItem = <P extends ModalfyParams>({
     )
   }
 
-  const justifyContent = useMemo(() => {
+  const justifyContent = useMemo((): ViewStyle['justifyContent'] => {
     switch (verticalPosition) {
       case 'top':
         return 'flex-start'

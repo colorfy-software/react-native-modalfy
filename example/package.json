@@ -17,6 +17,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-reanimated": "~2.3.1",
     "react-native-unimodules": "~0.15.0",
     "react-native-web": "0.17.1"
   },
@@ -26,7 +27,7 @@
     "babel-loader": "^8.2.3",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-preset-expo": "9.0.2",
-    "expo-cli": "^6.0.2",
+    "expo-cli": "^6.3.2",
     "react-native-gesture-handler": "~2.1.0"
   }
 }

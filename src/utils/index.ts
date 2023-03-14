@@ -22,6 +22,7 @@ export const defaultOptions: ModalOptions = {
   backBehavior: 'pop',
   backdropOpacity: 0.6,
   disableFlingGesture: false,
+  pointerEventsBehavior: 'auto',
   backdropAnimationDuration: 300,
 }
 

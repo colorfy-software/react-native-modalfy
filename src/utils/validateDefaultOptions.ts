@@ -7,6 +7,7 @@ export default function ({
   backBehavior,
   backdropOpacity,
   transitionOptions,
+  pointerEventsBehavior,
   backdropAnimationDuration,
 }: ModalOptions = {}) {
   invariant(
@@ -14,23 +15,31 @@ export default function ({
       (backBehavior && backBehavior === 'clear') ||
       (backBehavior && backBehavior === 'none') ||
       (backBehavior && backBehavior === 'pop'),
-    "backBehavior should either be 'pop', 'clear' or 'none' in createModalStack()",
+    `backBehavior should either be 'pop', 'clear' or 'none' in createModalStack(), you provided: ${backBehavior}`,
+  )
+  invariant(
+    !pointerEventsBehavior ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'auto') ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'none') ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'current-modal-only') ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'current-modal-none'),
+    `pointerEventsBehavior should either be 'auto', 'none', 'current-modal-only' or 'current-modal-none' in createModalStack(), you provided: ${pointerEventsBehavior}`,
   )
   invariant(
     !backdropOpacity ||
       (backdropOpacity && typeof backdropOpacity === 'number' && backdropOpacity >= 0 && backdropOpacity <= 1),
-    'backdropOpacity should be a number between 0 and 1 in createModalStack()',
+    `backdropOpacity should be a number between 0 and 1 in createModalStack(), you provided: ${backdropOpacity}`,
   )
   invariant(
     !backdropAnimationDuration || (backdropAnimationDuration && typeof backdropAnimationDuration === 'number'),
-    'backdropAnimationDuration should be a number in createModalStack()',
+    `backdropAnimationDuration should be a number in createModalStack(), you provided: ${backdropAnimationDuration}`,
   )
   invariant(
     !position ||
       (position && position === 'top') ||
       (position && position === 'center') ||
       (position && position === 'bottom'),
-    "position should either be 'top', 'center' or 'bottom' in createModalStack()",
+    `position should either be 'top', 'center' or 'bottom' in createModalStack(), you provided: ${position}`,
   )
   invariant(
     !transitionOptions || (transitionOptions && typeof transitionOptions === 'function'),

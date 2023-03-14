@@ -104,6 +104,14 @@ const defaultOptions: ModalOptions = {
       },
     ],
   }),
+  animateInConfig: {
+    easing: Easing.bezier(0.42, -0.03, 0.27, 0.95),
+    duration: 450,
+  },
+  animateOutConfig: {
+    easing: Easing.bezier(0.42, -0.03, 0.27, 0.95),
+    duration: 450,
+  },
 }
 
 const stack = createModalStack<ModalStackParamsList>(config, defaultOptions)
