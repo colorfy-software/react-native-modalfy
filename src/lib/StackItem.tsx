@@ -16,9 +16,11 @@ import type {
 
 import { getStackItemOptions, vh } from '../utils'
 
-type Props<P> = SharedProps<P> & {
+type Props<P extends ModalfyParams> = SharedProps<P> & {
   zIndex: number
   position: number
+  hideBackdrop: () => void
+  isLastOpenedModal: boolean
   stackItem: ModalStackItem<P>
   wasOpenCallbackCalled: boolean
   wasClosedByBackdropPress: boolean
@@ -35,10 +37,12 @@ const StackItem = <P extends ModalfyParams>({
   closeModal,
   closeModals,
   currentModal,
+  hideBackdrop,
   closeAllModals,
   eventListeners,
   clearListeners,
   registerListener,
+  isLastOpenedModal,
   removeClosingAction,
   pendingClosingAction,
   wasOpenCallbackCalled,
@@ -139,16 +143,16 @@ const StackItem = <P extends ModalfyParams>({
       const onCloseFns = () => {
         onCloseListener.current({ type: 'closeModal', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeModal(modalName)
-        callback?.()
+        if (typeof callback === 'function') callback?.()
       }
 
-      if (!modalName || modalName === currentModal) {
-        updateAnimatedValue(position - 1, onCloseFns)
-      } else onCloseFns()
+      if (isLastOpenedModal) hideBackdrop()
+      updateAnimatedValue(position - 1, onCloseFns)
     },
     [
       currentModal,
       closeModal,
+      hideBackdrop,
       onCloseListener,
       position,
       stack.openedItemsSize,
@@ -162,32 +166,34 @@ const StackItem = <P extends ModalfyParams>({
       const onCloseFns = () => {
         onCloseListener.current({ type: 'closeModals', origin: 'default' })
         let output = closeModals(closingElement)
-        callback?.()
+        if (typeof callback === 'function') callback?.()
         return output
       }
 
-      if (closingElement === currentModal && position === 1) {
-        return updateAnimatedValue(position - 1, onCloseFns)
-      } else return onCloseFns()
+      if (isLastOpenedModal) hideBackdrop()
+      return updateAnimatedValue(position - 1, onCloseFns)
     },
-    [closeModals, currentModal, position, stack.openedItemsSize, updateAnimatedValue],
+    [closeModals, currentModal, hideBackdrop, position, stack.openedItemsSize, updateAnimatedValue],
   )
 
   const closeAllStackItems = useCallback(
     (callback?: () => void) => {
-      updateAnimatedValue(position - 1, () => {
+      hideBackdrop()
+      updateAnimatedValue(0, () => {
         onCloseListener.current({ type: 'closeAllModals', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeAllModals()
-        callback?.()
+        if (typeof callback === 'function') callback?.()
       })
     },
-    [closeAllModals, position, stack.openedItemsSize, updateAnimatedValue, wasClosedByBackdropPress],
+    [closeAllModals, hideBackdrop, position, stack.openedItemsSize, updateAnimatedValue, wasClosedByBackdropPress],
   )
 
   const onFling = useCallback(
     ({ nativeEvent }) => {
       if (!disableFlingGesture && nativeEvent.oldState === State.ACTIVE) {
         const toValue = verticalPosition === 'top' ? vh(-100) : vh(100)
+
+        hideBackdrop()
 
         Animated.timing(translateY, {
           toValue,
@@ -201,7 +207,16 @@ const StackItem = <P extends ModalfyParams>({
         })
       }
     },
-    [animateOutConfig, closeModal, disableFlingGesture, stack.openedItemsSize, stackItem, translateY, verticalPosition],
+    [
+      animateOutConfig,
+      closeModal,
+      disableFlingGesture,
+      hideBackdrop,
+      stack.openedItemsSize,
+      stackItem,
+      translateY,
+      verticalPosition,
+    ],
   )
 
   const pointerEvents = useMemo((): ViewProps['pointerEvents'] => {
@@ -274,20 +289,14 @@ const StackItem = <P extends ModalfyParams>({
 
   useEffect(() => {
     updateAnimatedValue(position, undefined, wasOpenCallbackCalled ? undefined : stackItem.callback)
+  }, [position, stackItem.callback, updateAnimatedValue, wasClosedByBackdropPress])
+
+  useEffect(() => {
     if (wasClosedByBackdropPress) {
       if (backBehavior === 'clear') closeAllStackItems()
       else closeStackItem(undefined)
     }
-  }, [
-    backBehavior,
-    closeAllStackItems,
-    closeStackItem,
-    position,
-    stackItem.callback,
-    updateAnimatedValue,
-    wasClosedByBackdropPress,
-    wasOpenCallbackCalled,
-  ])
+  }, [backBehavior, closeAllStackItems, closeStackItem, wasClosedByBackdropPress])
 
   useEffect(() => {
     if (pendingClosingAction) {
@@ -323,6 +332,7 @@ export default memo(
   (prevProps, nextProps) =>
     prevProps.position === nextProps.position &&
     prevProps.stackItem.hash === nextProps.stackItem.hash &&
+    prevProps.isLastOpenedModal === nextProps.isLastOpenedModal &&
     prevProps.pendingClosingAction === nextProps.pendingClosingAction &&
     prevProps.wasOpenCallbackCalled === nextProps.wasOpenCallbackCalled &&
     prevProps.wasClosedByBackdropPress === nextProps.wasClosedByBackdropPress,
