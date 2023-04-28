@@ -76,6 +76,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItemsSize - index
+    const isFirstVisibleModal = position === stack.openedItemsSize
     const isLastOpenedModal = position === 1 && stack.openedItemsSize === 1
     const pendingClosingAction: ModalPendingClosingAction | undefined = stack.pendingClosingActions
       .values()
@@ -96,6 +97,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
           setOpenActionCallbacks(state => [...state, stackItem.hash])
         }}
         isLastOpenedModal={isLastOpenedModal}
+        isFirstVisibleModal={isFirstVisibleModal}
         wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
         pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}

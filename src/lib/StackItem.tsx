@@ -21,6 +21,7 @@ type Props<P extends ModalfyParams> = SharedProps<P> & {
   position: number
   hideBackdrop: () => void
   isLastOpenedModal: boolean
+  isFirstVisibleModal: boolean
   stackItem: ModalStackItem<P>
   wasOpenCallbackCalled: boolean
   wasClosedByBackdropPress: boolean
@@ -43,6 +44,7 @@ const StackItem = <P extends ModalfyParams>({
   clearListeners,
   registerListener,
   isLastOpenedModal,
+  isFirstVisibleModal,
   removeClosingAction,
   pendingClosingAction,
   wasOpenCallbackCalled,
@@ -229,14 +231,14 @@ const StackItem = <P extends ModalfyParams>({
       case 'none':
         return 'box-only'
       case 'current-modal-none':
-        return position === 1 ? 'box-only' : 'box-none'
+        return isFirstVisibleModal ? 'box-only' : 'box-none'
       case 'current-modal-only':
-        return position === 1 ? 'box-none' : 'box-only'
+        return isFirstVisibleModal ? 'box-none' : 'box-only'
       case 'auto':
       default:
         return 'box-none'
     }
-  }, [pointerEventsBehavior, position])
+  }, [isFirstVisibleModal, pointerEventsBehavior])
 
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
@@ -333,6 +335,7 @@ export default memo(
     prevProps.position === nextProps.position &&
     prevProps.stackItem.hash === nextProps.stackItem.hash &&
     prevProps.isLastOpenedModal === nextProps.isLastOpenedModal &&
+    prevProps.isFirstVisibleModal === nextProps.isFirstVisibleModal &&
     prevProps.pendingClosingAction === nextProps.pendingClosingAction &&
     prevProps.wasOpenCallbackCalled === nextProps.wasOpenCallbackCalled &&
     prevProps.wasClosedByBackdropPress === nextProps.wasClosedByBackdropPress,
