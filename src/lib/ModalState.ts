@@ -31,7 +31,7 @@ const createModalState = (): ModalStateType<any> => {
   }
   let stateListeners: Set<() => void> = new Set()
 
-  const setState = <P>(updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>) => {
+  const setState = <P extends ModalfyParams>(updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>) => {
     const newState = updater(state)
     state = {
       ...newState,
@@ -47,9 +47,9 @@ const createModalState = (): ModalStateType<any> => {
 
   const init = setState
 
-  const getState = <P>(): ModalInternalState<P> => state
+  const getState = <P extends ModalfyParams>(): ModalInternalState<P> => state
 
-  const addStateSubscriber = <P>(stateSubscriber: ModalStateSubscriber<P>): ModalStateSubscription<P> => {
+  const addStateSubscriber = <P extends ModalfyParams>(stateSubscriber: ModalStateSubscriber<P>): ModalStateSubscription<P> => {
     function stateListener() {
       try {
         const currentState = getState<P>()
@@ -67,7 +67,7 @@ const createModalState = (): ModalStateType<any> => {
     return { unsubscribe: () => stateListeners.delete(stateListener) }
   }
 
-  const createStateSubscriber = <P>(
+  const createStateSubscriber = <P extends ModalfyParams>(
     stateListener: ModalStateListener<P>,
     equalityFn: ModalStateEqualityChecker<P>,
   ): ModalStateSubscriber<P> => ({
@@ -78,12 +78,12 @@ const createModalState = (): ModalStateType<any> => {
     unsubscribe: () => true,
   })
 
-  const subscribe = <P>(
+  const subscribe = <P extends ModalfyParams>(
     stateListener: ModalStateListener<P>,
     equalityFn: ModalStateEqualityChecker<P> = Object.is,
   ): ModalStateSubscription<P> => addStateSubscriber(createStateSubscriber(stateListener, equalityFn))
 
-  const openModal = <P>({
+  const openModal = <P extends ModalfyParams>({
     modalName,
     params,
     isCalledOutsideOfContext,
@@ -97,7 +97,7 @@ const createModalState = (): ModalStateType<any> => {
     const {
       stack: { content, names },
       currentModal,
-    } = state
+    } = getState()
 
     invariant(modalName, "You didn't pass any modal name")
     invariant(
@@ -146,10 +146,10 @@ const createModalState = (): ModalStateType<any> => {
     return stackItem?.params?.[paramName] ?? defaultValue
   }
 
-  const closeModal = <P>(closingElement?: Exclude<keyof P, symbol> | ModalStackItem<P>) => {
+  const closeModal = <P extends ModalfyParams>(closingElement?: Exclude<keyof P, number | symbol> | ModalStackItem<P>) => {
     const {
       stack: { openedItems, names },
-    } = state
+    } = getState()
 
     if (typeof closingElement === 'string') {
       invariant(
@@ -172,8 +172,10 @@ const createModalState = (): ModalStateType<any> => {
       if (!wasItemRemoved) {
         console.warn(`There was no opened ${closingElement} modal.`)
       }
-    } else if (closingElement && openedItems.has(closingElement as ModalStackItem<P>)) {
-      openedItems.delete(closingElement as ModalStackItem<P>)
+      // @ts-ignore
+    } else if (closingElement && openedItems.has(closingElement)) {
+      // @ts-ignore
+      openedItems.delete(closingElement)
     } else {
       const staleStackItem = Array.from(openedItems).pop()
       if (staleStackItem) openedItems.delete(staleStackItem)
@@ -187,10 +189,10 @@ const createModalState = (): ModalStateType<any> => {
     }))
   }
 
-  const closeModals = <P>(modalName: Exclude<keyof P, symbol>): boolean => {
+  const closeModals = <P extends ModalfyParams>(modalName: Exclude<keyof P, symbol>): boolean => {
     const {
       stack: { openedItems: oldOpenedItems, names },
-    } = state
+    } = getState()
 
     invariant(modalName, "You didn't pass any modal name to closeModals()")
     invariant(
@@ -219,7 +221,7 @@ const createModalState = (): ModalStateType<any> => {
   }
 
   const closeAllModals = () => {
-    const { openedItems } = state.stack
+    const { openedItems } = getState().stack
 
     openedItems.clear()
 
@@ -255,7 +257,7 @@ const createModalState = (): ModalStateType<any> => {
   }: ModalStatePendingClosingAction): ModalPendingClosingAction | null => {
     const {
       stack: { names },
-    } = state
+    } = getState()
 
     if (action !== 'closeAllModals' && modalName) {
       invariant(
@@ -293,7 +295,7 @@ const createModalState = (): ModalStateType<any> => {
   const removeClosingAction = (action: ModalPendingClosingAction): boolean => {
     const {
       stack: { pendingClosingActions: oldPendingClosingActions },
-    } = state
+    } = getState()
 
     const newPendingClosingActions = new Set(oldPendingClosingActions)
 

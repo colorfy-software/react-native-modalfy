@@ -123,12 +123,12 @@ export interface ModalContextProvider<
   stack: ModalStack<P>
 }
 
-export type ModalInternalState<P> = {
+export type ModalInternalState<P extends ModalfyParams> = {
   currentModal: ModalContextProvider<P>['currentModal'] | string | null
   stack: ModalContextProvider<P>['stack']
 }
 
-export interface ModalStateSubscriber<P> {
+export interface ModalStateSubscriber<P extends ModalfyParams> {
   state: ModalInternalState<P>
   equalityFn: ModalStateEqualityChecker<P>
   error: boolean
@@ -136,18 +136,21 @@ export interface ModalStateSubscriber<P> {
   unsubscribe: () => boolean
 }
 
-export interface ModalStateSubscription<P> {
+export interface ModalStateSubscription<P extends ModalfyParams> {
   unsubscribe: ModalStateSubscriber<P>['unsubscribe']
 }
 
-export type ModalStateListener<P> = (state: ModalInternalState<P> | null, error?: Error) => void
+export type ModalStateListener<P extends ModalfyParams> = (state: ModalInternalState<P> | null, error?: Error) => void
 
-export type ModalStateEqualityChecker<P> = (
+export type ModalStateEqualityChecker<P extends ModalfyParams> = (
   currentState: ModalInternalState<P>,
   newState: ModalInternalState<P>,
 ) => boolean
 
-export type ModalState<P> = Omit<ModalContextProvider<P>, 'currentModal' | 'stack' | 'openModal'> & {
+export type ModalState<P extends ModalfyParams> = Omit<
+  ModalContextProvider<P>,
+  'currentModal' | 'stack' | 'openModal'
+> & {
   openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(args: {
     modalName: N
     params?: P[N]
@@ -155,10 +158,14 @@ export type ModalState<P> = Omit<ModalContextProvider<P>, 'currentModal' | 'stac
     callback?: () => void
   }) => void
   handleBackPress: () => boolean
-  init: <T>(updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>) => ModalInternalState<T>
-  getState: <T>() => ModalInternalState<T>
-  setState: <T>(updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>) => ModalInternalState<T>
-  subscribe: <T>(
+  init: <T extends ModalfyParams>(
+    updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>,
+  ) => ModalInternalState<T>
+  getState: <T extends ModalfyParams>() => ModalInternalState<T>
+  setState: <T extends ModalfyParams>(
+    updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>,
+  ) => ModalInternalState<T>
+  subscribe: <T extends ModalfyParams>(
     listener: ModalStateListener<T>,
     equalityFn?: ModalStateEqualityChecker<T>,
   ) => ModalStateSubscription<T>
