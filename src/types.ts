@@ -8,7 +8,12 @@ import type { Animated, ViewStyle } from 'react-native'
  *   ========================                ========================
  */
 
-export type ModalfyParams = { [key: string]: any }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface ModalfyCustomParams {}
+
+export type ModalfyParams = ModalfyCustomParams[keyof ModalfyCustomParams] extends never
+  ? { [key: string]: any }
+  : ModalfyCustomParams
 
 export type ModalTransitionValue = Animated.AnimatedInterpolation | string | number | undefined | null
 
