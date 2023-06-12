@@ -26,7 +26,7 @@ type ButtonProps = {
 }
 
 type ModalsColorType = {
-  name: ModalName
+  name: ModalStackParamsList[ModalName]['name']
   color: ModalStackParamsList[ModalName]['color']
 }[]
 
@@ -58,7 +58,7 @@ const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsLi
   const { width } = useWindowDimensions()
 
   const origin = getParam('origin', 'Hooks')
-  const color = getParam('color', 'darkgreen')
+  const color = getParam('color', 'deeppink')
   const modalName = getParam('name')
 
   const Header = () => {
