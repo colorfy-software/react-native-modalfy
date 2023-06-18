@@ -5,7 +5,10 @@ import { TouchableOpacity, StyleSheet, Text } from 'react-native'
 import { ModalStackParamsList } from '../App'
 
 const IntroButton = () => {
+  // You can use it without explicit type, if you added it to declaration file 👇
+  // const { openModal } = useModal()
   const { openModal } = useModal<ModalStackParamsList>()
+
   const onPress = () => openModal('IntroModal')
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>

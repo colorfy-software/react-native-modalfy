@@ -12,7 +12,10 @@ interface Props {
 
 const HooksButton = ({ color, title, modalName: name }: Props) => {
   const { width } = useWindowDimensions()
-  const { openModal } = useModal<ModalStackParamsList>()
+  // You can use it without explicit type, if you added it to declaration file 👇
+  const { openModal } = useModal()
+  // const { openModal } = useModal<ModalStackParamsList>()
+
   const onPress = () => {
     // Type checking at work 👇
     openModal(name, { name, color, origin: 'Hooks' })
