@@ -223,7 +223,7 @@ export interface UsableModalComponentProp<P extends ModalfyParams, M extends key
  * Interface of the modal stack configuration.
  * These settings will let Modalfy know what modals you will be rendering and how.
  *
- * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#config-and-options
+ * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#config-and-options).
  */
 export interface ModalStackConfig {
   [key: string]: ComponentType<any> | ModalOptions
@@ -233,7 +233,7 @@ export interface ModalStackConfig {
  * Interface of the modal configuration options.
  * These settings will let Modalfy how to render and animate a modal.
  *
- * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#config-and-options
+ * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#config-and-options).
  */
 export interface ModalOptions {
   /**
@@ -243,7 +243,7 @@ export interface ModalOptions {
    * Note: only `easing` and `duration` are needed.
    *
    * @default { easing: Easing.inOut(Easing.exp), duration: 450 }
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animateinconfig
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animateinconfig).
    */
   animateInConfig?: Pick<Animated.TimingAnimationConfig, 'duration' | 'easing'>
   /**
@@ -275,7 +275,7 @@ export interface ModalOptions {
    *     if (finished) callback?.()
    *   })
    * }
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationin
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationin).
    */
   animationIn?: (
     animatedValue: Animated.Value,
@@ -289,7 +289,7 @@ export interface ModalOptions {
    * Note: only `easing` and `duration` are needed.
    *
    * @default { easing: Easing.inOut(Easing.exp), duration: 450 }
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout).
    */
   animateOutConfig?: Pick<Animated.TimingAnimationConfig, 'duration' | 'easing'>
   /**
@@ -320,7 +320,7 @@ export interface ModalOptions {
    *     if (finished) callback()
    *   })
    * }
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout).
    */
   animationOut?: (
     animatedValue: Animated.Value,
@@ -331,35 +331,35 @@ export interface ModalOptions {
    * How you want the modal stack to behave when users press the backdrop, but also when the physical back button is pressed on Android.
    *
    * @default 'pop'
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backbehavior
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backbehavior).
    */
   backBehavior?: 'clear' | 'pop' | 'none'
   /**
    * Color of the modal stack backdrop.
    *
    * @default 'black'
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropcolor
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropcolor).
    */
   backdropColor?: ViewStyle['backgroundColor']
   /**
    * Number between `0` and `1` that defines the backdrop opacity.
    *
    * @default 0.6
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropopacity
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropopacity).
    */
   backdropOpacity?: number
   /**
    * Number that defines how long the backdrop should take to animate in and out.
    *
    * @default 300
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropanimationduration
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropanimationduration).
    */
   backdropAnimationDuration?: number
   /**
    * Styles applied to the `<View>` directly wrapping your modal component.
    *
    * @default '{}'
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#containerstyle
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#containerstyle).
    */
   containerStyle?: ViewStyle
   /**
@@ -368,7 +368,7 @@ export interface ModalOptions {
    * Note: the fling gesture handler is not enabled when `position` is `center`.
    *
    * @default false
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#disableflinggesture
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#disableflinggesture).
    */
   disableFlingGesture?: boolean
   /**
@@ -377,14 +377,14 @@ export interface ModalOptions {
    * Note: only needed when you're using this inside createModalStack() 1st argument.
    *
    * @default -
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#modal
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#modal).
    */
   modal?: ComponentType<any>
   /**
    * Vertical positioning of the modal.
    *
    * @default 'center'
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#position
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#position).
    */
   position?: 'center' | 'top' | 'bottom'
   /**
@@ -393,14 +393,14 @@ export interface ModalOptions {
    * Note: the object returned by `transitionOptions()` must contain keys that work with `useNativeDriver: true`.
    *
    * @default -
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#transitionoptions
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#transitionoptions).
    */
   transitionOptions?: ModalTransitionOptions
   /**
    * How you want any modal to respond to a touch/click.
    *
    * @default 'auto'
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#pointereventsbehavior
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#pointereventsbehavior).
    */
   pointerEventsBehavior?: 'auto' | 'none' | 'current-modal-only' | 'current-modal-none'
 }
@@ -413,7 +413,7 @@ export interface ModalOptions {
  *
  * Note: Modal components used in `createModalStack()`'s config should employ `ModalComponentProp` instead.
  *
- * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprop
+ * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprop).
  */
 export type ModalProp<P extends ModalfyParams, Props = unknown> = Props & {
   /**
@@ -421,7 +421,7 @@ export type ModalProp<P extends ModalfyParams, Props = unknown> = Props & {
    *
    * Note: Modal components used in `createModalStack()`'s config should employ `ModalComponentProp` instead.
    *
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprop
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprop).
    */
   modal: UsableModalProp<P>
 }
@@ -435,18 +435,38 @@ export type ModalProp<P extends ModalfyParams, Props = unknown> = Props & {
  *
  * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` instead.
  *
- * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop
+ * @related [`ModalProps`](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprops).
+ * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop).
  */
 export type ModalComponentProp<P extends ModalfyParams, Props = unknown, M extends keyof P = keyof P> = Props & {
   /**
    * Interface of the `modal` prop exposed by the library specifically to modal components.
    *
-   * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` instead.
+   * Note:
+   * * A simplified version of this interface is ModalProps.
+   * * Components that are not used from `createModalStack()`'s config should employ `ModalProp` instead.
    *
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop).
    */
   modal: UsableModalComponentProp<P, M>
 }
+
+/**
+ * Interface of the `modal` prop exposed by the library specifically to modal components.
+ *
+ * @argument { string } ModalName? - Name of the current modal
+ * @argument { unknown } Props? - Component's props interface.
+ *
+ * Note: Components that are not used from `createModalStack()`'s config should employ `ModalProp` instead.
+ *
+ * @related [`ModalComponentProp`](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentprop).
+ * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalprops).
+ */
+export type ModalProps<N extends keyof ModalfyParams = keyof ModalfyParams, P = void> = ModalComponentProp<
+  ModalfyParams,
+  P,
+  N
+>
 
 /**
  * Interface for a React component containing its props and the `modalOptions` static property.
@@ -456,7 +476,7 @@ export type ModalComponentProp<P extends ModalfyParams, Props = unknown, M exten
  *
  * @argument { unknown } Props? - Component's props interface.
  *
- * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentwithoptions
+ * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/guides/typing#modalcomponentwithoptions).
  */
 export type ModalComponentWithOptions<P = unknown> = ComponentType<P> & {
   modalOptions?: ModalOptions

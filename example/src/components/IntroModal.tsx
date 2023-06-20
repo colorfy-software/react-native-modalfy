@@ -1,5 +1,5 @@
 import {
-  ModalComponentProp,
+  ModalProps,
   ModalEventListener,
   ModalOnCloseEventCallback,
   ModalOnAnimateEventCallback,
@@ -36,7 +36,7 @@ const Card = ({ title, modalName: name, color }: Props) => {
   )
 }
 
-const IntroModal = ({ modal: { addListener } }: ModalComponentProp<ModalStackParamsList, void, 'IntroModal'>) => {
+const IntroModal = ({ modal: { addListener } }: ModalProps<'IntroModal'>) => {
   const onAnimateListener = useRef<ModalEventListener | undefined>()
   const onCloseListener = useRef<ModalEventListener | undefined>()
   const animatedValue = useRef(new Animated.Value(0)).current

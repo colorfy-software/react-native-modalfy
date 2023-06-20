@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native'
 import {
-  ModalComponentProp,
+  ModalProps,
   ModalComponentWithOptions,
   ModalOnCloseEventCallback,
   ModalEventListener,
@@ -41,7 +41,7 @@ const HOOKS_MODALS_COLOR: ModalsColorType = [
   { name: 'ModalC', color: 'deeppink' },
 ]
 
-const DemoModal: ModalComponentWithOptions<ModalComponentProp<ModalStackParamsList, void, ModalName>> = ({
+const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
   modal: { addListener, currentModal, closeModal, closeModals, closeAllModals, getParam, openModal },
 }) => {
   const [otherModals, setOtherModals] = useState<OtherModalsType>([])
