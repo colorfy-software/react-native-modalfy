@@ -62,9 +62,7 @@ const animate = (animatedValue: Animated.Value, toValue: number, callback?: () =
     restSpeedThreshold: 0.001,
     restDisplacementThreshold: 0.001,
     useNativeDriver: true,
-  }).start(({ finished }) => {
-    if (finished) callback?.()
-  })
+  }).start(() => callback?.())
 }
 
 const defaultOptions: ModalOptions = {
