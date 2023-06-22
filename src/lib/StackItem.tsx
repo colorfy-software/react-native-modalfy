@@ -214,7 +214,6 @@ const StackItem = <P extends ModalfyParams>({
       closeModal,
       disableFlingGesture,
       hideBackdrop,
-      stack.openedItemsSize,
       stackItem,
       translateY,
       verticalPosition,

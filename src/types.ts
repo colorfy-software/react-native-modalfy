@@ -89,7 +89,7 @@ export type ModalPendingClosingAction =
     }
   | {
       hash: string
-      modalName?: never
+      modalName: never
       currentModalHash?: string
       action: 'closeAllModals'
       callback?: () => void
@@ -110,9 +110,7 @@ export interface ModalStack<P extends ModalfyParams> {
   content: ModalStackItem<P>[]
   defaultOptions: ModalOptions
   openedItems: Set<ModalStackItem<P>>
-  openedItemsSize: number
   pendingClosingActions: Set<ModalPendingClosingAction>
-  pendingClosingActionsSize: number
 }
 
 export interface ModalContextProvider<

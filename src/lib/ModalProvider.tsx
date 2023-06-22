@@ -118,7 +118,7 @@ const ModalProvider = ({ children, stack }: Props) => {
 
   useEffect(() => {
     // NOTE: Used to prevent scrolling on Web when the modal stack is opened.
-    if (Platform.OS === 'web' && contextValue.stack.openedItemsSize) {
+    if (Platform.OS === 'web' && contextValue.stack.openedItems.size) {
       document.body.style.touchAction = 'none'
       document.body.style.overflow = 'hidden'
       document.body.style.overscrollBehavior = 'none'
@@ -131,7 +131,7 @@ const ModalProvider = ({ children, stack }: Props) => {
         document.body.style.overscrollBehavior = 'auto'
       }
     }
-  }, [contextValue.stack.openedItemsSize])
+  }, [contextValue.stack.openedItems.size])
 
   return (
     <ModalContext.Provider value={contextValue}>

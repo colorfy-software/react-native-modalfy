@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react'
 import { useCallback, useMemo } from 'use-memo-one'
-import React, { useEffect, useState, memo } from 'react'
 import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
 
 import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAction } from '../types'
@@ -55,14 +55,14 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   }, [backdropAnimationDuration, opacity, translateY, stackStatus])
 
   useEffect(() => {
-    if (stack.openedItemsSize && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
+    if (stack.openedItems.size && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
       setBackdropColorStatus(true)
     }
-  }, [backdropColor, hasChangedBackdropColor, stack.openedItemsSize])
+  }, [backdropColor, hasChangedBackdropColor, stack.openedItems.size])
 
   useEffect(() => {
     const scrollY = Platform.OS === 'web' ? window.scrollY ?? document.documentElement.scrollTop : 0
-    if (stack.openedItemsSize) {
+    if (stack.openedItems.size) {
       setStackStatus('shown')
       translateY.setValue(scrollY)
       Animated.timing(opacity, {
@@ -72,16 +72,17 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         useNativeDriver: true,
       }).start()
     } else hideBackdrop()
-  }, [backdropAnimationDuration, opacity, stack.openedItemsSize, translateY])
+  }, [backdropAnimationDuration, opacity, stack.openedItems.size, translateY])
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
-    const position = stack.openedItemsSize - index
-    const isFirstVisibleModal = position === stack.openedItemsSize
-    const isLastOpenedModal = position === 1 && stack.openedItemsSize === 1
+    const position = stack.openedItems.size - index
+    const isFirstVisibleModal = position === stack.openedItems.size
+    const isLastOpenedModal = position === 1 && stack.openedItems.size === 1
     const pendingClosingAction: ModalPendingClosingAction | undefined = stack.pendingClosingActions
       .values()
       .next().value
     const hasPendingClosingAction = position === 1 && pendingClosingAction?.currentModalHash === stackItem.hash
+
     return (
       <StackItem
         {...props}
@@ -106,7 +107,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   }
 
   const renderStack = () => {
-    if (!stack.openedItemsSize) return null
+    if (!stack.openedItems.size) return null
     return [...stack.openedItems].map(renderStackItem)
   }
 
@@ -121,7 +122,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const renderBackdrop = () => {
     const onPress = () => onBackdropPress()
     const backgroundColor =
-      stack.openedItemsSize && backdropColor ? backdropColor : hasChangedBackdropColor ? 'transparent' : 'black'
+      stack.openedItems.size && backdropColor ? backdropColor : hasChangedBackdropColor ? 'transparent' : 'black'
 
     return (
       <TouchableWithoutFeedback onPress={onPress}>
@@ -146,7 +147,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       style={[
         styles.container,
         { opacity, transform: [{ translateY }] },
-        Platform.OS === 'web' && stack.openedItemsSize ? styles.containerWeb : null,
+        Platform.OS === 'web' && stack.openedItems.size ? styles.containerWeb : null,
       ]}>
       {renderBackdrop()}
       {renderStack()}
@@ -182,9 +183,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default memo(
-  ModalStack,
-  (prevProps, nextProps) =>
-    prevProps.stack.openedItemsSize === nextProps.stack.openedItemsSize &&
-    prevProps.stack.pendingClosingActionsSize === nextProps.stack.pendingClosingActionsSize,
-)
+export default ModalStack

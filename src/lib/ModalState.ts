@@ -23,24 +23,16 @@ const createModalState = (): ModalStateType<any> => {
       names: [],
       content: [],
       defaultOptions,
-      openedItemsSize: 0,
       openedItems: new Set(),
-      pendingClosingActionsSize: 0,
       pendingClosingActions: new Set(),
     },
   }
-  let stateListeners: Set<() => void> = new Set()
+  const stateListeners: Set<() => void> = new Set()
 
-  const setState = <P extends ModalfyParams>(updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>) => {
-    const newState = updater(state)
-    state = {
-      ...newState,
-      stack: {
-        ...newState.stack,
-        openedItemsSize: newState.stack.openedItems.size,
-        pendingClosingActionsSize: newState.stack.pendingClosingActions.size,
-      },
-    }
+  const setState = <P extends ModalfyParams>(
+    updater: (currentState: ModalInternalState<P>) => ModalInternalState<P>,
+  ) => {
+    state = updater(getState())
     stateListeners.forEach(stateListener => stateListener())
     return state
   }
