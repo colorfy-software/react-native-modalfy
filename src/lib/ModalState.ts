@@ -6,7 +6,6 @@ import type {
   ModalStateListener,
   ModalInternalState,
   ModalStateSubscriber,
-  ModalContextProvider,
   ModalStateSubscription,
   ModalStateEqualityChecker,
   ModalPendingClosingAction,
@@ -41,7 +40,9 @@ const createModalState = (): ModalStateType<any> => {
 
   const getState = <P extends ModalfyParams>(): ModalInternalState<P> => state
 
-  const addStateSubscriber = <P extends ModalfyParams>(stateSubscriber: ModalStateSubscriber<P>): ModalStateSubscription<P> => {
+  const addStateSubscriber = <P extends ModalfyParams>(
+    stateSubscriber: ModalStateSubscriber<P>,
+  ): ModalStateSubscription<P> => {
     function stateListener() {
       try {
         const currentState = getState<P>()
@@ -63,9 +64,9 @@ const createModalState = (): ModalStateType<any> => {
     stateListener: ModalStateListener<P>,
     equalityFn: ModalStateEqualityChecker<P>,
   ): ModalStateSubscriber<P> => ({
-    stateListener,
     equalityFn,
     error: false,
+    stateListener,
     state: getState(),
     unsubscribe: () => true,
   })
@@ -87,8 +88,8 @@ const createModalState = (): ModalStateType<any> => {
     callback?: () => void
   }) => {
     const {
-      stack: { content, names },
       currentModal,
+      stack: { content, names },
     } = getState()
 
     invariant(modalName, "You didn't pass any modal name")
@@ -106,19 +107,22 @@ const createModalState = (): ModalStateType<any> => {
       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
     }
 
-    setState<P>(currentState => ({
-      currentModal: modalName,
-      stack: {
-        ...currentState.stack,
-        openedItems: state.stack.openedItems.add(
-          Object.assign({}, stackItem, {
-            hash,
-            callback,
-            ...(params && { params }),
-          }),
-        ),
-      } as ModalContextProvider<P>['stack'],
-    }))
+    if (stackItem) {
+      setState<P>(currentState => ({
+        currentModal: modalName,
+        stack: {
+          ...currentState.stack,
+          openedItems: currentState.stack.openedItems.add(
+            Object.assign({}, stackItem, {
+              ...stackItem,
+              hash,
+              callback,
+              ...(params && { params }),
+            }) as ModalStackItem<ModalfyParams>,
+          ),
+        },
+      }))
+    }
   }
 
   const getParam = <P extends ModalfyParams, N extends keyof P[keyof P], D extends P[keyof P][N]>(
@@ -128,7 +132,7 @@ const createModalState = (): ModalStateType<any> => {
   ): D extends P[keyof P][N] ? P[keyof P][N] : undefined => {
     const {
       stack: { openedItems },
-    } = state
+    } = getState()
     let stackItem: ModalStackItem<P> | undefined
 
     openedItems.forEach(item => {
@@ -138,10 +142,14 @@ const createModalState = (): ModalStateType<any> => {
     return stackItem?.params?.[paramName] ?? defaultValue
   }
 
-  const closeModal = <P extends ModalfyParams>(closingElement?: Exclude<keyof P, number | symbol> | ModalStackItem<P>) => {
+  const closeModal = <P extends ModalfyParams>(
+    closingElement?: Exclude<keyof P, number | symbol> | ModalStackItem<P>,
+  ) => {
     const {
-      stack: { openedItems, names },
+      stack: { openedItems: oldOpenedItems, names },
     } = getState()
+
+    const newOpenedItems = new Set(oldOpenedItems)
 
     if (typeof closingElement === 'string') {
       invariant(
@@ -152,11 +160,11 @@ const createModalState = (): ModalStateType<any> => {
       )
 
       let wasItemRemoved = false
-      let reversedOpenedItemsArray = Array.from(openedItems).reverse()
+      const reversedOpenedItemsArray = Array.from(newOpenedItems).reverse()
 
       reversedOpenedItemsArray.forEach(openedItem => {
         if (openedItem.name === closingElement && !wasItemRemoved) {
-          openedItems.delete(openedItem)
+          newOpenedItems.delete(openedItem)
           wasItemRemoved = true
         }
       })
@@ -165,19 +173,19 @@ const createModalState = (): ModalStateType<any> => {
         console.warn(`There was no opened ${closingElement} modal.`)
       }
       // @ts-ignore
-    } else if (closingElement && openedItems.has(closingElement)) {
+    } else if (closingElement && newOpenedItems.has(closingElement)) {
       // @ts-ignore
-      openedItems.delete(closingElement)
+      newOpenedItems.delete(closingElement)
     } else {
-      const staleStackItem = Array.from(openedItems).pop()
-      if (staleStackItem) openedItems.delete(staleStackItem)
+      const staleStackItem = Array.from(newOpenedItems).pop()
+      if (staleStackItem) newOpenedItems.delete(staleStackItem)
     }
 
-    const openedItemsArray = Array.from(openedItems)
+    const newOpenedItemsArray = Array.from(newOpenedItems)
 
     setState(currentState => ({
-      currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
-      stack: { ...currentState.stack, openedItems },
+      stack: { ...currentState.stack, openedItems: newOpenedItems },
+      currentModal: newOpenedItemsArray?.[newOpenedItemsArray?.length - 1]?.name,
     }))
   }
 
@@ -203,8 +211,8 @@ const createModalState = (): ModalStateType<any> => {
     if (newOpenedItems.size !== oldOpenedItems.size) {
       const openedItemsArray = Array.from(newOpenedItems)
       setState(currentState => ({
-        currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
         stack: { ...currentState.stack, openedItems: newOpenedItems },
+        currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
       }))
       return true
     }
@@ -213,13 +221,9 @@ const createModalState = (): ModalStateType<any> => {
   }
 
   const closeAllModals = () => {
-    const { openedItems } = getState().stack
-
-    openedItems.clear()
-
     setState(currentState => ({
       currentModal: null,
-      stack: { ...currentState.stack, openedItems },
+      stack: { ...currentState.stack, openedItems: new Set() },
     }))
   }
 
@@ -248,7 +252,7 @@ const createModalState = (): ModalStateType<any> => {
     modalName,
   }: ModalStatePendingClosingAction): ModalPendingClosingAction | null => {
     const {
-      stack: { names },
+      stack: { names, openedItems },
     } = getState()
 
     if (action !== 'closeAllModals' && modalName) {
@@ -260,7 +264,7 @@ const createModalState = (): ModalStateType<any> => {
       )
     }
 
-    const noOpenedItems = !state?.stack?.openedItems?.size
+    const noOpenedItems = !openedItems?.size
 
     if (noOpenedItems) return null
 
@@ -270,14 +274,13 @@ const createModalState = (): ModalStateType<any> => {
       ...currentState,
       stack: {
         ...currentState.stack,
-        // @ts-ignore
         pendingClosingActions: currentState.stack.pendingClosingActions.add({
           hash,
           action,
           callback,
           modalName,
           currentModalHash: [...currentState.stack.openedItems].slice(-1)[0]?.hash,
-        }),
+        } as ModalPendingClosingAction),
       },
     })).stack
 
@@ -293,20 +296,17 @@ const createModalState = (): ModalStateType<any> => {
 
     if (newPendingClosingActions.has(action)) {
       newPendingClosingActions.delete(action)
-    }
+    } else return false
 
-    if (newPendingClosingActions.size !== oldPendingClosingActions.size) {
-      setState(currentState => ({
-        ...currentState,
-        stack: {
-          ...currentState.stack,
-          pendingClosingActions: newPendingClosingActions,
-        },
-      }))
-      return true
-    }
+    setState(currentState => ({
+      ...currentState,
+      stack: {
+        ...currentState.stack,
+        pendingClosingActions: newPendingClosingActions,
+      },
+    }))
 
-    return false
+    return true
   }
 
   return {
