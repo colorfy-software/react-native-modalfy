@@ -22,6 +22,9 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * @example modal.closeAllModals(() => console.log('All modals closed'))
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
+     *
+     * @note We're using modalfy.closeAllModals instead of ModalState.closeAllModals so that the animations
+     * can be triggered appropriately from the synced custom internal state.
      */
     closeAllModals: closeAllModals as UsableModalProp<P>['closeAllModals'],
     /**
@@ -34,6 +37,9 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * @example modal.closeModal('Example', () => console.log('Current modal closed'))
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
+     *
+     * @note We're using modalfy.closeModal instead of ModalState.closeModal so that the animations
+     * can be triggered appropriately from the synced custom internal state.
      */
     closeModal: closeModal as UsableModalProp<P>['closeModal'],
     /**
@@ -48,6 +54,10 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * corresponding to `modalName` (and then closed them).
      *
      * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
+     *
+     * @note We're using modalfy.closeModals instead of ModalState.closeModals so that the animations
+     * can be triggered appropriately from the synced custom internal state.
+
      */
     closeModals: closeModals as UsableModalProp<P>['closeModals'],
     /**

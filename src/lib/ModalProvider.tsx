@@ -11,9 +11,9 @@ import type {
   ModalStack as ModalStackType,
 } from '../types'
 
-import ModalContext from './ModalContext'
 import ModalStack from './ModalStack'
 import ModalState from './ModalState'
+import ModalContext from './ModalContext'
 
 import { invariant, validateListener } from '../utils'
 
@@ -119,15 +119,15 @@ const ModalProvider = ({ children, stack }: Props) => {
   useEffect(() => {
     // NOTE: Used to prevent scrolling on Web when the modal stack is opened.
     if (Platform.OS === 'web' && contextValue.stack.openedItems.size) {
-      document.body.style.touchAction = 'none'
       document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
       document.body.style.overscrollBehavior = 'none'
     }
 
     return () => {
       if (Platform.OS === 'web') {
-        document.body.style.touchAction = 'auto'
         document.body.style.overflow = 'auto'
+        document.body.style.touchAction = 'auto'
         document.body.style.overscrollBehavior = 'auto'
       }
     }

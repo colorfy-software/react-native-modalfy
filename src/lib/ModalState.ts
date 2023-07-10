@@ -148,7 +148,6 @@ const createModalState = (): ModalStateType<any> => {
     const {
       stack: { openedItems: oldOpenedItems, names },
     } = getState()
-
     const newOpenedItems = new Set(oldOpenedItems)
 
     if (typeof closingElement === 'string') {
@@ -270,19 +269,24 @@ const createModalState = (): ModalStateType<any> => {
 
     const hash = `${modalName ? `${modalName}_${action}` : action}_${Math.random().toString(36).substring(2, 11)}`
 
-    const { pendingClosingActions } = setState(currentState => ({
-      ...currentState,
-      stack: {
-        ...currentState.stack,
-        pendingClosingActions: currentState.stack.pendingClosingActions.add({
-          hash,
-          action,
-          callback,
-          modalName,
-          currentModalHash: [...currentState.stack.openedItems].slice(-1)[0]?.hash,
-        } as ModalPendingClosingAction),
-      },
-    })).stack
+    const { pendingClosingActions } = setState(currentState => {
+      const newPendingClosingActions = new Set(currentState.stack.pendingClosingActions)
+      newPendingClosingActions.add({
+        hash,
+        action,
+        callback,
+        modalName,
+        currentModalHash: [...currentState.stack.openedItems].slice(-1)[0]?.hash,
+      } as ModalPendingClosingAction)
+
+      return {
+        ...currentState,
+        stack: {
+          ...currentState.stack,
+          pendingClosingActions: newPendingClosingActions,
+        },
+      }
+    }).stack
 
     return [...pendingClosingActions].slice(-1)[0]
   }
