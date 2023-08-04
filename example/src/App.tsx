@@ -6,9 +6,12 @@ import DemoModal from './components/DemoModal'
 import IntroModal from './components/IntroModal'
 import IntroButton from './components/IntroButton'
 
-interface Modal<N, C extends 'lightsalmon' | 'deepskyblue' | 'deeppink'> {
+interface Modal<N, C> {
   origin: 'Hooks' | 'Class' | 'Plain JS'
-  color: C
+  color: C | 'darkgreen'
+  // 👆 Comment this one and uncomment that one 👇 to remove all the TypeScript errors
+  // color: 'lightsalmon' | 'deepskyblue' | 'deeppink' | 'darkgreen'
+  // Note: the TS errors were left voluntarily to showcase the type inference & autocomplete possibilities
   name: N
 }
 

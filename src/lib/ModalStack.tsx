@@ -44,12 +44,10 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         easing: Easing.inOut(Easing.ease),
         duration: backdropAnimationDuration,
         useNativeDriver: true,
-      }).start(({ finished }) => {
-        if (finished) {
-          setStackStatus('hidden')
-          setBackdropClosedItems([])
-          translateY.setValue(sh(100))
-        }
+      }).start(() => {
+        setStackStatus('hidden')
+        setBackdropClosedItems([])
+        translateY.setValue(sh(100))
       })
     }
   }, [backdropAnimationDuration, opacity, translateY, stackStatus])

@@ -269,9 +269,7 @@ export interface ModalOptions {
    *       easing: Easing.inOut(Easing.exp),
    *       useNativeDriver: true,
    *     }),
-   *   ]).start(({ finished }) => {
-   *     if (finished) callback?.()
-   *   })
+   *   ]).start() => callback?.())
    * }
    * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationin).
    */
@@ -314,9 +312,7 @@ export interface ModalOptions {
    *       easing: Easing.inOut(Easing.exp),
    *       useNativeDriver: true,
    *     }),
-   *   ]).start(({ finished }) => {
-   *     if (finished) callback()
-   *   })
+   *   ]).start(() => callback())
    * }
    * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#animationout).
    */

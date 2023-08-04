@@ -129,11 +129,9 @@ const StackItem = <P extends ModalfyParams>({
           toValue,
           useNativeDriver: true,
           ...(closeModalCallback ? animateOutConfig : animateInConfig),
-        }).start(({ finished }) => {
-          if (finished) {
-            closeModalCallback?.(stackItem)
-            modalStackItemCallback?.()
-          }
+        }).start(() => {
+          closeModalCallback?.(stackItem)
+          modalStackItemCallback?.()
         })
       }
     },
@@ -203,11 +201,9 @@ const StackItem = <P extends ModalfyParams>({
           toValue,
           useNativeDriver: true,
           ...animateOutConfig,
-        }).start(({ finished }) => {
-          if (finished) {
-            onCloseListener.current({ type: 'closeModal', origin: 'fling' })
-            closeModal(stackItem)
-          }
+        }).start(() => {
+          onCloseListener.current({ type: 'closeModal', origin: 'fling' })
+          closeModal(stackItem)
         })
       }
     },
