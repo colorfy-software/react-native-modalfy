@@ -249,7 +249,7 @@ const createModalState = (): ModalStateType<any> => {
     action,
     callback,
     modalName,
-  }: ModalStatePendingClosingAction): ModalPendingClosingAction | null => {
+  }: ModalStatePendingClosingAction): ModalPendingClosingAction | (() => void) | void | null => {
     const {
       stack: { names, openedItems },
     } = getState()
@@ -264,6 +264,8 @@ const createModalState = (): ModalStateType<any> => {
     }
 
     const noOpenedItems = !openedItems?.size
+
+    if (noOpenedItems && typeof callback === 'function') return callback?.()
 
     if (noOpenedItems) return null
 
