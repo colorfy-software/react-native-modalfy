@@ -265,7 +265,10 @@ const createModalState = (): ModalStateType<any> => {
 
     const noOpenedItems = !openedItems?.size
 
-    if (noOpenedItems) return null
+    if (noOpenedItems) {
+      if (typeof callback === 'function') callback?.()
+      return null
+    }
 
     const hash = `${modalName ? `${modalName}_${action}` : action}_${Math.random().toString(36).substring(2, 11)}`
 
