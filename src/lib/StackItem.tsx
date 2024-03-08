@@ -58,7 +58,6 @@ const StackItem = <P extends ModalfyParams>({
     [],
   )
 
-  const animatedListenerId = useRef<string | undefined>()
   const onCloseListener = useRef<ModalOnCloseEventCallback>(() => undefined)
 
   const {
@@ -75,7 +74,7 @@ const StackItem = <P extends ModalfyParams>({
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
   useEffect(() => {
-    let onAnimateListener: ModalOnAnimateEventCallback = () => undefined
+    let onAnimateListener: ModalOnAnimateEventCallback | undefined = undefined
 
     if (transitionOptions && typeof transitionOptions !== 'function') {
       throw new Error(`'${stackItem.name}' transitionOptions should be a function. For instance:
@@ -103,10 +102,12 @@ const StackItem = <P extends ModalfyParams>({
       }
     })
 
-    animatedListenerId.current = animatedValue.addListener(({ value }) => onAnimateListener(value))
+    if (typeof onAnimateListener === 'function') {
+      animatedValue.addListener(({ value }) => onAnimateListener?.(value))
+    }
 
     return () => {
-      animatedValue.removeAllListeners()
+      animatedValue.stopAnimation(() => animatedValue.removeAllListeners())
       clearListeners(stackItem.hash)
     }
   }, [])
