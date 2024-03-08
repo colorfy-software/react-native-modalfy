@@ -38,12 +38,15 @@ export type ModalEventListeners = Set<{
 export type ModalEventName = 'onAnimate' | 'onClose'
 
 export type ModalOnAnimateEventCallback = (value?: number) => void
-export type ModalOnCloseEventCallback = (closingAction: {
+
+export type ModalClosingAction = {
   type: ModalClosingActionName
   origin: ModalClosingActionOrigin
-}) => void
-export type ModalClosingActionName = 'closeModal' | 'closeModals' | 'closeAllModals'
+}
 export type ModalClosingActionOrigin = 'default' | 'fling' | 'backdrop'
+export type ModalClosingActionName = 'closeModal' | 'closeModals' | 'closeAllModals'
+export type ModalOnCloseEventCallback = (closingAction: ModalClosingAction) => void
+
 export type ModalEventCallback = ModalOnAnimateEventCallback | ModalOnCloseEventCallback
 
 export type ModalEventListener = { remove: () => boolean }
