@@ -1,5 +1,6 @@
 import { useCallback } from 'use-memo-one'
 import { BackHandler, Platform } from 'react-native'
+import { FullWindowOverlay } from 'react-native-screens'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 
 import type {
@@ -133,17 +134,21 @@ const ModalProvider = ({ children, stack }: Props) => {
     }
   }, [contextValue.stack.openedItems.size])
 
+  const modalStack = (
+    <ModalStack
+      {...contextValue}
+      clearListeners={clearListeners}
+      registerListener={registerListener}
+      eventListeners={modalEventListeners}
+      removeClosingAction={ModalState.removeClosingAction}
+    />
+  )
+
   return (
     <ModalContext.Provider value={contextValue}>
       <>
         {children}
-        <ModalStack
-          {...contextValue}
-          clearListeners={clearListeners}
-          registerListener={registerListener}
-          eventListeners={modalEventListeners}
-          removeClosingAction={ModalState.removeClosingAction}
-        />
+        {Platform.OS === 'ios' ? <FullWindowOverlay>{modalStack}</FullWindowOverlay> : modalStack}
       </>
     </ModalContext.Provider>
   )
