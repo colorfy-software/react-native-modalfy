@@ -80,6 +80,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       .values()
       .next().value
     const hasPendingClosingAction = position === 1 && pendingClosingAction?.currentModalHash === stackItem.hash
+    const placePreviousModalsBelowBackdrop = stack.defaultOptions.placePreviousModalsBelowBackdrop
 
     return (
       <StackItem
@@ -87,7 +88,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         // @ts-ignore
         stackItem={stackItem}
         key={index}
-        zIndex={index + 1}
+        zIndex={placePreviousModalsBelowBackdrop && index < stack.openedItems.size - 1 ? -1 : index + 1}
         position={position}
         hideBackdrop={hideBackdrop}
         openModal={(...args) => {
@@ -123,7 +124,9 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       stack.openedItems.size && backdropColor ? backdropColor : hasChangedBackdropColor ? 'transparent' : 'black'
 
     return (
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback
+        onPress={onPress}
+        style={[stack.defaultOptions.placePreviousModalsBelowBackdrop && { zIndex: 0 }]}>
         <Animated.View
           style={[
             styles.backdrop,

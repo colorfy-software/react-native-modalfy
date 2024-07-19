@@ -400,6 +400,12 @@ export interface ModalOptions {
    * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#pointereventsbehavior).
    */
   pointerEventsBehavior?: 'auto' | 'none' | 'current-modal-only' | 'current-modal-none'
+  /**
+   * Determines if previous modals should be placed below the backdrop.
+   *
+   * @default false
+   */
+  placePreviousModalsBelowBackdrop?: boolean
 }
 
 /**
