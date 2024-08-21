@@ -28,6 +28,15 @@ type Props<P extends ModalfyParams> = SharedProps<P> & {
   pendingClosingAction?: ModalPendingClosingAction
 }
 
+const addCallbackToMacroTaskQueue = (fn: (() => void) | undefined) => {
+  if (typeof fn === 'function') {
+    const timeout = setTimeout(() => {
+      clearTimeout(timeout)
+      fn?.()
+    }, 0)
+  }
+}
+
 const StackItem = <P extends ModalfyParams>({
   stack,
   zIndex,
@@ -115,24 +124,24 @@ const StackItem = <P extends ModalfyParams>({
   const updateAnimatedValue = useCallback(
     (
       toValue: number,
-      closeModalCallback?: (closingElement: ModalStackItem<P>) => void,
-      modalStackItemCallback?: () => void,
+      internalClosingCallback?: (closingElement: ModalStackItem<P>) => void,
+      stackItemCallback?: () => void,
     ) => {
-      if (!closeModalCallback && animationIn) {
-        animationIn(animatedValue, toValue, modalStackItemCallback)
-      } else if (closeModalCallback && animationOut) {
+      if (!internalClosingCallback && animationIn) {
+        animationIn(animatedValue, toValue, stackItemCallback)
+      } else if (internalClosingCallback && animationOut) {
         animationOut(animatedValue, toValue, () => {
-          closeModalCallback(stackItem)
-          modalStackItemCallback?.()
+          internalClosingCallback(stackItem)
+          addCallbackToMacroTaskQueue(stackItemCallback)
         })
       } else {
         Animated.timing(animatedValue, {
           toValue,
           useNativeDriver: true,
-          ...(closeModalCallback ? animateOutConfig : animateInConfig),
+          ...(internalClosingCallback ? animateOutConfig : animateInConfig),
         }).start(() => {
-          closeModalCallback?.(stackItem)
-          modalStackItemCallback?.()
+          internalClosingCallback?.(stackItem)
+          addCallbackToMacroTaskQueue(stackItemCallback)
         })
       }
     },
@@ -147,7 +156,7 @@ const StackItem = <P extends ModalfyParams>({
         onCloseListener.current({ type: 'closeModal', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeModal(modalName)
         if (pendingClosingAction?.action === 'closeModal') removeClosingAction(pendingClosingAction)
-        if (typeof callback === 'function') callback?.()
+        addCallbackToMacroTaskQueue(callback)
       })
     },
     [
@@ -170,7 +179,7 @@ const StackItem = <P extends ModalfyParams>({
         onCloseListener.current({ type: 'closeModals', origin: 'default' })
         let output = closeModals(closingElement)
         if (pendingClosingAction?.action === 'closeModals') removeClosingAction(pendingClosingAction)
-        if (typeof callback === 'function') callback?.()
+        addCallbackToMacroTaskQueue(callback)
         return output
       })
     },
@@ -185,7 +194,7 @@ const StackItem = <P extends ModalfyParams>({
         onCloseListener.current({ type: 'closeAllModals', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeAllModals()
         if (pendingClosingAction?.action === 'closeAllModals') removeClosingAction(pendingClosingAction)
-        if (typeof callback === 'function') callback?.()
+        addCallbackToMacroTaskQueue(callback)
       })
     },
     [closeAllModals, hideBackdrop, pendingClosingAction, position, updateAnimatedValue, wasClosedByBackdropPress],
