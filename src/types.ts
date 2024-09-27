@@ -129,7 +129,7 @@ export interface ModalContextProvider<
     paramName: N,
     defaultValue?: D,
   ) => D extends P[M][N] ? P[M][N] : undefined
-  openModal: <N extends M>(modalName: N, params?: P[N], callback?: () => void) => void
+  openModal: <N extends M>(modalName: N, params: P[N], callback?: () => void) => void
   stack: ModalStack<P>
 }
 
