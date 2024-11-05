@@ -116,22 +116,32 @@ export interface ModalStack<P extends ModalfyParams> {
   pendingClosingActions: Set<ModalPendingClosingAction>
 }
 
+//context
 export interface ModalContextProvider<
   P extends ModalfyParams,
   M extends Exclude<keyof P, symbol | number> = Exclude<keyof P, symbol | number>,
 > {
-  currentModal: M | null
-  closeAllModals: (callback?: () => void) => void
-  closeModal: (stackItem?: M | ModalStackItem<P>, callback?: () => void) => void
-  closeModals: (modalName: M, callback?: () => void) => boolean
+  currentModal: M | null;
+  closeAllModals: (callback?: () => void) => void;
+  closeModal: (stackItem?: M | ModalStackItem<P>, callback?: () => void) => void;
+  closeModals: (modalName: M, callback?: () => void) => boolean;
   getParam: <N extends keyof P[M], D extends P[M][N]>(
     hash: ModalStackItem<P>['hash'],
     paramName: N,
     defaultValue?: D,
-  ) => D extends P[M][N] ? P[M][N] : undefined
-  openModal: <N extends M>(modalName: N, params?: P[N], callback?: () => void) => void
-  stack: ModalStack<P>
+  ) => D extends P[M][N] ? P[M][N] : undefined;
+
+  // Update `openModal` here with conditional type for params
+  openModal: <N extends M>(
+    modalName: N,
+    params: P[N] extends undefined ? never : P[N],  // Conditional type for params
+    callback?: () => void
+  ) => void;
+
+  stack: ModalStack<P>;
 }
+
+
 
 export type ModalInternalState<P extends ModalfyParams> = {
   currentModal: ModalContextProvider<P>['currentModal'] | string | null
@@ -157,31 +167,41 @@ export type ModalStateEqualityChecker<P extends ModalfyParams> = (
   newState: ModalInternalState<P>,
 ) => boolean
 
+//model state
 export type ModalState<P extends ModalfyParams> = Omit<
   ModalContextProvider<P>,
   'currentModal' | 'stack' | 'openModal'
 > & {
+  // Update `openModal` here with conditional type for params
   openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(args: {
-    modalName: N
-    params?: P[N]
-    isCalledOutsideOfContext?: boolean
-    callback?: () => void
-  }) => void
-  handleBackPress: () => boolean
+    modalName: N;
+    params: P[N] extends undefined ? never : P[N];  // Conditional type for params
+    isCalledOutsideOfContext?: boolean;
+    callback?: () => void;
+  }) => void;
+
+  handleBackPress: () => boolean;
+  
   init: <T extends ModalfyParams>(
     updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>,
-  ) => ModalInternalState<T>
-  getState: <T extends ModalfyParams>() => ModalInternalState<T>
+  ) => ModalInternalState<T>;
+
+  getState: <T extends ModalfyParams>() => ModalInternalState<T>;
+
   setState: <T extends ModalfyParams>(
     updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>,
-  ) => ModalInternalState<T>
+  ) => ModalInternalState<T>;
+
   subscribe: <T extends ModalfyParams>(
     listener: ModalStateListener<T>,
     equalityFn?: ModalStateEqualityChecker<T>,
-  ) => ModalStateSubscription<T>
-  queueClosingAction: (action: ModalStatePendingClosingAction) => ModalPendingClosingAction | null
-  removeClosingAction: (action: ModalPendingClosingAction) => boolean
-}
+  ) => ModalStateSubscription<T>;
+
+  queueClosingAction: (action: ModalStatePendingClosingAction) => ModalPendingClosingAction | null;
+  
+  removeClosingAction: (action: ModalPendingClosingAction) => boolean;
+};
+
 
 export interface SharedProps<P extends ModalfyParams> extends ModalContextProvider<P> {
   clearListeners: (hash: string) => void
