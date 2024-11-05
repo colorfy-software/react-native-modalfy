@@ -5,6 +5,8 @@ import type { ModalfyParams, UsableModalProp } from '../types'
 import ModalContext from './ModalContext'
 import { modalfy } from './ModalState'
 
+const { closeModal, closeModals, closeAllModals } = modalfy()
+
 /**
  * Hook that exposes Modalfy's API.
  *
@@ -14,7 +16,6 @@ import { modalfy } from './ModalState'
  */
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
   const context = useContext(ModalContext) as UsableModalProp<P>
-  const { closeModal, closeModals, closeAllModals } = modalfy<P>()
   return {
     /**
      * This function closes every open modal.
@@ -59,7 +60,7 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      * can be triggered appropriately from the synced custom internal state.
 
      */
-    closeModals: closeModals as UsableModalProp<P>['closeModals'],
+    closeModals: closeModals as unknown as UsableModalProp<P>['closeModals'],
     /**
      * This value returns the current open modal (`null` if none).
      *
