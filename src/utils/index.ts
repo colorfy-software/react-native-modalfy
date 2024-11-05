@@ -24,6 +24,7 @@ export const defaultOptions: ModalOptions = {
   disableFlingGesture: false,
   pointerEventsBehavior: 'auto',
   backdropAnimationDuration: 300,
+  placePreviousModalsBelowBackdrop: false,
 }
 
 export { default as invariant } from './invariant'

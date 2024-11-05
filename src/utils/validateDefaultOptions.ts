@@ -9,6 +9,7 @@ export default function ({
   transitionOptions,
   pointerEventsBehavior,
   backdropAnimationDuration,
+  placePreviousModalsBelowBackdrop,
 }: ModalOptions = {}) {
   invariant(
     !backBehavior ||
@@ -57,5 +58,10 @@ export default function ({
         }),
       }
       }`,
+  )
+  invariant(
+    !placePreviousModalsBelowBackdrop ||
+      (placePreviousModalsBelowBackdrop && typeof placePreviousModalsBelowBackdrop === 'boolean'),
+    `placePreviousModalsBelowBackdrop should be a boolean in createModalStack(), you provided: ${placePreviousModalsBelowBackdrop}`,
   )
 }
