@@ -1,6 +1,6 @@
 {
   "name": "react-native-modalfy",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "description": "Modal citizen of React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
