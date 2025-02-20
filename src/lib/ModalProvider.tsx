@@ -1,6 +1,6 @@
 import { useCallback } from 'use-memo-one'
-import { BackHandler, Platform } from 'react-native'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
+import { BackHandler, NativeEventSubscription, Platform } from 'react-native'
 
 import type {
   SharedProps,
@@ -31,7 +31,8 @@ interface Props {
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/stack#provider
  */
 const ModalProvider = ({ children, stack }: Props) => {
-  const modalStateSubscription = useRef<ModalStateSubscription<any> | undefined>()
+  const backHandlerSubscription = useRef<NativeEventSubscription>()
+  const modalStateSubscription = useRef<ModalStateSubscription<any>>()
 
   const modalEventListeners = useRef<ModalEventListeners>(new Set()).current
 
@@ -39,7 +40,7 @@ const ModalProvider = ({ children, stack }: Props) => {
     const { currentModal } = ModalState.getState()
 
     if (!currentModal) {
-      BackHandler.addEventListener('hardwareBackPress', ModalState.handleBackPress)
+      backHandlerSubscription.current = BackHandler.addEventListener('hardwareBackPress', ModalState.handleBackPress)
     }
 
     ModalState.openModal({ modalName, params, callback, isCalledOutsideOfContext: true })
@@ -111,8 +112,8 @@ const ModalProvider = ({ children, stack }: Props) => {
     modalStateSubscription.current = ModalState.subscribe(listener)
 
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', ModalState.handleBackPress)
-      modalStateSubscription.current?.unsubscribe()
+      backHandlerSubscription.current?.remove?.()
+      modalStateSubscription.current?.unsubscribe?.()
     }
   }, [])
 
