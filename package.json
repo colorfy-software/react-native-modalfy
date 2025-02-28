@@ -35,7 +35,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/colorfy-software/react-native-modalfy.git"
+    "url": "https://github.com/colorfy-software/react-native-modalfy.git"
   },
   "author": "Charles Mangwa <charles.m@hey.com> (https://github.com/CharlesMangwa)",
   "license": "MIT",
