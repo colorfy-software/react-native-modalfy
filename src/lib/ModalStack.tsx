@@ -31,10 +31,16 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     [],
   )
 
-  const { backBehavior, backdropAnimationDuration, backdropColor, backdropOpacity } = useMemo(
+  const { backBehavior, backdropAnimationDuration, backdropColor, backdropOpacity, stackContainerStyle } = useMemo(
     () => getStackItemOptions(Array.from(stack.openedItems).pop(), stack),
     [stack],
   )
+
+  const getStackContainerStyle = () => {
+    if (typeof stackContainerStyle === 'object') return stackContainerStyle
+    else if (typeof stackContainerStyle === 'function') return stackContainerStyle(opacity)
+    return {}
+  }
 
   const hideBackdrop = useCallback(() => {
     if (stackStatus === 'shown') {
@@ -146,6 +152,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         styles.container,
         { opacity, transform: [{ translateY }] },
         Platform.OS === 'web' && stack.openedItems.size ? styles.containerWeb : null,
+        getStackContainerStyle(),
       ]}>
       {renderBackdrop()}
       {renderStack()}

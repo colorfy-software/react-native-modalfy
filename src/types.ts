@@ -385,6 +385,17 @@ export interface ModalOptions {
    */
   position?: 'center' | 'top' | 'bottom'
   /**
+   * Styles applied to the `<Animated.View>` directly wrapping the entire modal stack & backdrop.
+   *
+   * The styles can be provided as a regular object or as a function (that will receive an `Animated.Value` representing the opacity of the modal stack as sole argument).
+   *
+   * Note: the object returned by `stackContainerStyle()` must contain keys that work with `useNativeDriver: true`.
+   *
+   * @default '{}'
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#stackcontainerstyle).
+   */
+  stackContainerStyle?: ViewStyle | ((opacity: Animated.Value) => ViewStyle)
+  /**
    * `transitionOptions(animatedValue)` returns a React Native style object containing values that can use the provided `animatedValue` to run animation interpolations on a modal.
    *
    * Note: the object returned by `transitionOptions()` must contain keys that work with `useNativeDriver: true`.
