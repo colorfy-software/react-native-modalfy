@@ -1,7 +1,13 @@
+import {
+  Gesture,
+  Directions,
+  GestureDetector,
+  GestureStateChangeEvent,
+  FlingGestureHandlerEventPayload,
+} from 'react-native-gesture-handler'
 import { useMemo, useCallback } from 'use-memo-one'
 import React, { ReactNode, useEffect, useRef, memo } from 'react'
 import { Animated, StyleSheet, ViewProps, ViewStyle } from 'react-native'
-import { State, Directions, FlingGestureHandler } from 'react-native-gesture-handler'
 
 import type {
   SharedProps,
@@ -201,20 +207,24 @@ const StackItem = <P extends ModalfyParams>({
   )
 
   const onFling = useCallback(
-    ({ nativeEvent }) => {
-      if (!disableFlingGesture && nativeEvent.oldState === State.ACTIVE) {
+    (_: GestureStateChangeEvent<FlingGestureHandlerEventPayload>, success: boolean) => {
+      if (success) {
         const toValue = verticalPosition === 'top' ? vh(-100) : vh(100)
 
-        hideBackdrop()
-
-        Animated.timing(translateY, {
-          toValue,
-          useNativeDriver: true,
-          ...animateOutConfig,
-        }).start(() => {
+        const onAnimationEnd = () => {
+          animatedValue.setValue(position - 1)
           onCloseListener.current({ type: 'closeModal', origin: 'fling' })
           closeModal(stackItem)
-        })
+        }
+
+        if (animationOut) animationOut(translateY, toValue, onAnimationEnd)
+        else {
+          Animated.timing(translateY, {
+            toValue,
+            useNativeDriver: true,
+            ...animateOutConfig,
+          }).start(onAnimationEnd)
+        }
       }
     },
     [animateOutConfig, closeModal, disableFlingGesture, hideBackdrop, stackItem, translateY, verticalPosition],
@@ -239,6 +249,8 @@ const StackItem = <P extends ModalfyParams>({
     }
   }, [isFirstVisibleModal, pointerEventsBehavior])
 
+  const Wrapper = disableFlingGesture ? Animated.View : GestureDetector
+
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
     const addListener = (eventName: ModalEventName, handler: ModalEventCallback) =>
@@ -247,13 +259,11 @@ const StackItem = <P extends ModalfyParams>({
 
     return (
       <Animated.View pointerEvents={pointerEvents} style={{ transform: [{ translateY }] }}>
-        <FlingGestureHandler
-          direction={verticalPosition === 'top' ? Directions.UP : verticalPosition === 'bottom' ? Directions.DOWN : -1}
-          onHandlerStateChange={onFling}>
-          <Animated.View
-            style={{
-              ...(transitionOptions && transitionOptions(animatedValue)),
-            }}>
+        <Wrapper
+          gesture={Gesture.Fling()
+            .direction(verticalPosition === 'top' ? Directions.UP : Directions.DOWN)
+            .onEnd(onFling)}>
+          <Animated.View style={{ ...(transitionOptions && transitionOptions(animatedValue)) }}>
             <Component
               modal={{
                 openModal,
@@ -272,7 +282,7 @@ const StackItem = <P extends ModalfyParams>({
               }}
             />
           </Animated.View>
-        </FlingGestureHandler>
+        </Wrapper>
       </Animated.View>
     )
   }
