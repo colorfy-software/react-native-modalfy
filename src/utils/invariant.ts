@@ -13,11 +13,7 @@ export class InvariantError extends Error {
   framesToPop = 1
   name = genericMessage
   constructor(message: string | number = genericMessage) {
-    super(
-      typeof message === 'number'
-        ? `${genericMessage}: ${message} (see https://github.com/apollographql/invariant-packages)`
-        : message,
-    )
+    super(typeof message === 'number' ? `${genericMessage}: ${message}` : message)
     setPrototypeOf(this, InvariantError.prototype)
   }
 }
