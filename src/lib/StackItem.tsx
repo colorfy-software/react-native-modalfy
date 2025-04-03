@@ -262,7 +262,8 @@ const StackItem = <P extends ModalfyParams>({
         <Wrapper
           gesture={Gesture.Fling()
             .direction(verticalPosition === 'top' ? Directions.UP : Directions.DOWN)
-            .onEnd(onFling)}>
+            .onEnd(onFling)
+            .runOnJS(true)}>
           <Animated.View style={{ ...(transitionOptions && transitionOptions(animatedValue)) }}>
             <Component
               modal={{
