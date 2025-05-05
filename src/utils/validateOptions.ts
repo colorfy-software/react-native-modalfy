@@ -2,10 +2,33 @@ import type { ModalOptions } from '../types'
 
 import invariant from './invariant'
 
-export default function ({
+export function validateStackItemOptions({
+  animationIn,
+  animationOut,
+  animateInConfig,
+  animateOutConfig,
+}: ModalOptions = {}) {
+  if (animationIn && animateInConfig) {
+    console.warn(
+      `You should defined either 'animationIn' or 'animateInConfig' but not both at once. 'animateInConfig' will be ignored as Modalfy defaults to 'animationIn'.`,
+    )
+  }
+
+  if (animationOut && animateOutConfig) {
+    console.warn(
+      `You should defined either 'animationOut' or 'animateOutConfig' but not both at once. 'animateOutConfig' will be ignored as Modalfy defaults to 'animationOut'.`,
+    )
+  }
+}
+
+export default function validateDefaultOptions({
   position,
+  animationIn,
   backBehavior,
+  animationOut,
+  animateInConfig,
   backdropOpacity,
+  animateOutConfig,
   transitionOptions,
   pointerEventsBehavior,
   backdropAnimationDuration,
@@ -58,4 +81,6 @@ export default function ({
       }
       }`,
   )
+
+  validateStackItemOptions({ animationIn, animationOut, animateInConfig, animateOutConfig })
 }
