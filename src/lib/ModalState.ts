@@ -274,8 +274,7 @@ const createModalState = (): ModalStateType<any> => {
     const hash = `${modalName ? `${modalName}_${action}` : action}_${Math.random().toString(36).substring(2, 11)}`
 
     const { pendingClosingActions } = setState(currentState => {
-      const newPendingClosingActions = new Set(currentState.stack.pendingClosingActions)
-      newPendingClosingActions.add({
+      const newPendingClosingActions = new Set(currentState.stack.pendingClosingActions).add({
         hash,
         action,
         callback,
@@ -287,7 +286,14 @@ const createModalState = (): ModalStateType<any> => {
         ...currentState,
         stack: {
           ...currentState.stack,
-          pendingClosingActions: newPendingClosingActions,
+          pendingClosingActions: new Set(
+            Array.from(newPendingClosingActions).filter(
+              (
+                seen => item =>
+                  !seen.has(item.currentModalHash) && seen.add(item.currentModalHash)
+              )(new Set()),
+            ),
+          ),
         },
       }
     }).stack
