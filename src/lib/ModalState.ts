@@ -264,8 +264,9 @@ const createModalState = (): ModalStateType<any> => {
     }
 
     const noOpenedItems = !openedItems?.size
+    const noOpenedItemsForCloseModalsAction = action === 'closeModals' && !names.some(name => name === modalName)
 
-    if (noOpenedItems) {
+    if (noOpenedItems || noOpenedItemsForCloseModalsAction) {
       if (typeof callback === 'function') callback?.()
       return null
     }
@@ -389,13 +390,12 @@ export const modalfy = <
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
    */
-  closeModals: (modalName: M, callback?: () => void) => {
-    ModalState.queueClosingAction({
+  closeModals: (modalName: M, callback?: () => void): boolean =>
+    !!ModalState.queueClosingAction({
       action: 'closeModals',
       modalName,
       callback,
-    })
-  },
+    }),
   /**
    * This value returns the current open modal (`null` if none).
    *

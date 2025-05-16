@@ -1,11 +1,10 @@
 import { useContext } from 'react'
+import { useCallbackOne, useMemoOne } from 'use-memo-one'
 
 import type { ModalfyParams, UsableModalProp } from '../types'
 
-import ModalContext from './ModalContext'
 import { modalfy } from './ModalState'
-
-const { closeModal, closeModals, closeAllModals } = modalfy()
+import ModalContext from './ModalContext'
 
 /**
  * Hook that exposes Modalfy's API.
@@ -16,34 +15,44 @@ const { closeModal, closeModals, closeAllModals } = modalfy()
  */
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
   const context = useContext(ModalContext) as UsableModalProp<P>
-  return {
-    /**
-     * This function closes every open modal.
-     *
-     * @example modal.closeAllModals(() => console.log('All modals closed'))
-     *
-     * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
-     *
-     * @note We're using modalfy.closeAllModals instead of ModalState.closeAllModals so that the animations
-     * can be triggered appropriately from the synced custom internal state.
-     */
-    closeAllModals: closeAllModals as UsableModalProp<P>['closeAllModals'],
-    /**
-     * This function closes the currently displayed modal by default.
-     *
-     * You can also provide a `modalName` if you want to close a different modal
-     * than the latest opened. This will only close the latest instance of that modal,
-     * see `closeModals()` if you want to close all instances.
-     *
-     * @example modal.closeModal('Example', () => console.log('Current modal closed'))
-     *
-     * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
-     *
-     * @note We're using modalfy.closeModal instead of ModalState.closeModal so that the animations
-     * can be triggered appropriately from the synced custom internal state.
-     */
-    closeModal: closeModal as UsableModalProp<P>['closeModal'],
-    /**
+
+  const closeAllModals: UsableModalProp<P>['closeAllModals'] = useCallbackOne(modalfy().closeAllModals, [])
+
+  const closeModals: UsableModalProp<P>['closeModals'] = useCallbackOne(modalfy().closeModals, [])
+
+  const closeModal: UsableModalProp<P>['closeModal'] = useCallbackOne(modalfy().closeModal, [])
+
+  const openModal: UsableModalProp<P>['openModal'] = useCallbackOne(modalfy().openModal, [])
+
+  const output = useMemoOne(
+    () => ({
+      /**
+       * This function closes every open modal.
+       *
+       * @example modal.closeAllModals(() => console.log('All modals closed'))
+       *
+       * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
+       *
+       * @note We're using modalfy.closeAllModals instead of ModalState.closeAllModals so that the animations
+       * can be triggered appropriately from the synced custom internal state.
+       */
+      closeAllModals,
+      /**
+       * This function closes the currently displayed modal by default.
+       *
+       * You can also provide a `modalName` if you want to close a different modal
+       * than the latest opened. This will only close the latest instance of that modal,
+       * see `closeModals()` if you want to close all instances.
+       *
+       * @example modal.closeModal('Example', () => console.log('Current modal closed'))
+       *
+       * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
+       *
+       * @note We're using modalfy.closeModal instead of ModalState.closeModal so that the animations
+       * can be triggered appropriately from the synced custom internal state.
+       */
+      closeModal,
+      /**
      * This function closes all the instances of a given modal.
      *
      * You can use it whenever you have the same modal opened
@@ -58,29 +67,32 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
      *
      * @note We're using modalfy.closeModals instead of ModalState.closeModals so that the animations
      * can be triggered appropriately from the synced custom internal state.
+     */
+      closeModals,
+      /**
+       * This value returns the current open modal (`null` if none).
+       *
+       * @example modal.currentModal
+       *
+       * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#currentmodal
+       */
+      currentModal: context.currentModal,
+      /**
+       * This function opens a modal based on the provided `modalName`.
+       *
+       * It will look at the stack passed to `<ModalProvider>` and add
+       * the corresponding component to the current stack of open modals.
+       * Alternatively, you can also provide some `params` that will be
+       * accessible to that component.
+       *
+       * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokedexEntryModal modal opened'))
+       *
+       * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
+       */
+      openModal,
+    }),
+    [context.currentModal, closeAllModals, closeModals, closeModal, openModal],
+  )
 
-     */
-    closeModals: closeModals as unknown as UsableModalProp<P>['closeModals'],
-    /**
-     * This value returns the current open modal (`null` if none).
-     *
-     * @example modal.currentModal
-     *
-     * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#currentmodal
-     */
-    currentModal: context.currentModal,
-    /**
-     * This function opens a modal based on the provided `modalName`.
-     *
-     * It will look at the stack passed to `<ModalProvider>` and add
-     * the corresponding component to the current stack of open modals.
-     * Alternatively, you can also provide some `params` that will be
-     * accessible to that component.
-     *
-     * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokedexEntryModal modal opened'))
-     *
-     * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
-     */
-    openModal: context.openModal,
-  }
+  return output
 }
