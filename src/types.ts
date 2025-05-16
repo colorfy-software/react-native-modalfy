@@ -120,15 +120,81 @@ export interface ModalContextProvider<
   P extends ModalfyParams,
   M extends Exclude<keyof P, symbol | number> = Exclude<keyof P, symbol | number>,
 > {
+  /**
+   * This value returns the current open modal (`null` if none).
+   *
+   * @example modal.currentModal
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#currentmodal
+   */
   currentModal: M | null
+  /**
+   * This function closes every open modal.
+   *
+   * @example modal.closeAllModals(() => console.log('All modals closed'))
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
+   *
+   * @note We're using modalfy.closeAllModals instead of ModalState.closeAllModals so that the animations
+   * can be triggered appropriately from the synced custom internal state.
+   */
   closeAllModals: (callback?: () => void) => void
+  /**
+   * This function closes the currently displayed modal by default.
+   *
+   * You can also provide a `modalName` if you want to close a different modal
+   * than the latest opened. This will only close the latest instance of that modal,
+   * see `closeModals()` if you want to close all instances.
+   *
+   * @example modal.closeModal('Example', () => console.log('Current modal closed'))
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
+   *
+   * @note We're using modalfy.closeModal instead of ModalState.closeModal so that the animations
+   * can be triggered appropriately from the synced custom internal state.
+   */
   closeModal: (stackItem?: M | ModalStackItem<P>, callback?: () => void) => void
+  /**
+   * This function closes all the instances of a given modal.
+   *
+   * You can use it whenever you have the same modal opened
+   * several times, to close all of them at once.
+   *
+   * @example modal.closeModals('ExampleModal', () => console.log('All ExampleModal modals closed'))
+   *
+   * @returns { boolean } Whether or not Modalfy found any open modal
+   * corresponding to `modalName` (and then closed them).
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
+   *
+   * @note We're using modalfy.closeModals instead of ModalState.closeModals so that the animations
+   * can be triggered appropriately from the synced custom internal state.
+   */
   closeModals: (modalName: M, callback?: () => void) => boolean
+  /**
+   * This function looks inside `params` and returns the value of the key corresponding to `paramName`. Returns the provided `defaultValue` if nothing was found.
+   *
+   * @example const message = getParam('message', 'Something went wrong... 🤔')
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#getparam
+   */
   getParam: <N extends keyof P[M], D extends P[M][N]>(
     hash: ModalStackItem<P>['hash'],
     paramName: N,
     defaultValue?: D,
   ) => D extends P[M][N] ? P[M][N] : undefined
+  /**
+   * This function opens a modal based on the provided `modalName`.
+   *
+   * It will look at the stack passed to `<ModalProvider>` and add
+   * the corresponding component to the current stack of open modals.
+   * Alternatively, you can also provide some `params` that will be
+   * accessible to that component.
+   *
+   * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokedexEntryModal modal opened'))
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
+   */
   openModal: <N extends M>(modalName: N, params?: P[N], callback?: () => void) => void
   stack: ModalStack<P>
 }
@@ -198,18 +264,90 @@ export type UsableModalProp<P extends ModalfyParams> = Pick<
   ModalContextProvider<P>,
   'closeAllModals' | 'closeModals' | 'currentModal' | 'openModal'
 > & {
+  /**
+   * This function closes the currently displayed modal by default.
+   *
+   * You can also provide a `modalName` if you want to close a different modal
+   * than the latest opened. This will only close the latest instance of that modal,
+   * see `closeModals()` if you want to close all instances.
+   *
+   * @example modal.closeModal('Example', () => console.log('Current modal closed'))
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
+   *
+   * @note We're using modalfy.closeModal instead of ModalState.closeModal so that the animations
+   * can be triggered appropriately from the synced custom internal state.
+   */
   closeModal: (modalName?: Exclude<keyof P, symbol | number>, callback?: () => void) => void
 }
 
 export interface UsableModalComponentProp<P extends ModalfyParams, M extends keyof P>
   extends Omit<ModalContextProvider<P>, 'closeModal' | 'stack' | 'getParam'> {
+  /**
+   * Ths function that allows you to hook a listener to the modal component you're in. Right now, the only listener
+   * types supported are: `'onAnimate'` & `'onClose'`.
+   *
+   * @example
+   *
+   * const onCloseListener = useRef<ModalEventListener | undefined>()
+   *
+   * const handleClose: ModalOnCloseEventCallback = useCallback(
+   *   closingAction => {
+   *     console.log(`👋 Modal closed by: ${closingAction.type} • ${closingAction.origin}`)
+   *   },
+   *   []
+   * )
+   *
+   * useEffect(() => {
+   *   onCloseListener.current = addListener('onAnimate', handleClose)
+   *
+   *   return () => {
+   *     onCloseListener.current?.remove()
+   *   }
+   * }, [addListener, handleClose])
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#addlistener
+   */
   addListener: ModalListener
+  /**
+   * This function closes the currently displayed modal by default.
+   *
+   * You can also provide a `modalName` if you want to close a different modal
+   * than the latest opened. This will only close the latest instance of that modal,
+   * see `closeModals()` if you want to close all instances.
+   *
+   * @example closeModal('Example', () => console.log('Current modal closed'))
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodal
+   *
+   * @note We're using modalfy.closeModal instead of ModalState.closeModal so that the animations
+   * can be triggered appropriately from the synced custom internal state.
+   */
   closeModal: (modalName?: M, callback?: () => void) => void
+  /**
+   * This function looks inside `params` and returns the value of the key corresponding to `paramName`. Returns the provided `defaultValue` if nothing was found.
+   *
+   * @example const message = getParam('message', 'Something went wrong... 🤔')
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#getparam
+   */
   getParam: <N extends keyof P[M], D extends P[M][N]>(
     paramName: N,
     defaultValue?: D,
   ) => D extends P[M][N] ? P[M][N] : undefined
+  /**
+   * This function removes all the listeners connected to the modal component you're in.
+   *
+   * @example removeAllListeners()
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#removealllisteners
+   */
   removeAllListeners: () => void
+  /**
+   * Optional params object you provided when opening the modal you're in.
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#params
+   */
   params?: P[M]
 }
 
