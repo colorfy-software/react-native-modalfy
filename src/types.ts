@@ -470,6 +470,13 @@ export interface ModalOptions {
    */
   backBehavior?: 'clear' | 'pop' | 'none'
   /**
+   * Number that defines how long the backdrop should take to animate in and out.
+   *
+   * @default 300
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropanimationduration).
+   */
+  backdropAnimationDuration?: number
+  /**
    * Color of the modal stack backdrop.
    *
    * @default 'black'
@@ -484,12 +491,12 @@ export interface ModalOptions {
    */
   backdropOpacity?: number
   /**
-   * Number that defines how long the backdrop should take to animate in and out.
+   * Where in the stack should the backdrop be displayed.
    *
-   * @default 300
-   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropanimationduration).
+   * @default 'root'
+   * @see [API reference](https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modaloptions#backdropposition).
    */
-  backdropAnimationDuration?: number
+  backdropPosition?: 'root' | 'belowLatest'
   /**
    * Styles applied to the `<View>` directly wrapping your modal component.
    *

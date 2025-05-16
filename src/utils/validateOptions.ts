@@ -28,6 +28,7 @@ export default function validateDefaultOptions({
   animationOut,
   animateInConfig,
   backdropOpacity,
+  backdropPosition,
   animateOutConfig,
   transitionOptions,
   pointerEventsBehavior,
@@ -41,12 +42,8 @@ export default function validateDefaultOptions({
     `backBehavior should either be 'pop', 'clear' or 'none' in createModalStack(), you provided: ${backBehavior}`,
   )
   invariant(
-    !pointerEventsBehavior ||
-      (pointerEventsBehavior && pointerEventsBehavior === 'auto') ||
-      (pointerEventsBehavior && pointerEventsBehavior === 'none') ||
-      (pointerEventsBehavior && pointerEventsBehavior === 'current-modal-only') ||
-      (pointerEventsBehavior && pointerEventsBehavior === 'current-modal-none'),
-    `pointerEventsBehavior should either be 'auto', 'none', 'current-modal-only' or 'current-modal-none' in createModalStack(), you provided: ${pointerEventsBehavior}`,
+    !backdropAnimationDuration || (backdropAnimationDuration && typeof backdropAnimationDuration === 'number'),
+    `backdropAnimationDuration should be a number in createModalStack(), you provided: ${backdropAnimationDuration}`,
   )
   invariant(
     !backdropOpacity ||
@@ -54,8 +51,18 @@ export default function validateDefaultOptions({
     `backdropOpacity should be a number between 0 and 1 in createModalStack(), you provided: ${backdropOpacity}`,
   )
   invariant(
-    !backdropAnimationDuration || (backdropAnimationDuration && typeof backdropAnimationDuration === 'number'),
-    `backdropAnimationDuration should be a number in createModalStack(), you provided: ${backdropAnimationDuration}`,
+    !backdropPosition ||
+      (backdropPosition && backdropPosition === 'root') ||
+      (backdropPosition && backdropPosition === 'belowLatest'),
+    `backdropPosition should either be 'root' or 'belowLatest' in createModalStack(), you provided: ${backdropPosition}`,
+  )
+  invariant(
+    !pointerEventsBehavior ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'auto') ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'none') ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'current-modal-only') ||
+      (pointerEventsBehavior && pointerEventsBehavior === 'current-modal-none'),
+    `pointerEventsBehavior should either be 'auto', 'none', 'current-modal-only' or 'current-modal-none' in createModalStack(), you provided: ${pointerEventsBehavior}`,
   )
   invariant(
     !position ||

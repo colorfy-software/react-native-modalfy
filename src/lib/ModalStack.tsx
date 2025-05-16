@@ -38,6 +38,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     backdropColor,
     animateInConfig,
     backdropOpacity,
+    backdropPosition,
     animateOutConfig,
     stackContainerStyle,
     backdropAnimationDuration,
@@ -67,8 +68,12 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItems.size - index
+    const isBackdropBelowLatestModal = backdropPosition === 'belowLatest'
+    
+    const isNotLatestOpenedModal = position >= 2
     const isFirstVisibleModal = position === stack.openedItems.size
     const isLastOpenedModal = position === 1 && stack.openedItems.size === 1
+
     const pendingClosingAction: ModalPendingClosingAction | undefined = stack.pendingClosingActions
       .values()
       .next().value
@@ -80,7 +85,6 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         // @ts-ignore
         stackItem={stackItem}
         key={index}
-        zIndex={index + 1}
         position={position}
         hideBackdrop={hideBackdrop}
         openModal={(...args) => {
@@ -93,6 +97,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
         pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
+        zIndex={isBackdropBelowLatestModal && isNotLatestOpenedModal ? -1 : index + 1}
       />
     )
   }
@@ -112,11 +117,12 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   const renderBackdrop = () => {
     const onPress = () => onBackdropPress()
+    const isBackdropBelowLatestModal = backdropPosition === 'belowLatest'
     const backgroundColor =
       stack.openedItems.size && backdropColor ? backdropColor : hasChangedBackdropColor ? 'transparent' : 'black'
 
     return (
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback style={isBackdropBelowLatestModal && { zIndex: 0 }} onPress={onPress}>
         <Animated.View
           style={[
             styles.backdrop,

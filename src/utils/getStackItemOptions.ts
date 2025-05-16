@@ -15,6 +15,7 @@ export default function <P>(stackItem: ModalStackItem<P> | undefined, stack: Mod
     animateInConfig: extractOption('animateInConfig'),
     backdropOpacity: extractOption('backdropOpacity'),
     animateOutConfig: extractOption('animateOutConfig'),
+    backdropPosition: extractOption('backdropPosition'),
     transitionOptions: extractOption('transitionOptions'),
     stackContainerStyle: extractOption('stackContainerStyle'),
     disableFlingGesture: extractOption('disableFlingGesture'),
