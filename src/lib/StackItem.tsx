@@ -208,6 +208,7 @@ const StackItem = <P extends ModalfyParams>({
 
   const onFling = useCallback(
     (_: GestureStateChangeEvent<FlingGestureHandlerEventPayload>, success: boolean) => {
+      'worklet'
       if (success) {
         const toValue = verticalPosition === 'top' ? vh(-100) : vh(100)
 
