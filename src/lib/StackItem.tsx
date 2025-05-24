@@ -250,7 +250,6 @@ const StackItem = <P extends ModalfyParams>({
     }
   }, [isFirstVisibleModal, pointerEventsBehavior])
 
-  const Wrapper = disableFlingGesture ? Animated.View : GestureDetector
 
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
@@ -260,10 +259,12 @@ const StackItem = <P extends ModalfyParams>({
 
     return (
       <Animated.View pointerEvents={pointerEvents} style={{ transform: [{ translateY }] }}>
-        <Wrapper
+        <GestureDetector
           gesture={Gesture.Fling()
+            .enabled(!disableFlingGesture)
             .direction(verticalPosition === 'top' ? Directions.UP : Directions.DOWN)
-            .onEnd(onFling)}>
+            .onEnd(onFling)
+            .runOnJS(true)}>
           <Animated.View style={{ ...(transitionOptions && transitionOptions(animatedValue)) }}>
             <Component
               modal={{
@@ -283,7 +284,7 @@ const StackItem = <P extends ModalfyParams>({
               }}
             />
           </Animated.View>
-        </Wrapper>
+        </GestureDetector>
       </Animated.View>
     )
   }

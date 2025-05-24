@@ -184,7 +184,7 @@ const createModalState = (): ModalStateType<any> => {
 
     setState(currentState => ({
       stack: { ...currentState.stack, openedItems: newOpenedItems },
-      currentModal: newOpenedItemsArray?.[newOpenedItemsArray?.length - 1]?.name,
+      currentModal: newOpenedItemsArray?.slice(-1)[0]?.name,
     }))
   }
 
@@ -211,7 +211,7 @@ const createModalState = (): ModalStateType<any> => {
       const openedItemsArray = Array.from(newOpenedItems)
       setState(currentState => ({
         stack: { ...currentState.stack, openedItems: newOpenedItems },
-        currentModal: openedItemsArray?.[openedItemsArray?.length - 1]?.name,
+        currentModal: openedItemsArray?.slice(-1)[0]?.name,
       }))
       return true
     }
