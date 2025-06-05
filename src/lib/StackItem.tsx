@@ -6,7 +6,7 @@ import {
   FlingGestureHandlerEventPayload,
 } from 'react-native-gesture-handler'
 import { useMemo, useCallback } from 'use-memo-one'
-import React, { ReactNode, useEffect, useRef, memo } from 'react'
+import React, { ReactNode, useEffect, useLayoutEffect, useRef, memo } from 'react'
 import { Animated, StyleSheet, ViewProps, ViewStyle } from 'react-native'
 
 import type {
@@ -88,7 +88,7 @@ const StackItem = <P extends ModalfyParams>({
     position: verticalPosition,
   } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let onAnimateListener: ModalOnAnimateEventCallback | undefined = undefined
 
     if (transitionOptions && typeof transitionOptions !== 'function') {
@@ -248,7 +248,6 @@ const StackItem = <P extends ModalfyParams>({
         return 'box-none'
     }
   }, [isFirstVisibleModal, pointerEventsBehavior])
-
 
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
