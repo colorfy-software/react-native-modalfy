@@ -11,6 +11,7 @@ import { Animated, StyleSheet, ViewProps, ViewStyle } from 'react-native'
 
 import type {
   SharedProps,
+  ModalOptions,
   ModalfyParams,
   ModalStackItem,
   ModalEventName,
@@ -20,7 +21,7 @@ import type {
   ModalOnAnimateEventCallback,
 } from '../types'
 
-import { addCallbackToMacroTaskQueue, getStackItemOptions, vh } from '../utils'
+import { addCallbackToMacroTaskQueue, getStackItemOptions, validateStackItemOptions, vh } from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P> & {
   zIndex: number
@@ -313,6 +314,18 @@ const StackItem = <P extends ModalfyParams>({
       }
     }
   }, [closeAllStackItems, closeStackItem, closeStackItems, pendingClosingAction])
+
+  useEffect(() => {
+    const stackItemOption = <K extends keyof ModalOptions>(key: K): ModalOptions[K] =>
+      stackItem?.component.modalOptions?.[key] ?? stackItem?.options?.[key]
+
+    validateStackItemOptions({
+      animationIn: stackItemOption('animationIn'),
+      animationOut: stackItemOption('animationOut'),
+      animateInConfig: stackItemOption('animateInConfig'),
+      animateOutConfig: stackItemOption('animateOutConfig'),
+    })
+  }, [])
 
   return (
     <Animated.View pointerEvents="box-none" style={[styles.container, containerStyle, { justifyContent, zIndex }]}>

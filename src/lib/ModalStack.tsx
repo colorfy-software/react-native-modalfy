@@ -6,13 +6,7 @@ import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAct
 
 import StackItem from './StackItem'
 
-import {
-  sh,
-  defaultOptions,
-  getStackItemOptions,
-  validateStackItemOptions,
-  addCallbackToMacroTaskQueue,
-} from '../utils'
+import { sh, defaultOptions, getStackItemOptions, addCallbackToMacroTaskQueue } from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P>
 
@@ -38,14 +32,10 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   )
 
   const {
-    animationIn,
-    animationOut,
     backBehavior,
     backdropColor,
-    animateInConfig,
     backdropOpacity,
     backdropPosition,
-    animateOutConfig,
     stackContainerStyle,
     backdropAnimationDuration,
   } = useMemo(() => getStackItemOptions(Array.from(stack.openedItems).pop(), stack), [stack])
@@ -166,10 +156,6 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       }).start()
     } else hideBackdrop()
   }, [backdropAnimationDuration, opacity, stack.openedItems.size, translateY])
-
-  useEffect(() => {
-    validateStackItemOptions({ animationIn, animationOut, animateInConfig, animateOutConfig })
-  }, [])
 
   return canShowStack ? (
     <Animated.View
