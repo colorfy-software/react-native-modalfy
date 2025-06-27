@@ -6,8 +6,8 @@ import {
   FlingGestureHandlerEventPayload,
 } from 'react-native-gesture-handler'
 import { useMemo, useCallback } from 'use-memo-one'
-import React, { ReactNode, useEffect, useRef, memo } from 'react'
 import { Animated, StyleSheet, ViewProps, ViewStyle } from 'react-native'
+import React, { ReactNode, useEffect, useRef, memo, useState } from 'react'
 
 import type {
   SharedProps,
@@ -16,12 +16,14 @@ import type {
   ModalStackItem,
   ModalEventName,
   ModalEventCallback,
+  ModalStackItemOptions,
   ModalPendingClosingAction,
   ModalOnCloseEventCallback,
   ModalOnAnimateEventCallback,
+  ModalStackSavedStackItemsOptions,
 } from '../types'
 
-import { addCallbackToMacroTaskQueue, getStackItemOptions, validateStackItemOptions, vh } from '../utils'
+import { computeUpdatedModalOptions, queueMacroTask, getStackItemOptions, validateStackItemOptions, vh } from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P> & {
   zIndex: number
@@ -33,6 +35,9 @@ type Props<P extends ModalfyParams> = SharedProps<P> & {
   wasOpenCallbackCalled: boolean
   wasClosedByBackdropPress: boolean
   pendingClosingAction?: ModalPendingClosingAction
+  setModalStackOptions: (modalOptions: ModalOptions) => void
+  savedStackItemsOptions: ModalStackSavedStackItemsOptions<P>
+  setSavedStackItemsOptions: React.Dispatch<React.SetStateAction<Props<P>['savedStackItemsOptions']>>
 }
 
 const StackItem = <P extends ModalfyParams>({
@@ -53,10 +58,31 @@ const StackItem = <P extends ModalfyParams>({
   isLastOpenedModal,
   isFirstVisibleModal,
   removeClosingAction,
+  setModalStackOptions,
   pendingClosingAction,
   wasOpenCallbackCalled,
+  savedStackItemsOptions,
   wasClosedByBackdropPress,
+  setSavedStackItemsOptions,
 }: Props<P>) => {
+  const [
+    {
+      animationIn,
+      animationOut,
+      backBehavior,
+      containerStyle,
+      animateInConfig,
+      animateOutConfig,
+      transitionOptions,
+      disableFlingGesture,
+      pointerEventsBehavior,
+      position: verticalPosition,
+    },
+    setModalOptions,
+  ] = useState<ModalStackItemOptions>(getStackItemOptions(stackItem, stack))
+
+  let localStackItemOptionsCache: ModalOptions
+
   const { animatedValue, translateY } = useMemo(
     () => ({
       translateY: new Animated.Value(0),
@@ -66,58 +92,6 @@ const StackItem = <P extends ModalfyParams>({
   )
 
   const onCloseListener = useRef<ModalOnCloseEventCallback>(() => undefined)
-
-  const {
-    animationIn,
-    animationOut,
-    backBehavior,
-    containerStyle,
-    animateInConfig,
-    animateOutConfig,
-    transitionOptions,
-    disableFlingGesture,
-    pointerEventsBehavior,
-    position: verticalPosition,
-  } = useMemo(() => getStackItemOptions(stackItem, stack), [stack, stackItem])
-
-  useEffect(() => {
-    let onAnimateListener: ModalOnAnimateEventCallback | undefined = undefined
-
-    if (transitionOptions && typeof transitionOptions !== 'function') {
-      throw new Error(`'${stackItem.name}' transitionOptions should be a function. For instance:
-      import ${stackItem.name} from './src/modals/${stackItem.name}';
-
-      ...
-      ${stackItem.name}: {
-        modal: ${stackItem.name},
-        transitionOptions: animatedValue => ({
-          opacity: animatedValue.interpolate({
-            inputRange: [0, 1, 2, 3],
-            outputRange: [0, 1, 0.5, 0.25],
-            extrapolate: 'clamp',
-          }),
-        }),
-      },
-      }`)
-    }
-
-    eventListeners.forEach(item => {
-      if (item.event === `${stackItem.hash}_onAnimate`) {
-        onAnimateListener = item.handler as ModalOnAnimateEventCallback
-      } else if (item.event === `${stackItem.hash}_onClose`) {
-        onCloseListener.current = item.handler as ModalOnCloseEventCallback
-      }
-    })
-
-    if (typeof onAnimateListener === 'function') {
-      animatedValue.addListener(({ value }) => onAnimateListener?.(value))
-    }
-
-    return () => {
-      animatedValue.stopAnimation(() => animatedValue.removeAllListeners())
-      clearListeners(stackItem.hash)
-    }
-  }, [])
 
   const updateAnimatedValue = useCallback(
     (
@@ -130,7 +104,7 @@ const StackItem = <P extends ModalfyParams>({
       } else if (internalClosingCallback && animationOut) {
         animationOut(animatedValue, toValue, () => {
           internalClosingCallback(stackItem)
-          addCallbackToMacroTaskQueue(stackItemCallback)
+          queueMacroTask(stackItemCallback)
         })
       } else {
         Animated.timing(animatedValue, {
@@ -138,7 +112,7 @@ const StackItem = <P extends ModalfyParams>({
           useNativeDriver: true,
           ...(internalClosingCallback ? animateOutConfig : animateInConfig),
         }).start(() => {
-          addCallbackToMacroTaskQueue(() => {
+          queueMacroTask(() => {
             internalClosingCallback?.(stackItem)
             stackItemCallback?.()
           })
@@ -148,15 +122,50 @@ const StackItem = <P extends ModalfyParams>({
     [stackItem, animationIn, animationOut, animatedValue, animateInConfig, animateOutConfig],
   )
 
+  const setStackItemModalOptions = useCallback(
+    (newModalOptions: ModalOptions) => {
+      if (position !== 1) return
+      if (!newModalOptions || !Object.keys(newModalOptions).length) {
+        throw new Error(`'${stackItem.name}' setModalOptions expects an object with valid modal options. For instance:
+
+...
+
+useEffect(() => {
+  setModalOptions({
+    backBehavior: 'clear',
+    disableFlingGesture: true,
+  })
+}, [])`)
+      }
+
+      localStackItemOptionsCache = newModalOptions
+      setSavedStackItemsOptions({ [stackItem.hash]: newModalOptions })
+
+      queueMacroTask(() => {
+        setModalOptions(computeUpdatedModalOptions('stackItem', newModalOptions, getStackItemOptions(stackItem, stack)))
+      })
+
+      queueMacroTask(() => setModalStackOptions(newModalOptions), 1)
+    },
+    [position, savedStackItemsOptions[stackItem.hash]],
+  )
+
+  const resetStackItemModalOptions = useCallback(() => {
+    if (!localStackItemOptionsCache && !savedStackItemsOptions[stackItem.hash]) {
+      setModalOptions(getStackItemOptions(stackItem, stack))
+    }
+  }, [])
+
   const closeStackItem = useCallback(
     (modalName, callback?: () => void) => {
       if (isLastOpenedModal) hideBackdrop()
+      else resetStackItemModalOptions()
 
       updateAnimatedValue(position - 1, () => {
         onCloseListener.current({ type: 'closeModal', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeModal(modalName)
         if (pendingClosingAction?.action === 'closeModal') removeClosingAction(pendingClosingAction)
-        addCallbackToMacroTaskQueue(callback)
+        queueMacroTask(callback)
       })
     },
     [
@@ -174,12 +183,13 @@ const StackItem = <P extends ModalfyParams>({
   const closeStackItems = useCallback(
     (closingElement, callback?: () => void) => {
       if (isLastOpenedModal) hideBackdrop()
+      else resetStackItemModalOptions()
 
       return updateAnimatedValue(position - 1, () => {
         onCloseListener.current({ type: 'closeModals', origin: 'default' })
         let output = closeModals(closingElement)
         if (pendingClosingAction?.action === 'closeModals') removeClosingAction(pendingClosingAction)
-        addCallbackToMacroTaskQueue(callback)
+        queueMacroTask(callback)
         return output
       })
     },
@@ -194,7 +204,7 @@ const StackItem = <P extends ModalfyParams>({
         onCloseListener.current({ type: 'closeAllModals', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
         closeAllModals()
         if (pendingClosingAction?.action === 'closeAllModals') removeClosingAction(pendingClosingAction)
-        addCallbackToMacroTaskQueue(callback)
+        queueMacroTask(callback)
       })
     },
     [closeAllModals, hideBackdrop, pendingClosingAction, position, updateAnimatedValue, wasClosedByBackdropPress],
@@ -217,7 +227,7 @@ const StackItem = <P extends ModalfyParams>({
             toValue,
             useNativeDriver: true,
             ...animateOutConfig,
-          }).start(() => addCallbackToMacroTaskQueue(onAnimationEnd))
+          }).start(() => queueMacroTask(onAnimationEnd))
         }
       }
     },
@@ -243,6 +253,17 @@ const StackItem = <P extends ModalfyParams>({
     }
   }, [isFirstVisibleModal, pointerEventsBehavior])
 
+  const justifyContent = useMemo((): ViewStyle['justifyContent'] => {
+    switch (verticalPosition) {
+      case 'top':
+        return 'flex-start'
+      case 'bottom':
+        return 'flex-end'
+      default:
+        return 'center'
+    }
+  }, [verticalPosition])
+
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component
     const addListener = (eventName: ModalEventName, handler: ModalEventCallback) =>
@@ -267,6 +288,7 @@ const StackItem = <P extends ModalfyParams>({
                 closeModal: closeStackItem,
                 closeModals: closeStackItems,
                 closeAllModals: closeAllStackItems,
+                setModalOptions: setStackItemModalOptions,
                 getParam: <N extends keyof P[NonNullable<typeof currentModal>]>(
                   paramName: N,
                   defaultValue?: P[NonNullable<typeof currentModal>][N],
@@ -281,16 +303,69 @@ const StackItem = <P extends ModalfyParams>({
     )
   }
 
-  const justifyContent = useMemo((): ViewStyle['justifyContent'] => {
-    switch (verticalPosition) {
-      case 'top':
-        return 'flex-start'
-      case 'bottom':
-        return 'flex-end'
-      default:
-        return 'center'
+  useEffect(() => {
+    const stackItemOption = <K extends keyof ModalOptions>(key: K): ModalOptions[K] =>
+      stackItem?.component.modalOptions?.[key] ?? stackItem?.options?.[key]
+
+    validateStackItemOptions({
+      animationIn: stackItemOption('animationIn'),
+      animationOut: stackItemOption('animationOut'),
+      animateInConfig: stackItemOption('animateInConfig'),
+      animateOutConfig: stackItemOption('animateOutConfig'),
+    })
+  }, [])
+
+  useEffect(() => {
+    let onAnimateListener: ModalOnAnimateEventCallback | undefined = undefined
+
+    if (transitionOptions && typeof transitionOptions !== 'function') {
+      throw new Error(`'${stackItem.name}' transitionOptions should be a function. For instance:
+import ${stackItem.name} from './src/modals/${stackItem.name}';
+import ModalStack from '../../lib/module/lib/ModalStack';
+
+...
+
+${stackItem.name}: {
+  modal: ${stackItem.name},
+  transitionOptions: animatedValue => ({
+    opacity: animatedValue.interpolate({
+      inputRange: [0, 1, 2, 3],
+      outputRange: [0, 1, 0.5, 0.25],
+      extrapolate: 'clamp',
+    }),
+  }),
+},`)
     }
-  }, [verticalPosition])
+
+    eventListeners.forEach(item => {
+      if (item.event === `${stackItem.hash}_onAnimate`) {
+        onAnimateListener = item.handler as ModalOnAnimateEventCallback
+      } else if (item.event === `${stackItem.hash}_onClose`) {
+        onCloseListener.current = item.handler as ModalOnCloseEventCallback
+      }
+    })
+
+    if (typeof onAnimateListener === 'function') {
+      animatedValue.addListener(({ value }) => onAnimateListener?.(value))
+    }
+
+    return () => {
+      animatedValue.stopAnimation(() => animatedValue.removeAllListeners())
+      clearListeners(stackItem.hash)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (position === 1) {
+      resetStackItemModalOptions()
+    }
+  }, [position])
+
+  useEffect(() => {
+    if (position === 1 && savedStackItemsOptions[stackItem.hash]) {
+      setStackItemModalOptions(localStackItemOptionsCache ?? savedStackItemsOptions[stackItem.hash])
+    }
+  }, [savedStackItemsOptions[stackItem.hash], position, stackItem.hash])
 
   useEffect(() => {
     updateAnimatedValue(position, undefined, wasOpenCallbackCalled ? undefined : stackItem.callback)
@@ -314,18 +389,6 @@ const StackItem = <P extends ModalfyParams>({
       }
     }
   }, [closeAllStackItems, closeStackItem, closeStackItems, pendingClosingAction])
-
-  useEffect(() => {
-    const stackItemOption = <K extends keyof ModalOptions>(key: K): ModalOptions[K] =>
-      stackItem?.component.modalOptions?.[key] ?? stackItem?.options?.[key]
-
-    validateStackItemOptions({
-      animationIn: stackItemOption('animationIn'),
-      animationOut: stackItemOption('animationOut'),
-      animateInConfig: stackItemOption('animateInConfig'),
-      animateOutConfig: stackItemOption('animateOutConfig'),
-    })
-  }, [])
 
   return (
     <Animated.View pointerEvents="box-none" style={[styles.container, containerStyle, { justifyContent, zIndex }]}>

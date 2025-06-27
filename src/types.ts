@@ -98,6 +98,26 @@ export type ModalPendingClosingAction =
       callback?: () => void
     }
 
+export interface ModalStack<P extends ModalfyParams> {
+  names: Array<Exclude<keyof P, symbol | number>>
+  content: ModalStackItem<P>[]
+  defaultOptions: ModalOptions
+  openedItems: Set<ModalStackItem<P>>
+  pendingClosingActions: Set<ModalPendingClosingAction>
+}
+
+export type ModalStackOptions = Pick<
+  ModalOptions,
+  | 'backBehavior'
+  | 'backdropColor'
+  | 'backdropOpacity'
+  | 'backdropPosition'
+  | 'stackContainerStyle'
+  | 'backdropAnimationDuration'
+>
+
+export type ModalStackSavedStackItemsOptions<P extends ModalfyParams> = Record<ModalStackItem<P>['hash'], ModalOptions>
+
 export interface ModalStackItem<P extends ModalfyParams> {
   name: Exclude<keyof P, symbol | number>
   component: ComponentType<any> & { modalOptions?: ModalOptions }
@@ -108,13 +128,19 @@ export interface ModalStackItem<P extends ModalfyParams> {
   callback?: () => void
 }
 
-export interface ModalStack<P extends ModalfyParams> {
-  names: Array<Exclude<keyof P, symbol | number>>
-  content: ModalStackItem<P>[]
-  defaultOptions: ModalOptions
-  openedItems: Set<ModalStackItem<P>>
-  pendingClosingActions: Set<ModalPendingClosingAction>
-}
+export type ModalStackItemOptions = Pick<
+  ModalOptions,
+  | 'position'
+  | 'animationIn'
+  | 'animationOut'
+  | 'backBehavior'
+  | 'containerStyle'
+  | 'animateInConfig'
+  | 'animateOutConfig'
+  | 'transitionOptions'
+  | 'disableFlingGesture'
+  | 'pointerEventsBehavior'
+>
 
 export interface ModalContextProvider<
   P extends ModalfyParams,
@@ -336,6 +362,12 @@ export interface UsableModalComponentProp<P extends ModalfyParams, M extends key
     defaultValue?: D,
   ) => D extends P[M][N] ? P[M][N] : undefined
   /**
+   * Optional params object you provided when opening the modal you're in.
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#params
+   */
+  params?: P[M]
+  /**
    * This function removes all the listeners connected to the modal component you're in.
    *
    * @example removeAllListeners()
@@ -344,11 +376,20 @@ export interface UsableModalComponentProp<P extends ModalfyParams, M extends key
    */
   removeAllListeners: () => void
   /**
-   * Optional params object you provided when opening the modal you're in.
+   * This function allows you to dynamically change the modal options of to the modal component you're in.
    *
-   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#params
+   * @example
+   *
+   * useEffect(() => {
+   *  setModalOptions({
+   *    backBehavior: 'clear',
+   *    disableFlingGesture: true,
+   *  })
+   * }, [])
+   *
+   * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#addlistener
    */
-  params?: P[M]
+  setModalOptions: (modalOptions: ModalOptions) => void
 }
 
 /*  ========================                 ========================

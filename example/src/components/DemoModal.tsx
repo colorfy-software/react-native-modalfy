@@ -1,21 +1,21 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import {
-  TouchableOpacity,
-  StyleSheet,
-  // Easing,
-  // Dimensions,
   Text,
   View,
-  useWindowDimensions,
   Platform,
+  // Easing,
+  StyleSheet,
+  // Dimensions,
+  TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native'
 import {
   ModalProps,
+  ModalEventListener,
   ModalComponentWithOptions,
   ModalOnCloseEventCallback,
-  ModalEventListener,
 } from 'react-native-modalfy'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 import { ModalStackParamsList, ModalName } from '../App'
 
@@ -42,7 +42,7 @@ const HOOKS_MODALS_COLOR: ModalsColorType = [
 ]
 
 const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
-  modal: { addListener, currentModal, closeModal, closeModals, closeAllModals, getParam, openModal },
+  modal: { addListener, currentModal, closeModal, closeModals, closeAllModals, getParam, openModal, setModalOptions },
 }) => {
   const [otherModals, setOtherModals] = useState<OtherModalsType>([])
 
@@ -61,7 +61,7 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
   const color = getParam('color', 'deeppink')
   const modalName = getParam('name')
 
-  const Header = () => {
+  const Header = memo(() => {
     const onPress = () => closeModal(undefined, () => console.log('✅  Closed latest opened modal'))
 
     return (
@@ -74,9 +74,9 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
         </TouchableOpacity>
       </View>
     )
-  }
+  })
 
-  const Footer = () => {
+  const Footer = memo(() => {
     const onCloseModals = () => closeModals(modalName, () => console.log(`✅  Closed ${modalName} modals`))
     return (
       <View style={styles.container}>
@@ -88,16 +88,16 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
         </TouchableOpacity>
       </View>
     )
-  }
+  })
 
-  const Button = ({ letter, onPress, backgroundColor }: ButtonProps) => {
+  const Button = memo(({ letter, onPress, backgroundColor }: ButtonProps) => {
     const onPressButton = () => onPress()
     return (
       <TouchableOpacity style={[styles.button, { backgroundColor }]} onPress={onPressButton}>
         <Text style={styles.buttonText}>{letter}</Text>
       </TouchableOpacity>
     )
-  }
+  })
 
   // Type checking at work 👇
   const onOpenSameModal = () =>
@@ -122,6 +122,16 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
   }
 
   const size = Platform.OS === 'web' ? Math.max(width * 0.3, 320) : width * 0.85
+
+  useEffect(() => {
+    if (currentModal === 'ModalC') {
+      setModalOptions({
+        position: 'bottom',
+        backdropOpacity: 0.8,
+        containerStyle: { marginBottom: 30 },
+      })
+    }
+  }, [currentModal, setModalOptions])
 
   useEffect(() => {
     setOtherModals(

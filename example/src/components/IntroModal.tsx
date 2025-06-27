@@ -4,7 +4,7 @@ import {
   ModalOnCloseEventCallback,
   ModalOnAnimateEventCallback,
 } from 'react-native-modalfy'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useRef } from 'react'
 import { TouchableOpacity, StyleSheet, Animated, Text, View, Platform, useWindowDimensions } from 'react-native'
 
 import { ModalStackParamsList, ModalName } from '../App'
@@ -62,11 +62,11 @@ const IntroModal = ({ modal: { addListener } }: ModalProps<'IntroModal'>) => {
     }
   }, [addListener, handleAnimation, handleClose])
 
-  const Header = () => (
+  const Header = memo(() => (
     <Animated.View style={[styles.header, { opacity: animatedValue }]}>
       <View style={styles.handle} />
     </Animated.View>
-  )
+  ))
 
   return (
     <View style={[styles.container, { width: Platform.OS === 'web' ? Math.min(width * 0.85, 900) : width }]}>

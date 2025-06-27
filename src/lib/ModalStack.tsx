@@ -2,11 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useCallback, useMemo } from 'use-memo-one'
 import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
 
-import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAction } from '../types'
+import type {
+  SharedProps,
+  ModalOptions,
+  ModalfyParams,
+  ModalStackItem,
+  ModalStackOptions,
+  ModalPendingClosingAction,
+  ModalStackSavedStackItemsOptions,
+} from '../types'
 
 import StackItem from './StackItem'
 
-import { sh, defaultOptions, getStackItemOptions, addCallbackToMacroTaskQueue } from '../utils'
+import { computeUpdatedModalOptions, defaultOptions, getStackItemOptions, queueMacroTask, sh } from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P>
 
@@ -21,6 +29,13 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   const [stackStatus, setStackStatus] = useState<'idle' | 'shown' | 'hiding' | 'hidden'>('idle')
 
+  const [savedStackItemsOptions, setSavedStackItemsOptions] = useState<ModalStackSavedStackItemsOptions<P>>({})
+
+  const [
+    { backBehavior, backdropColor, backdropOpacity, backdropPosition, stackContainerStyle, backdropAnimationDuration },
+    setModalStackOptions,
+  ] = useState<ModalStackOptions>(getStackItemOptions(Array.from(stack.openedItems).pop(), stack))
+
   const canShowStack = stackStatus === 'hiding' || stackStatus === 'shown'
 
   const { opacity, translateY } = useMemo(
@@ -30,15 +45,6 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     }),
     [],
   )
-
-  const {
-    backBehavior,
-    backdropColor,
-    backdropOpacity,
-    backdropPosition,
-    stackContainerStyle,
-    backdropAnimationDuration,
-  } = useMemo(() => getStackItemOptions(Array.from(stack.openedItems).pop(), stack), [stack])
 
   const getStackContainerStyle = () => {
     if (typeof stackContainerStyle === 'object') return stackContainerStyle
@@ -55,7 +61,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         duration: backdropAnimationDuration,
         useNativeDriver: true,
       }).start(() => {
-        addCallbackToMacroTaskQueue(() => {
+        queueMacroTask(() => {
           setStackStatus('hidden')
           setBackdropClosedItems([])
           translateY.setValue(sh(100))
@@ -63,6 +69,24 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       })
     }
   }, [backdropAnimationDuration, opacity, translateY, stackStatus])
+
+  const onSetModalStackOptions = useCallback((newModalOptions: ModalOptions) => {
+    queueMacroTask(() => {
+      setModalStackOptions(
+        computeUpdatedModalOptions(
+          'modalStack',
+          newModalOptions,
+          getStackItemOptions(Array.from(stack.openedItems).pop(), stack),
+        ),
+      )
+    })
+  }, [])
+
+  const resetModalStackOptions = useCallback(() => {
+    queueMacroTask(() => {
+      setModalStackOptions(getStackItemOptions(Array.from(stack.openedItems).pop(), stack))
+    })
+  }, [])
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItems.size - index
@@ -92,10 +116,13 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         }}
         isLastOpenedModal={isLastOpenedModal}
         isFirstVisibleModal={isFirstVisibleModal}
+        setModalStackOptions={onSetModalStackOptions}
+        savedStackItemsOptions={savedStackItemsOptions}
+        setSavedStackItemsOptions={setSavedStackItemsOptions}
         wasOpenCallbackCalled={openActionCallbacks.includes(stackItem.hash)}
         wasClosedByBackdropPress={backdropClosedItems.includes(stackItem.hash)}
-        pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
         zIndex={isBackdropBelowLatestModal && isNotLatestOpenedModal ? -1 : index + 1}
+        pendingClosingAction={hasPendingClosingAction ? pendingClosingAction : undefined}
       />
     )
   }
@@ -136,6 +163,10 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
       </TouchableWithoutFeedback>
     )
   }
+
+  useEffect(() => {
+    resetModalStackOptions()
+  }, [stack.openedItems.size])
 
   useEffect(() => {
     if (stack.openedItems.size && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
