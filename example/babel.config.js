@@ -8,6 +8,12 @@ module.exports = function (api) {
     presets: ['babel-preset-expo'],
     plugins: [
       [
+        'react-native-reanimated/plugin',
+        {
+          relativeSourceLocation: true,
+        },
+      ],
+      [
         'module-resolver',
         {
           extensions: ['.tsx', '.ts', '.js', '.json'],

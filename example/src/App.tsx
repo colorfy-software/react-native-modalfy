@@ -1,4 +1,5 @@
 import React from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { ModalOptions, ModalProvider, ModalStackConfig, createModalStack } from 'react-native-modalfy'
 import { ImageBackground, Dimensions, StyleSheet, StatusBar, Easing, Text, Animated, Platform } from 'react-native'
 
@@ -116,13 +117,15 @@ const defaultOptions: ModalOptions = {
 const stack = createModalStack<ModalStackParamsList>(config, defaultOptions)
 
 const App = () => (
-  <ModalProvider stack={stack}>
-    <ImageBackground style={styles.container} source={require('./assets/background.jpg')}>
-      <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
-      <Text style={styles.title}>🥞 Modalfy</Text>
-      <IntroButton />
-    </ImageBackground>
-  </ModalProvider>
+  <GestureHandlerRootView style={{ flex: 1 }}>
+    <ModalProvider stack={stack}>
+      <ImageBackground style={styles.container} source={require('./assets/background.jpg')}>
+        <StatusBar translucent barStyle="light-content" backgroundColor="transparent" />
+        <Text style={styles.title}>🥞 Modalfy</Text>
+        <IntroButton />
+      </ImageBackground>
+    </ModalProvider>
+  </GestureHandlerRootView>
 )
 
 const styles = StyleSheet.create({
