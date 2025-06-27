@@ -27,6 +27,15 @@ export const defaultOptions: ModalOptions = {
   backdropAnimationDuration: 300,
 }
 
+export const addCallbackToMacroTaskQueue = (fn: (() => void) | undefined) => {
+  if (typeof fn === 'function') {
+    const timeout = setTimeout(() => {
+      clearTimeout(timeout)
+      fn?.()
+    }, 0)
+  }
+}
+
 export { default as invariant } from './invariant'
 export { default as getStackItemData } from './getStackItemData'
 export { default as validateListener } from './validateListener'

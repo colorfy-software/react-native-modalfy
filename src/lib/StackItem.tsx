@@ -20,7 +20,7 @@ import type {
   ModalOnAnimateEventCallback,
 } from '../types'
 
-import { getStackItemOptions, vh } from '../utils'
+import { addCallbackToMacroTaskQueue, getStackItemOptions, vh } from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P> & {
   zIndex: number
@@ -32,15 +32,6 @@ type Props<P extends ModalfyParams> = SharedProps<P> & {
   wasOpenCallbackCalled: boolean
   wasClosedByBackdropPress: boolean
   pendingClosingAction?: ModalPendingClosingAction
-}
-
-const addCallbackToMacroTaskQueue = (fn: (() => void) | undefined) => {
-  if (typeof fn === 'function') {
-    const timeout = setTimeout(() => {
-      clearTimeout(timeout)
-      fn?.()
-    }, 0)
-  }
 }
 
 const StackItem = <P extends ModalfyParams>({
@@ -146,8 +137,10 @@ const StackItem = <P extends ModalfyParams>({
           useNativeDriver: true,
           ...(internalClosingCallback ? animateOutConfig : animateInConfig),
         }).start(() => {
-          internalClosingCallback?.(stackItem)
-          addCallbackToMacroTaskQueue(stackItemCallback)
+          addCallbackToMacroTaskQueue(() => {
+            internalClosingCallback?.(stackItem)
+            stackItemCallback?.()
+          })
         })
       }
     },
@@ -166,13 +159,13 @@ const StackItem = <P extends ModalfyParams>({
       })
     },
     [
-      currentModal,
+      position,
       closeModal,
+      currentModal,
       hideBackdrop,
       onCloseListener,
-      position,
-      pendingClosingAction,
       updateAnimatedValue,
+      pendingClosingAction,
       wasClosedByBackdropPress,
     ],
   )
@@ -223,7 +216,7 @@ const StackItem = <P extends ModalfyParams>({
             toValue,
             useNativeDriver: true,
             ...animateOutConfig,
-          }).start(onAnimationEnd)
+          }).start(() => addCallbackToMacroTaskQueue(onAnimationEnd))
         }
       }
     },
@@ -248,7 +241,6 @@ const StackItem = <P extends ModalfyParams>({
         return 'box-none'
     }
   }, [isFirstVisibleModal, pointerEventsBehavior])
-
 
   const renderAnimatedComponent = (): ReactNode => {
     const Component = stackItem.component

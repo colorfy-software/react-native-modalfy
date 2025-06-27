@@ -6,7 +6,13 @@ import type { SharedProps, ModalfyParams, ModalStackItem, ModalPendingClosingAct
 
 import StackItem from './StackItem'
 
-import { defaultOptions, getStackItemOptions, validateStackItemOptions, sh } from '../utils'
+import {
+  sh,
+  defaultOptions,
+  getStackItemOptions,
+  validateStackItemOptions,
+  addCallbackToMacroTaskQueue,
+} from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P>
 
@@ -59,9 +65,11 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         duration: backdropAnimationDuration,
         useNativeDriver: true,
       }).start(() => {
-        setStackStatus('hidden')
-        setBackdropClosedItems([])
-        translateY.setValue(sh(100))
+        addCallbackToMacroTaskQueue(() => {
+          setStackStatus('hidden')
+          setBackdropClosedItems([])
+          translateY.setValue(sh(100))
+        })
       })
     }
   }, [backdropAnimationDuration, opacity, translateY, stackStatus])
@@ -69,7 +77,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItems.size - index
     const isBackdropBelowLatestModal = backdropPosition === 'belowLatest'
-    
+
     const isNotLatestOpenedModal = position >= 2
     const isFirstVisibleModal = position === stack.openedItems.size
     const isLastOpenedModal = position === 1 && stack.openedItems.size === 1
