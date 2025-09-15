@@ -86,7 +86,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     queueMacroTask(() => {
       setModalStackOptions(getStackItemOptions(Array.from(stack.openedItems).pop(), stack))
     })
-  }, [])
+  }, [stack])
 
   const renderStackItem = (stackItem: ModalStackItem<P>, index: number) => {
     const position = stack.openedItems.size - index
