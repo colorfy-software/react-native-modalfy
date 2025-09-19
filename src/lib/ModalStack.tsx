@@ -133,7 +133,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   }
 
   const onBackdropPress = () => {
-    if (backBehavior === 'none') return
+    if (backBehavior === 'none' || stackStatus === 'hiding') return
 
     const currentItem = [...stack.openedItems].slice(-1)[0]
 
