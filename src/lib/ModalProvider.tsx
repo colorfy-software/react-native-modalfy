@@ -93,11 +93,11 @@ const ModalProvider = ({ children, stack }: Props) => {
 
   const listener: ModalStateListener<any> = (modalState, error) => {
     if (modalState) {
-      setContextValue({
-        ...contextValue,
+      setContextValue(prev => ({
+        ...prev,
         currentModal: modalState.currentModal,
         stack: modalState.stack,
-      })
+      }))
     } else console.warn('Modalfy', error)
   }
 
