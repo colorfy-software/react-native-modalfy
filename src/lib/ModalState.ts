@@ -363,7 +363,8 @@ export const modalfy = <
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closeallmodals
    */
   closeAllModals: (callback?: () => void) => {
-    ModalState.queueClosingAction({ action: 'closeAllModals', callback })
+    ModalState.closeAllModals()
+    callback?.()
   },
   /**
    * This function closes the currently displayed modal by default.
