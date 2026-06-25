@@ -238,7 +238,7 @@ useEffect(() => {
         }
       }
     },
-    [animateOutConfig, closeModal, disableFlingGesture, hideBackdrop, stackItem, translateY, verticalPosition],
+    [animateOutConfig, closeModal, hideBackdrop, stackItem, translateY, verticalPosition],
   )
 
   const pointerEvents = useMemo((): ViewProps['pointerEvents'] => {
@@ -277,35 +277,42 @@ useEffect(() => {
       registerListener(stackItem.hash, eventName, handler)
     const removeAllListeners = () => clearListeners(stackItem.hash)
 
+    const content = (
+      <Animated.View style={{ ...(transitionOptions && transitionOptions(animatedValue)) }}>
+        <Component
+          modal={{
+            openModal,
+            addListener,
+            currentModal,
+            removeAllListeners,
+            closeModal: closeStackItem,
+            closeModals: closeStackItems,
+            closeAllModals: closeAllStackItems,
+            setModalOptions: setStackItemModalOptions,
+            getParam: <N extends keyof P[NonNullable<typeof currentModal>]>(
+              paramName: N,
+              defaultValue?: P[NonNullable<typeof currentModal>][N],
+            ): P[NonNullable<NonNullable<typeof currentModal>>][N] | undefined =>
+              getParam(stackItem.hash, paramName, defaultValue),
+            ...(stackItem.params && { params: stackItem.params }),
+          }}
+        />
+      </Animated.View>
+    )
+
     return (
       <Animated.View pointerEvents={pointerEvents} style={{ transform: [{ translateY }] }}>
-        <GestureDetector
-          gesture={Gesture.Fling()
-            .enabled(!disableFlingGesture)
-            .direction(verticalPosition === 'top' ? Directions.UP : Directions.DOWN)
-            .onEnd(onFling)
-            .runOnJS(true)}>
-          <Animated.View style={{ ...(transitionOptions && transitionOptions(animatedValue)) }}>
-            <Component
-              modal={{
-                openModal,
-                addListener,
-                currentModal,
-                removeAllListeners,
-                closeModal: closeStackItem,
-                closeModals: closeStackItems,
-                closeAllModals: closeAllStackItems,
-                setModalOptions: setStackItemModalOptions,
-                getParam: <N extends keyof P[NonNullable<typeof currentModal>]>(
-                  paramName: N,
-                  defaultValue?: P[NonNullable<typeof currentModal>][N],
-                ): P[NonNullable<NonNullable<typeof currentModal>>][N] | undefined =>
-                  getParam(stackItem.hash, paramName, defaultValue),
-                ...(stackItem.params && { params: stackItem.params }),
-              }}
-            />
-          </Animated.View>
-        </GestureDetector>
+        {disableFlingGesture ? (
+          content
+        ) : (
+          <GestureDetector
+            gesture={Gesture.Fling()
+              .direction(verticalPosition === 'top' ? Directions.UP : Directions.DOWN)
+              .onEnd(onFling)
+              .runOnJS(true)}>
+            {content}
+          </GestureDetector>
+        )}
       </Animated.View>
     )
   }
