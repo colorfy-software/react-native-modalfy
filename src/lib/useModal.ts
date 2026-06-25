@@ -1,10 +1,10 @@
 import { useContext } from 'react'
-import { useCallbackOne, useMemoOne } from 'use-memo-one'
 
 import type { ModalfyParams, UsableModalProp } from '../types'
 
 import { modalfy } from './ModalState'
 import ModalContext from './ModalContext'
+import { useCallbackOne, useMemoOne } from './useMemoOne'
 
 /**
  * Hook that exposes Modalfy's API.

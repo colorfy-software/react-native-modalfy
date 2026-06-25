@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useCallback, useMemo } from 'use-memo-one'
 import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
 
 import type {
@@ -13,6 +12,7 @@ import type {
 } from '../types'
 
 import StackItem from './StackItem'
+import { useCallback, useMemo } from './useMemoOne'
 
 import { absoluteFillStyle, computeUpdatedModalOptions, defaultOptions, getStackItemOptions, queueMacroTask, sh } from '../utils'
 

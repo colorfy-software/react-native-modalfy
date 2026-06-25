@@ -1,4 +1,3 @@
-import { useCallback } from 'use-memo-one'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { BackHandler, NativeEventSubscription, Platform } from 'react-native'
 
@@ -14,6 +13,7 @@ import type {
 import ModalStack from './ModalStack'
 import ModalState from './ModalState'
 import ModalContext from './ModalContext'
+import { useCallback } from './useMemoOne'
 
 import { invariant, validateListener } from '../utils'
 

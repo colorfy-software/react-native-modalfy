@@ -5,7 +5,6 @@ import {
   GestureStateChangeEvent,
   FlingGestureHandlerEventPayload,
 } from 'react-native-gesture-handler'
-import { useMemo, useCallback } from 'use-memo-one'
 import { Animated, StyleSheet, ViewProps, ViewStyle } from 'react-native'
 import React, { ReactNode, useEffect, useRef, memo, useState } from 'react'
 
@@ -22,6 +21,8 @@ import type {
   ModalOnAnimateEventCallback,
   ModalStackSavedStackItemsOptions,
 } from '../types'
+
+import { useMemo, useCallback } from './useMemoOne'
 
 import {
   vh,
