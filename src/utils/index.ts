@@ -91,6 +91,7 @@ export function computeUpdatedModalOptions(
 }
 
 export { default as invariant } from './invariant'
+export { useMemo, useCallback } from './useMemoOne'
 export { default as getStackItemData } from './getStackItemData'
 export { default as validateListener } from './validateListener'
 export { default as getStackItemOptions } from './getStackItemOptions'

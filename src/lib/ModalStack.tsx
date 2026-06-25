@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useCallback, useMemo } from 'use-memo-one'
 import { Easing, Animated, StyleSheet, TouchableWithoutFeedback, Platform } from 'react-native'
 
 import type {
@@ -14,7 +13,16 @@ import type {
 
 import StackItem from './StackItem'
 
-import { absoluteFillStyle, computeUpdatedModalOptions, defaultOptions, getStackItemOptions, queueMacroTask, sh } from '../utils'
+import {
+  sh,
+  useMemo,
+  useCallback,
+  defaultOptions,
+  queueMacroTask,
+  absoluteFillStyle,
+  getStackItemOptions,
+  computeUpdatedModalOptions,
+} from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P>
 

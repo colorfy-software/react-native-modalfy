@@ -1,10 +1,11 @@
 import { useContext } from 'react'
-import { useCallbackOne, useMemoOne } from 'use-memo-one'
 
 import type { ModalfyParams, UsableModalProp } from '../types'
 
 import { modalfy } from './ModalState'
 import ModalContext from './ModalContext'
+
+import { useCallback, useMemo } from '../utils'
 
 /**
  * Hook that exposes Modalfy's API.
@@ -16,15 +17,15 @@ import ModalContext from './ModalContext'
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
   const context = useContext(ModalContext) as UsableModalProp<P>
 
-  const closeAllModals: UsableModalProp<P>['closeAllModals'] = useCallbackOne(modalfy().closeAllModals, [])
+  const closeAllModals: UsableModalProp<P>['closeAllModals'] = useCallback(modalfy().closeAllModals, [])
 
-  const closeModals: UsableModalProp<P>['closeModals'] = useCallbackOne(modalfy().closeModals, [])
+  const closeModals: UsableModalProp<P>['closeModals'] = useCallback(modalfy().closeModals, [])
 
-  const closeModal: UsableModalProp<P>['closeModal'] = useCallbackOne(modalfy().closeModal, [])
+  const closeModal: UsableModalProp<P>['closeModal'] = useCallback(modalfy().closeModal, [])
 
-  const openModal: UsableModalProp<P>['openModal'] = useCallbackOne(modalfy().openModal, [])
+  const openModal: UsableModalProp<P>['openModal'] = useCallback(modalfy().openModal, [])
 
-  const output = useMemoOne(
+  const output = useMemo(
     () => ({
       /**
        * This function closes every open modal.
@@ -53,21 +54,21 @@ export default function <P extends ModalfyParams>(): UsableModalProp<P> {
        */
       closeModal,
       /**
-     * This function closes all the instances of a given modal.
-     *
-     * You can use it whenever you have the same modal opened
-     * several times, to close all of them at once.
-     *
-     * @example modal.closeModals('ExampleModal', () => console.log('All ExampleModal modals closed'))
-     *
-     * @returns { boolean } Whether or not Modalfy found any open modal
-     * corresponding to `modalName` (and then closed them).
-     *
-     * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
-     *
-     * @note We're using modalfy.closeModals instead of ModalState.closeModals so that the animations
-     * can be triggered appropriately from the synced custom internal state.
-     */
+       * This function closes all the instances of a given modal.
+       *
+       * You can use it whenever you have the same modal opened
+       * several times, to close all of them at once.
+       *
+       * @example modal.closeModals('ExampleModal', () => console.log('All ExampleModal modals closed'))
+       *
+       * @returns { boolean } Whether or not Modalfy found any open modal
+       * corresponding to `modalName` (and then closed them).
+       *
+       * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#closemodals
+       *
+       * @note We're using modalfy.closeModals instead of ModalState.closeModals so that the animations
+       * can be triggered appropriately from the synced custom internal state.
+       */
       closeModals,
       /**
        * This value returns the current open modal (`null` if none).
