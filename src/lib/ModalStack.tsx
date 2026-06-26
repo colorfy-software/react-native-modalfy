@@ -14,7 +14,7 @@ import type {
 
 import StackItem from './StackItem'
 
-import { computeUpdatedModalOptions, defaultOptions, getStackItemOptions, queueMacroTask, sh } from '../utils'
+import { absoluteFillStyle, computeUpdatedModalOptions, defaultOptions, getStackItemOptions, queueMacroTask, sh } from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P>
 
@@ -206,17 +206,17 @@ const styles = StyleSheet.create({
   container: {
     ...Platform.select({
       android: {
-        ...StyleSheet.absoluteFillObject,
+        ...absoluteFillStyle,
         zIndex: 0,
       },
       ios: {
-        ...StyleSheet.absoluteFillObject,
+        ...absoluteFillStyle,
         zIndex: 0,
       },
     }),
   },
   containerWeb: {
-    ...StyleSheet.absoluteFillObject,
+    ...absoluteFillStyle,
     overflow: 'hidden',
     height: '100vh',
     width: '100vw',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     maxWidth: '-webkit-fill-available',
   },
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...absoluteFillStyle,
   },
 })
 

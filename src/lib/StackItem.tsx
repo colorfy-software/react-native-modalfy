@@ -23,7 +23,14 @@ import type {
   ModalStackSavedStackItemsOptions,
 } from '../types'
 
-import { computeUpdatedModalOptions, queueMacroTask, getStackItemOptions, validateStackItemOptions, vh } from '../utils'
+import {
+  vh,
+  queueMacroTask,
+  absoluteFillStyle,
+  getStackItemOptions,
+  validateStackItemOptions,
+  computeUpdatedModalOptions,
+} from '../utils'
 
 type Props<P extends ModalfyParams> = SharedProps<P> & {
   zIndex: number
@@ -399,7 +406,7 @@ ${stackItem.name}: {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...absoluteFillStyle,
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
