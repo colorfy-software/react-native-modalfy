@@ -4,7 +4,7 @@ import type { ModalfyParams, UsableModalProp } from '../types'
 
 import { modalfy } from './ModalState'
 import ModalContext from './ModalContext'
-import { useCallbackOne, useMemoOne } from './useMemoOne'
+import { useCallback, useMemo } from '../utils/useMemoOne'
 
 /**
  * Hook that exposes Modalfy's API.
@@ -16,15 +16,15 @@ import { useCallbackOne, useMemoOne } from './useMemoOne'
 export default function <P extends ModalfyParams>(): UsableModalProp<P> {
   const context = useContext(ModalContext) as UsableModalProp<P>
 
-  const closeAllModals: UsableModalProp<P>['closeAllModals'] = useCallbackOne(modalfy().closeAllModals, [])
+  const closeAllModals: UsableModalProp<P>['closeAllModals'] = useCallback(modalfy().closeAllModals, [])
 
-  const closeModals: UsableModalProp<P>['closeModals'] = useCallbackOne(modalfy().closeModals, [])
+  const closeModals: UsableModalProp<P>['closeModals'] = useCallback(modalfy().closeModals, [])
 
-  const closeModal: UsableModalProp<P>['closeModal'] = useCallbackOne(modalfy().closeModal, [])
+  const closeModal: UsableModalProp<P>['closeModal'] = useCallback(modalfy().closeModal, [])
 
-  const openModal: UsableModalProp<P>['openModal'] = useCallbackOne(modalfy().openModal, [])
+  const openModal: UsableModalProp<P>['openModal'] = useCallback(modalfy().openModal, [])
 
-  const output = useMemoOne(
+  const output = useMemo(
     () => ({
       /**
        * This function closes every open modal.

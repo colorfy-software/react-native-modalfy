@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 
-import { useCallbackOne, useMemoOne } from '../lib/useMemoOne'
+import { useCallbackOne, useMemoOne } from '../utils/useMemoOne'
 
 describe('useMemoOne', () => {
   it('keeps the same memoized value while inputs are equal', () => {

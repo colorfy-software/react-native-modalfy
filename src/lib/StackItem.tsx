@@ -22,7 +22,7 @@ import type {
   ModalStackSavedStackItemsOptions,
 } from '../types'
 
-import { useMemo, useCallback } from './useMemoOne'
+import { useMemo, useCallback } from '../utils/useMemoOne'
 
 import {
   vh,

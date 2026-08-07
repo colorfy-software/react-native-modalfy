@@ -12,7 +12,7 @@ import type {
 } from '../types'
 
 import StackItem from './StackItem'
-import { useCallback, useMemo } from './useMemoOne'
+import { useCallback, useMemo } from '../utils/useMemoOne'
 
 import { absoluteFillStyle, computeUpdatedModalOptions, defaultOptions, getStackItemOptions, queueMacroTask, sh } from '../utils'
 

@@ -28,6 +28,7 @@ export function useMemoOne<T>(getResult: () => T, inputs?: readonly unknown[]): 
     isFirstRun.current ||
     Boolean(inputs && committed.current.inputs && areInputsEqual(inputs, committed.current.inputs))
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const cache = useCache
     ? committed.current
     : {

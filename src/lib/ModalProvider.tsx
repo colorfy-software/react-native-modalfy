@@ -13,7 +13,7 @@ import type {
 import ModalStack from './ModalStack'
 import ModalState from './ModalState'
 import ModalContext from './ModalContext'
-import { useCallback } from './useMemoOne'
+import { useCallback } from '../utils/useMemoOne'
 
 import { invariant, validateListener } from '../utils'
 
