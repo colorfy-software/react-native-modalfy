@@ -220,6 +220,8 @@ useEffect(() => {
   const onFling = useCallback(
     (_: GestureStateChangeEvent<FlingGestureHandlerEventPayload>, success: boolean) => {
       if (success) {
+        if (isLastOpenedModal) hideBackdrop()
+
         const toValue = verticalPosition === 'top' ? vh(-100) : vh(100)
 
         const onAnimationEnd = () => {
@@ -238,7 +240,7 @@ useEffect(() => {
         }
       }
     },
-    [animateOutConfig, closeModal, hideBackdrop, stackItem, translateY, verticalPosition],
+    [animateOutConfig, closeModal, hideBackdrop, isLastOpenedModal, stackItem, translateY, verticalPosition],
   )
 
   const pointerEvents = useMemo((): ViewProps['pointerEvents'] => {
