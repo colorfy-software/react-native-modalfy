@@ -114,7 +114,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
         {...props}
         // @ts-ignore
         stackItem={stackItem}
-        key={index}
+        key={stackItem.hash}
         position={position}
         hideBackdrop={hideBackdrop}
         openModal={(...args) => {
