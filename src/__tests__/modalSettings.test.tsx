@@ -4,15 +4,18 @@ import TestRenderer, { act } from 'react-test-renderer'
 
 import { createModalStack } from '../index'
 import ModalStack from '../lib/ModalStack'
+import type { ModalPendingClosingAction } from '../types'
 
 const FirstModal = () => null
 const SecondModal = () => null
+const firstAnimationOut = jest.fn()
 
 const stack = createModalStack({
   FirstModal: {
     modal: FirstModal,
     backdropColor: 'orange',
     backdropOpacity: 0,
+    animationOut: firstAnimationOut,
     containerStyle: { backgroundColor: 'red' },
   },
   SecondModal: {
@@ -43,9 +46,23 @@ afterEach(() => {
   jest.useRealTimers()
 })
 
+beforeEach(() => {
+  jest.clearAllMocks()
+  firstAnimationOut.mockReset()
+})
+
 const stackWith = (item: typeof firstStackItem | typeof secondStackItem) => ({
   ...stack,
   openedItems: new Set([item]),
+})
+
+const stackWithItems = (
+  items: Array<typeof firstStackItem | typeof secondStackItem>,
+  pendingClosingActions: Set<ModalPendingClosingAction> = new Set(),
+) => ({
+  ...stack,
+  openedItems: new Set(items),
+  pendingClosingActions,
 })
 
 const hasContainerColor = (renderer: TestRenderer.ReactTestRenderer, color: string) =>
@@ -89,4 +106,63 @@ it('keeps modal settings isolated when replacing an item at the same stack posit
   expect(hasContainerColor(renderer, 'red')).toBe(false)
   expect(hasContainerColor(renderer, 'purple')).toBe(true)
   expect(hasContainerColor(renderer, 'orange')).toBe(false)
+})
+
+it('closes the original modal when another opens before its close animation finishes', () => {
+  jest.useFakeTimers()
+  let finishClosingFirst: (() => void) | undefined
+  firstAnimationOut.mockImplementation((_animatedValue, _toValue, callback) => {
+    finishClosingFirst = callback
+  })
+  jest.spyOn(Animated, 'timing').mockImplementation(() => {
+    const animation: Animated.CompositeAnimation = {
+      start: jest.fn(),
+      stop: jest.fn(),
+      reset: jest.fn(),
+    }
+    return animation
+  })
+
+  let renderer!: TestRenderer.ReactTestRenderer
+
+  act(() => {
+    renderer = TestRenderer.create(
+      <ModalStack {...(sharedProps as any)} currentModal="FirstModal" stack={stackWithItems([firstStackItem])} />,
+    )
+  })
+
+  const closeFirstAction: ModalPendingClosingAction = {
+    hash: 'close-first',
+    action: 'closeModal',
+    currentModalHash: firstStackItem.hash,
+  }
+
+  act(() => {
+    renderer.update(
+      <ModalStack
+        {...(sharedProps as any)}
+        currentModal="FirstModal"
+        stack={stackWithItems([firstStackItem], new Set([closeFirstAction]))}
+      />,
+    )
+  })
+
+  expect(finishClosingFirst).toBeDefined()
+
+  act(() => {
+    renderer.update(
+      <ModalStack
+        {...(sharedProps as any)}
+        currentModal="SecondModal"
+        stack={stackWithItems([firstStackItem, secondStackItem], new Set([closeFirstAction]))}
+      />,
+    )
+  })
+
+  act(() => {
+    finishClosingFirst?.()
+    jest.runOnlyPendingTimers()
+  })
+
+  expect(sharedProps.closeModal).toHaveBeenCalledWith(firstStackItem)
 })

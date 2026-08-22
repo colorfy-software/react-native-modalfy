@@ -171,13 +171,14 @@ useEffect(() => {
 
       updateAnimatedValue(position - 1, () => {
         onCloseListener.current({ type: 'closeModal', origin: wasClosedByBackdropPress ? 'backdrop' : 'default' })
-        closeModal(modalName)
+        closeModal(modalName ?? stackItem)
         if (pendingClosingAction?.action === 'closeModal') removeClosingAction(pendingClosingAction)
         queueMacroTask(callback)
       })
     },
     [
       position,
+      stackItem,
       closeModal,
       currentModal,
       hideBackdrop,
