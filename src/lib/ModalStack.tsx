@@ -28,6 +28,7 @@ type Props<P extends ModalfyParams> = SharedProps<P>
 
 const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
   const { stack } = props
+  const currentModalHash = Array.from(stack.openedItems).pop()?.hash
 
   const [hasChangedBackdropColor, setBackdropColorStatus] = useState(false)
 
@@ -174,7 +175,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   useEffect(() => {
     resetModalStackOptions()
-  }, [stack.openedItems.size])
+  }, [currentModalHash])
 
   useEffect(() => {
     if (stack.openedItems.size && backdropColor && backdropColor !== 'black' && !hasChangedBackdropColor) {
