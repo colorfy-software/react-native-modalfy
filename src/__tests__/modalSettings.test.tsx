@@ -11,10 +11,14 @@ const SecondModal = () => null
 const stack = createModalStack({
   FirstModal: {
     modal: FirstModal,
+    backdropColor: 'orange',
+    backdropOpacity: 0,
     containerStyle: { backgroundColor: 'red' },
   },
   SecondModal: {
     modal: SecondModal,
+    backdropColor: 'purple',
+    backdropOpacity: 0.4,
     containerStyle: { backgroundColor: 'blue' },
   },
 })
@@ -34,7 +38,10 @@ const sharedProps = {
   removeClosingAction: jest.fn(),
 }
 
-afterEach(() => jest.restoreAllMocks())
+afterEach(() => {
+  jest.restoreAllMocks()
+  jest.useRealTimers()
+})
 
 const stackWith = (item: typeof firstStackItem | typeof secondStackItem) => ({
   ...stack,
@@ -49,6 +56,7 @@ const hasContainerColor = (renderer: TestRenderer.ReactTestRenderer, color: stri
   ).length > 0
 
 it('keeps modal settings isolated when replacing an item at the same stack position', () => {
+  jest.useFakeTimers()
   jest.spyOn(Animated, 'timing').mockImplementation(() => {
     const animation: Animated.CompositeAnimation = {
       start: jest.fn(),
@@ -64,16 +72,21 @@ it('keeps modal settings isolated when replacing an item at the same stack posit
     renderer = TestRenderer.create(
       <ModalStack {...(sharedProps as any)} currentModal="FirstModal" stack={stackWith(firstStackItem)} />,
     )
+    jest.runOnlyPendingTimers()
   })
 
   expect(hasContainerColor(renderer, 'red')).toBe(true)
+  expect(hasContainerColor(renderer, 'orange')).toBe(true)
 
   act(() => {
     renderer.update(
       <ModalStack {...(sharedProps as any)} currentModal="SecondModal" stack={stackWith(secondStackItem)} />,
     )
+    jest.runOnlyPendingTimers()
   })
 
   expect(hasContainerColor(renderer, 'blue')).toBe(true)
   expect(hasContainerColor(renderer, 'red')).toBe(false)
+  expect(hasContainerColor(renderer, 'purple')).toBe(true)
+  expect(hasContainerColor(renderer, 'orange')).toBe(false)
 })
