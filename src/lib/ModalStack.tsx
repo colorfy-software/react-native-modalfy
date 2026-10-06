@@ -199,6 +199,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
 
   return canShowStack ? (
     <Animated.View
+      pointerEvents="box-none"
       style={[
         styles.container,
         { opacity, transform: [{ translateY }] },
