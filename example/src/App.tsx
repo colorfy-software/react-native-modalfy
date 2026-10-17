@@ -20,10 +20,11 @@ export interface ModalStackParamsList {
   ModalA: Modal<'ModalA', 'lightsalmon'>
   ModalB: Modal<'ModalB', 'deepskyblue'>
   ModalC: Modal<'ModalC', 'deeppink'>
+  ModalD?: Modal<'ModalD', 'red'>
   IntroModal: undefined
 }
 
-export type ModalName = Exclude<keyof ModalStackParamsList, 'IntroModal'>
+export type ModalName = Exclude<keyof ModalStackParamsList, 'IntroModal' | 'ModalD'>
 
 const { height, width } = Dimensions.get('screen')
 

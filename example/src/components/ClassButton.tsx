@@ -22,7 +22,7 @@ class ClassButton extends Component<Props> {
     } = this.props
 
     // Type checking at work 👇
-    openModal(name, { name, color, origin: 'Class' })
+    openModal(name, { name, color, origin: 'Class' } as any)
   }
 
   render() {
