@@ -145,6 +145,7 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     if (backBehavior === 'none' || stackStatus === 'hiding') return
 
     const currentItem = [...stack.openedItems].slice(-1)[0]
+    if (!currentItem) return
 
     setBackdropClosedItems([...backdropClosedItems, currentItem?.hash])
   }

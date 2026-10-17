@@ -184,7 +184,7 @@ const createModalState = (): ModalStateType<any> => {
 
     setState(currentState => ({
       stack: { ...currentState.stack, openedItems: newOpenedItems },
-      currentModal: newOpenedItemsArray?.slice(-1)[0]?.name,
+      currentModal: newOpenedItemsArray?.slice(-1)[0]?.name ?? null,
     }))
   }
 
@@ -211,7 +211,7 @@ const createModalState = (): ModalStateType<any> => {
       const openedItemsArray = Array.from(newOpenedItems)
       setState(currentState => ({
         stack: { ...currentState.stack, openedItems: newOpenedItems },
-        currentModal: openedItemsArray?.slice(-1)[0]?.name,
+        currentModal: openedItemsArray?.slice(-1)[0]?.name ?? null,
       }))
       return true
     }
@@ -298,7 +298,7 @@ const createModalState = (): ModalStateType<any> => {
       }
     }).stack
 
-    return [...pendingClosingActions].slice(-1)[0]
+    return [...pendingClosingActions].slice(-1)[0] ?? null
   }
 
   const removeClosingAction = (action: ModalPendingClosingAction): boolean => {
