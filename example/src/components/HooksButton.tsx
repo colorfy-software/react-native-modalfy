@@ -18,7 +18,7 @@ const HooksButton = ({ color, title, modalName: name }: Props) => {
 
   const onPress = () => {
     // Type checking at work 👇
-    openModal(name, { name, color, origin: 'Hooks' })
+    openModal(name, { name, color, origin: 'Hooks' } as any)
   }
 
   return (

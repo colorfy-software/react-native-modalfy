@@ -8,5 +8,5 @@ const { openModal } = modalfy()
 
 export default function <N extends ModalName>(name: N, color: ModalStackParamsList[N]['color']) {
   // Type checking at work 👇
-  openModal(name, { name, color, origin: 'Plain JS' })
+  openModal(name, { name, color, origin: 'Plain JS' } as any)
 }
