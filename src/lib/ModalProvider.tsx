@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
-import { BackHandler, NativeEventSubscription, Platform } from 'react-native'
+import { BackHandler, NativeEventSubscription, Platform, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 import type {
   SharedProps,
@@ -19,6 +19,12 @@ import { invariant, useCallback, validateListener } from '../utils'
 interface Props {
   children: ReactNode
   stack: ModalStackType<any>
+
+  /**
+   * Override default styling. This should only be used when experiencing layout issues
+   * directly caused by `ModalProvider`.
+   */
+  style?: StyleProp<ViewStyle>
 }
 
 /**
@@ -29,7 +35,7 @@ interface Props {
  *
  * @see https://colorfy-software.gitbook.io/react-native-modalfy/guides/stack#provider
  */
-const ModalProvider = ({ children, stack }: Props) => {
+const ModalProvider = ({ children, stack, style }: Props) => {
   const backHandlerSubscription = useRef<NativeEventSubscription>()
   const modalStateSubscription = useRef<ModalStateSubscription<any>>()
 
@@ -136,7 +142,12 @@ const ModalProvider = ({ children, stack }: Props) => {
   return (
     <ModalContext.Provider value={contextValue}>
       <>
-        {children}
+        <View
+          style={[styles.container, style]}
+          collapsable={false}
+          importantForAccessibility={contextValue.stack.openedItems.size ? 'no-hide-descendants' : 'auto'}>
+          {children}
+        </View>
         <ModalStack
           {...contextValue}
           clearListeners={clearListeners}
@@ -148,5 +159,11 @@ const ModalProvider = ({ children, stack }: Props) => {
     </ModalContext.Provider>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+})
 
 export default ModalProvider

@@ -197,13 +197,17 @@ const ModalStack = <P extends ModalfyParams>(props: Props<P>) => {
     } else hideBackdrop()
   }, [backdropAnimationDuration, opacity, stack.openedItems.size, translateY])
 
+  const isStackNonempty = !!stack.openedItems.size
+
   return canShowStack ? (
     <Animated.View
       pointerEvents="box-none"
+      aria-modal={isStackNonempty}
+      accessibilityViewIsModal={isStackNonempty}
       style={[
         styles.container,
         { opacity, transform: [{ translateY }] },
-        Platform.OS === 'web' && stack.openedItems.size ? styles.containerWeb : null,
+        Platform.OS === 'web' && isStackNonempty ? styles.containerWeb : null,
         getStackContainerStyle(),
       ]}>
       {renderBackdrop()}
