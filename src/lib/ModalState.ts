@@ -11,6 +11,7 @@ import type {
   ModalPendingClosingAction,
   ModalState as ModalStateType,
   ModalStatePendingClosingAction,
+  OpenModalFunctionParams,
 } from '../types'
 
 import { invariant, getStackItemOptions, defaultOptions } from '../utils'
@@ -416,14 +417,14 @@ export const modalfy = <
    *
    * It will look at the stack passed to `<ModalProvider>` and add
    * the corresponding component to the current stack of open modals.
-   * Alternatively, you can also provide some `params` that will be
-   * accessible to that component.
+   * You can also provide some `params` that will be accessible to
+   * that component.
    *
    * @example modalfy().openModal('PokédexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokédexEntryModal modal opened'))
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
    */
-  openModal: (modalName: M, params?: P[M], callback?: () => void) =>
+  openModal: (...[modalName, params, callback]: OpenModalFunctionParams<P, M>) =>
     ModalState.openModal({ modalName, params, callback, isCalledOutsideOfContext: true }),
 })
 

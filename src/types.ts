@@ -142,6 +142,19 @@ export type ModalStackItemOptions = Pick<
   | 'pointerEventsBehavior'
 >
 
+type RequiredParamsModalNames<P extends ModalfyParams, M extends keyof P> = M extends unknown
+  ? undefined extends P[M]
+    ? never
+    : M
+  : never
+
+export type OpenModalFunctionParams<P extends ModalfyParams, M extends keyof P> = M extends RequiredParamsModalNames<
+  P,
+  M
+>
+  ? [modalName: M, params: P[M], callback?: () => void]
+  : [modalName: M, params?: P[M], callback?: () => void]
+
 export interface ModalContextProvider<
   P extends ModalfyParams,
   M extends Exclude<keyof P, symbol | number> = Exclude<keyof P, symbol | number>,
@@ -214,14 +227,14 @@ export interface ModalContextProvider<
    *
    * It will look at the stack passed to `<ModalProvider>` and add
    * the corresponding component to the current stack of open modals.
-   * Alternatively, you can also provide some `params` that will be
-   * accessible to that component.
+   * You can also provide some `params` that will be accessible to
+   * that component.
    *
    * @example openModal('PokedexEntryModal', { id: 619, name: 'Lin-Fu' }, () => console.log('PokedexEntryModal modal opened'))
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalprop#openmodal
    */
-  openModal: <N extends M>(modalName: N, params?: P[N], callback?: () => void) => void
+  openModal: (...params: OpenModalFunctionParams<P, M>) => void
   stack: ModalStack<P>
 }
 
@@ -253,12 +266,20 @@ export type ModalState<P extends ModalfyParams> = Omit<
   ModalContextProvider<P>,
   'currentModal' | 'stack' | 'openModal'
 > & {
-  openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(args: {
-    modalName: N
-    params?: P[N]
-    isCalledOutsideOfContext?: boolean
-    callback?: () => void
-  }) => void
+  openModal: <M extends Exclude<keyof P, symbol | number>, N extends M>(
+    args: (N extends RequiredParamsModalNames<P, M>
+      ? {
+          modalName: N
+          params: P[N]
+        }
+      : {
+          modalName: N
+          params?: P[N]
+        }) & {
+      isCalledOutsideOfContext?: boolean
+      callback?: () => void
+    },
+  ) => void
   handleBackPress: () => boolean
   init: <T extends ModalfyParams>(
     updater: (currentState: ModalInternalState<T>) => ModalInternalState<T>,
@@ -366,7 +387,7 @@ export interface UsableModalComponentProp<P extends ModalfyParams, M extends key
    *
    * @see https://colorfy-software.gitbook.io/react-native-modalfy/api/types/modalcomponentprop#params
    */
-  params?: P[M]
+  params: P[M] | (M extends RequiredParamsModalNames<P, M> ? never : undefined)
   /**
    * This function removes all the listeners connected to the modal component you're in.
    *

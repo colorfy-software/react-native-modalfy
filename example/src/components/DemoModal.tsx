@@ -101,7 +101,7 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
 
   // Type checking at work 👇
   const onOpenSameModal = () =>
-    openModal(modalName, { name: modalName, color, origin }, () => {
+    openModal(modalName, { name: modalName, color, origin } as any, () => {
       console.log(`✅  Opened ${modalName}`)
     })
 
@@ -110,7 +110,7 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
       name: otherModals[0]?.modalName,
       color: otherModals[0]?.color,
       origin,
-    })
+    } as any)
   }
 
   const onPressRightButton = () => {
@@ -118,7 +118,7 @@ const DemoModal: ModalComponentWithOptions<ModalProps<ModalName>> = ({
       name: otherModals[1]?.modalName,
       color: otherModals[1]?.color,
       origin,
-    })
+    } as any)
   }
 
   const size = Platform.OS === 'web' ? Math.max(width * 0.3, 320) : width * 0.85
